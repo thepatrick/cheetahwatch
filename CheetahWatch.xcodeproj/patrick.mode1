@@ -185,48 +185,7 @@
 	<key>Notifications</key>
 	<array/>
 	<key>OpenEditors</key>
-	<array>
-		<dict>
-			<key>Content</key>
-			<dict>
-				<key>PBXProjectModuleGUID</key>
-				<string>CD50EE080C68D39900736404</string>
-				<key>PBXProjectModuleLabel</key>
-				<string>CWMain.m</string>
-				<key>PBXSplitModuleInNavigatorKey</key>
-				<dict>
-					<key>Split0</key>
-					<dict>
-						<key>PBXProjectModuleGUID</key>
-						<string>CD50EE090C68D39900736404</string>
-						<key>PBXProjectModuleLabel</key>
-						<string>CWMain.m</string>
-						<key>_historyCapacity</key>
-						<integer>0</integer>
-						<key>bookmark</key>
-						<string>CD9520430C6B9E9A00C1BD6E</string>
-						<key>history</key>
-						<array>
-							<string>CD951FFB0C6B99D000C1BD6E</string>
-						</array>
-					</dict>
-					<key>SplitCount</key>
-					<string>1</string>
-				</dict>
-				<key>StatusBarVisibility</key>
-				<true/>
-			</dict>
-			<key>Geometry</key>
-			<dict>
-				<key>Frame</key>
-				<string>{{0, 20}, {824, 717}}</string>
-				<key>PBXModuleWindowStatusBarHidden2</key>
-				<false/>
-				<key>RubberWindowFrame</key>
-				<string>419 120 824 758 0 0 1440 878 </string>
-			</dict>
-		</dict>
-	</array>
+	<array/>
 	<key>PerspectiveWidths</key>
 	<array>
 		<integer>-1</integer>
@@ -408,9 +367,9 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>CD951FD30C6B980400C1BD6E</string>
+				<string>CDF864E30C6BA05C00C7C83F</string>
 				<string>1CE0B1FE06471DED0097A5F4</string>
-				<string>CD951FD40C6B980400C1BD6E</string>
+				<string>CDF864E40C6BA05C00C7C83F</string>
 				<string>1CE0B20306471E060097A5F4</string>
 				<string>1CE0B20506471E060097A5F4</string>
 			</array>
@@ -544,13 +503,9 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
-		<string>1CD10A99069EF8BA00B06720</string>
-		<string>CD9520390C6B9DDC00C1BD6E</string>
-		<string>CD95203A0C6B9DDC00C1BD6E</string>
-		<string>1C0AD2B3069F1EA900FABCE6</string>
 		<string>CDA4AEF50C625CEB00E71C0C</string>
-		<string>/Users/patrick/dev/CheetahWatch/CheetahWatch.xcodeproj</string>
-		<string>CD50EE080C68D39900736404</string>
+		<string>1C0AD2B3069F1EA900FABCE6</string>
+		<string>/Users/patrick/dev/cheetahwatch/CheetahWatch.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
 	<string>719 125 690 397 0 0 1440 878 </string>
@@ -574,7 +529,7 @@
 								<key>PBXProjectModuleGUID</key>
 								<string>1CD0528F0623707200166675</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>CWMain.m</string>
+								<string></string>
 								<key>StatusBarVisibility</key>
 								<true/>
 							</dict>
@@ -591,8 +546,6 @@
 							<string>213pt</string>
 						</dict>
 						<dict>
-							<key>BecomeActive</key>
-							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
@@ -632,7 +585,7 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>CDA4AEF50C625CEB00E71C0C</string>
-				<string>CD951FE70C6B98B000C1BD6E</string>
+				<string>CDF864EB0C6BA05C00C7C83F</string>
 				<string>1CD0528F0623707200166675</string>
 				<string>XCMainBuildResultsModuleGUID</string>
 			</array>
@@ -643,7 +596,7 @@
 			<key>WindowToolGUID</key>
 			<string>CDA4AEF50C625CEB00E71C0C</string>
 			<key>WindowToolIsVisible</key>
-			<true/>
+			<false/>
 		</dict>
 		<dict>
 			<key>FirstTimeWindowDisplayed</key>
@@ -1002,9 +955,9 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1C0AD2B3069F1EA900FABCE6</string>
-				<string>CD951FCF0C6B978F00C1BD6E</string>
+				<string>CDF864EC0C6BA05C00C7C83F</string>
 				<string>1CD0528B0623707200166675</string>
-				<string>CD951FD00C6B978F00C1BD6E</string>
+				<string>CDF864ED0C6BA05C00C7C83F</string>
 			</array>
 			<key>ToolbarConfiguration</key>
 			<string>xcode.toolbar.config.run</string>
