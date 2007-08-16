@@ -35,8 +35,41 @@
 	[theWindow setBorderEdgeColor:[NSColor colorWithDeviceWhite:0.8 alpha:0.5]];
 	[theWindow setBgColor:[NSColor colorWithDeviceWhite:0.95 alpha:1.0]];
 	[theWindow setBackgroundColor:[theWindow styledBackground]];
+	[theWindow setDelegate:self];
 	[self clearAllUI];
 	[self startMonitor:nil];
+	
+	
+   statusItem = [[[NSStatusBar systemStatusBar] 
+      statusItemWithLength:NSVariableStatusItemLength]
+      retain];
+   [statusItem setHighlightMode:YES];
+   [statusItem setTitle:@"CW Starting up..."]; 
+   [statusItem setEnabled:YES];
+   [statusItem setToolTip:@"IPMenulet"];
+
+   [statusItem setAction:@selector(clickMenu:)];
+   [statusItem setTarget:self];
+}
+
+-(void)clickMenu:(id)sender
+{
+	[NSApp activateIgnoringOtherApps:YES];
+	[theWindow makeKeyAndOrderFront:self];
+}
+
+- (BOOL)applicationShouldHandleReopen:(NSApplication *)app hasVisibleWindows:(BOOL)visible
+{
+	if (visible)
+		return TRUE;
+	[theWindow makeKeyAndOrderFront:self];
+	return FALSE;
+}
+
+-(void)dealloc
+{
+    [statusItem release];
+      [super dealloc];
 }
 
 // start a new thread running myrunner below
@@ -63,6 +96,7 @@
 	[self clearAllUI];
 	NSImage *imageFromBundle = [NSImage imageNamed:@"no-modem.png"];
 	[status setImage: imageFromBundle];
+	[statusItem setTitle:@"-"]; 
 	[self performSelector:@selector(startMonitor:) withObject:self afterDelay:5];
 }
 
@@ -70,6 +104,7 @@
 -(void)haveModem
 {
 	NSImage *imageFromBundle = [NSImage imageNamed:@"have-modem.png"];
+	[statusItem setTitle:@"?"]; 
 	[status setImage: imageFromBundle];
 	[self clearAllUI];
 }
@@ -85,35 +120,42 @@
 }
 
 // Update the "mode" display
-- (void)modeChange:(char*)buff
+-(void)modeChange:(char*)buff
 {
 	[mode setStringValue:@""];
 	switch (buff[0]) {
 		case '0':
+			[statusItem setTitle:@"X"]; 
 			[mode setStringValue:@"None"];
 			break;
 		case '1':
+			[statusItem setTitle:@"G"]; 
 			[mode setStringValue:@"GPRS"];
 			break;
 		case '2':
+			[statusItem setTitle:@"G"]; 
 			[mode setStringValue:@"GPRS"];
 			break;
 		case '3':
+			[statusItem setTitle:@"E"]; 
 			[mode setStringValue:@"EDGE"];
 			break;
 		case '4':
+			[statusItem setTitle:@"W"]; 
 			[mode setStringValue:@"WCDMA"];
 			break;
 		case '5':
+			[statusItem setTitle:@"H"]; 
 			[mode setStringValue:@"HSDPA"];
 			break;
 		default:
+			[statusItem setTitle:@"?"]; 
 			[mode setStringValue:@"Unknown"];
 	}
 }
 
 // Update the connection time, speed, and data moved display
-- (void)flowReport:(char*)buff
+-(void)flowReport:(char*)buff
 {
 	unsigned int SecondsConnected, SpeedTransmit, SpeedReceive, Transmitted, Received;
 	sscanf(buff,"%X,%X,%X,%X,%X", &SecondsConnected,&SpeedTransmit,&SpeedReceive,&Transmitted,&Received);

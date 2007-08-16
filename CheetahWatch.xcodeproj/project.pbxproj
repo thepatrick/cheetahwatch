@@ -18,8 +18,23 @@
 		CD8D97550C6367FD00FB394B /* StyledWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = CD8D97540C6367FD00FB394B /* StyledWindow.m */; };
 		CDA4AEB70C625BAA00E71C0C /* CWMain.m in Sources */ = {isa = PBXBuildFile; fileRef = CDA4AEB60C625BAA00E71C0C /* CWMain.m */; };
 		CDA4B1FA0C62947300E71C0C /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CDA4B1F90C62947300E71C0C /* Carbon.framework */; };
+		CDD647D70C74D7AB004CA0FA /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CDD647D40C74D7AB004CA0FA /* Sparkle.framework */; };
+		CDD647F60C74D8CD004CA0FA /* Sparkle.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = CDD647D40C74D7AB004CA0FA /* Sparkle.framework */; };
 		CDF0193C0C67E1820076EE01 /* Credits.html in Resources */ = {isa = PBXBuildFile; fileRef = CDF0193B0C67E1820076EE01 /* Credits.html */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		CDD647EB0C74D893004CA0FA /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				CDD647F60C74D8CD004CA0FA /* Sparkle.framework in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		089C165DFE840E0CC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -42,6 +57,7 @@
 		CDA4AEB50C625BAA00E71C0C /* CWMain.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CWMain.h; sourceTree = "<group>"; };
 		CDA4AEB60C625BAA00E71C0C /* CWMain.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = CWMain.m; sourceTree = "<group>"; };
 		CDA4B1F90C62947300E71C0C /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
+		CDD647D40C74D7AB004CA0FA /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Sparkle.framework; sourceTree = "<group>"; };
 		CDF0193B0C67E1820076EE01 /* Credits.html */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.html; path = Credits.html; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -52,6 +68,7 @@
 			files = (
 				8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */,
 				CDA4B1FA0C62947300E71C0C /* Carbon.framework in Frameworks */,
+				CDD647D70C74D7AB004CA0FA /* Sparkle.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -74,6 +91,7 @@
 		1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				CDD647D40C74D7AB004CA0FA /* Sparkle.framework */,
 				CDA4B1F90C62947300E71C0C /* Carbon.framework */,
 				1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */,
 			);
@@ -152,6 +170,7 @@
 				8D1107290486CEB800E47090 /* Resources */,
 				8D11072C0486CEB800E47090 /* Sources */,
 				8D11072E0486CEB800E47090 /* Frameworks */,
+				CDD647EB0C74D893004CA0FA /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -232,6 +251,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_1)",
+				);
+				FRAMEWORK_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)\"";
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_MODEL_TUNING = G5;
@@ -251,6 +275,11 @@
 					ppc,
 					i386,
 				);
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_1)",
+				);
+				FRAMEWORK_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)\"";
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_MODEL_TUNING = G5;
 				INFOPLIST_FILE = Info.plist;

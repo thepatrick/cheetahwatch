@@ -41,12 +41,22 @@
     IBOutlet id transferReceive;
     IBOutlet id transferTransmit;
     IBOutlet id uptime;
+	IBOutlet id appMenu;
 	id timer;
 	bool weHaveAModem;
+	NSStatusItem *statusItem;
 }
 
 -(void)startMonitor:(id)sender;
--(void)noModem:(id)sender;
 -(void)clearAllUI;
+
+-(void)noModem:(id)sender;
+-(void)haveModem;
+
+-(void)signalStrength:(char*)buff;
+-(void)modeChange:(char*)buff;
+-(void)flowReport:(char*)buff;
+
++(void)MyRunner:(id)mainController;
 
 @end

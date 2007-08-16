@@ -1,15 +1,19 @@
 {
     IBClasses = (
         {
+            ACTIONS = {noModem = id; startMonitor = id; }; 
             CLASS = CWMain; 
             LANGUAGE = ObjC; 
             OUTLETS = {
+                appMenu = id; 
                 mode = id; 
+                myOutlet = id; 
                 signal = id; 
                 speedReceive = id; 
                 speedTransmit = id; 
                 status = id; 
-                theWindow = id; 
+                theWindow = StyledWindow; 
+                timer = id; 
                 transferReceive = id; 
                 transferTransmit = id; 
                 uptime = id; 
@@ -18,6 +22,12 @@
         }, 
         {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
         {CLASS = NSLevelIndicator; LANGUAGE = ObjC; SUPERCLASS = NSControl; }, 
+        {
+            ACTIONS = {checkForUpdates = id; }; 
+            CLASS = SUUpdater; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSObject; 
+        }, 
         {CLASS = StyledWindow; LANGUAGE = ObjC; SUPERCLASS = NSWindow; }
     ); 
     IBVersion = 1; 
