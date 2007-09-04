@@ -23,16 +23,15 @@
 
 #import <Cocoa/Cocoa.h>
 #import "StyledWindow.h"
+#import "CWHistorySupport.h"
 
 #define BAUDRATE B9600
 #define MODEMUIDEV "/dev/tty.HUAWEIMobile-Pcui"
 #define BUFSIZE 256
 
-
 @interface CWMain : NSObject
 {
     IBOutlet id mode;
-    IBOutlet id myOutlet;
     IBOutlet id signal;
     IBOutlet id speedReceive;
     IBOutlet id speedTransmit;
@@ -41,22 +40,48 @@
     IBOutlet id transferReceive;
     IBOutlet id transferTransmit;
     IBOutlet id uptime;
-	IBOutlet id appMenu;
-	id timer;
+	IBOutlet id appMenu;	
+	IBOutlet id totalReceived;
+	IBOutlet id totalTransmitted;	
+	IBOutlet id menuStoreUsageHistory;
+	IBOutlet id menuClearUsageHistory;
+	
 	bool weHaveAModem;
 	NSStatusItem *statusItem;
+
+ 	CWHistorySupport *cwh;
+	
+	NSNumber *currentUptime;
+	NSNumber *currentSpeedReceive;
+	NSNumber *currentSpeedTransmit;
+	NSNumber *currentTransmitted;
+	NSNumber *currentReceived;
+	
 }
 
 -(void)startMonitor:(id)sender;
 -(void)clearAllUI;
+-(void)clearConnectionUI;
+-(void)updateHistory;
+-(void)makeMenuMatchStorageHistory;
+
+-(BOOL)storeUsageHistory;
+-(void)toggleStoreUsageHistory;
+-(void)makeMenuMatchStorageHistory;
+
+-(NSString*)prettyDataAmount:(int)bytes;
 
 -(void)noModem:(id)sender;
 -(void)haveModem;
+
+-(void)storeUsageHistory:(id)sender;
+-(void)clearUsageHistory:(id)sender;
 
 -(void)signalStrength:(char*)buff;
 -(void)modeChange:(char*)buff;
 -(void)flowReport:(char*)buff;
 
 +(void)MyRunner:(id)mainController;
+
 
 @end
