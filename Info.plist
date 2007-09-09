@@ -19,13 +19,13 @@
 	<key>CFBundleSignature</key>
 	<string>PQG0</string>
 	<key>CFBundleVersion</key>
-	<string>1.1.0</string>
+	<string>1.1</string>
 	<key>NSMainNibFile</key>
 	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
 	<key>SUFeedURL</key>
-	<string>http://localhost/flickr-tools/cheetahwatch/cheetahwatch.xml</string>
+	<string>http://m.ac.nz/cheetahwatch/cheetahwatch.xml</string>
 	<key>SUScheduledCheckInterval</key>
 	<integer>604800</integer>
 </dict>

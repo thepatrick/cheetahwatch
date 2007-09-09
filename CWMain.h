@@ -22,6 +22,7 @@
  */
 
 #import <Cocoa/Cocoa.h>
+#import <WebKit/WebKit.h>
 #import "StyledWindow.h"
 #import "CWHistorySupport.h"
 
@@ -45,6 +46,8 @@
 	IBOutlet id totalTransmitted;	
 	IBOutlet id menuStoreUsageHistory;
 	IBOutlet id menuClearUsageHistory;
+	IBOutlet id firstRunWindow;
+	IBOutlet id firstRunWebkit;
 	
 	bool weHaveAModem;
 	NSStatusItem *statusItem;
@@ -59,6 +62,8 @@
 	
 }
 
+-(void)showFirstRun;
+
 -(void)startMonitor:(id)sender;
 -(void)clearAllUI;
 -(void)clearConnectionUI;
@@ -69,6 +74,8 @@
 -(void)toggleStoreUsageHistory;
 -(void)makeMenuMatchStorageHistory;
 
+-(void)changeStatusImageTo:(NSString*)which;
+
 -(NSString*)prettyDataAmount:(int)bytes;
 
 -(void)noModem:(id)sender;
@@ -76,6 +83,8 @@
 
 -(void)storeUsageHistory:(id)sender;
 -(void)clearUsageHistory:(id)sender;
+
+-(void)dismissFirstRun:(id)sender;
 
 -(void)signalStrength:(char*)buff;
 -(void)modeChange:(char*)buff;

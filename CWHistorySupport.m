@@ -27,9 +27,6 @@
 
 -(void)dealloc
 {
-	if(mainController != nil) {
-		[mainController release];
-	}
 	if(activeConnection != nil) {
 		[activeConnection release];
 	}
@@ -224,7 +221,7 @@
 		cachedSent = cachedSent + [[[array objectAtIndex:i] valueForKey:@"sentData"] intValue];
 	}
 	
-	NSLog(@"Caching totals: Sent %i, Received %i", cachedSent, cachedRecv);
+	//NSLog(@"Caching totals: Sent %i, Received %i", cachedSent, cachedRecv);
 }
 
 -(void)clearHistory

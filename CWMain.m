@@ -27,7 +27,9 @@
 
 +(void)initialize
 {
-	[[NSUserDefaults standardUserDefaults] registerDefaults:[NSDictionary dictionaryWithObject:@"YES" forKey:@"CWStoreHistory"]];
+	NSMutableDictionary *dd = [NSMutableDictionary dictionaryWithObject:@"YES" forKey:@"CWStoreHistory"];
+	[dd setValue:@"YES" forKey:@"CWFirstRun"];
+	[[NSUserDefaults standardUserDefaults] registerDefaults:dd];
 }
 
 -(void)awakeFromNib
@@ -41,30 +43,40 @@
 	[theWindow setBgColor:[NSColor colorWithDeviceWhite:0.95 alpha:1.0]];
 	[theWindow setBackgroundColor:[theWindow styledBackground]];
 	[theWindow setDelegate:self];
-	
-	cwh = [[CWHistorySupport alloc] init];	
-	[cwh setMainController:self];
-	[cwh setupCoreData];
-	
+
+	if([self storeUsageHistory]) {
+		cwh = [[CWHistorySupport alloc] init];	
+		[cwh setMainController:self];
+		[cwh setupCoreData];	
+	}
+
 	[self clearAllUI];
 	[self startMonitor:nil];
 	[self updateHistory];
-	
-	[self makeMenuMatchStorageHistory];
-	
-//	[menuStoreUsageHistory setVisible:NO];
-	
-   statusItem = [[[NSStatusBar systemStatusBar] 
-      statusItemWithLength:NSVariableStatusItemLength]
-      retain];
-   [statusItem setHighlightMode:YES];
-   [statusItem setEnabled:YES];
-   [statusItem setToolTip:@"CheetahWatch"];
-   
-   [statusItem setImage:[NSImage imageNamed:@"no-modem-menu.tif"]];
 
-   [statusItem setAction:@selector(clickMenu:)];
-   [statusItem setTarget:self];
+	[self makeMenuMatchStorageHistory];
+
+	statusItem = [[[NSStatusBar systemStatusBar] statusItemWithLength:NSVariableStatusItemLength] retain];
+	[statusItem setHighlightMode:YES];
+	[statusItem setEnabled:YES];
+	[statusItem setToolTip:@"CheetahWatch"];
+
+	[statusItem setImage:[NSImage imageNamed:@"no-modem-menu.tif"]];
+
+	[statusItem setAction:@selector(clickMenu:)];
+	[statusItem setTarget:self];
+
+	[self showFirstRun];
+}
+
+-(void)showFirstRun
+{
+	if([[NSUserDefaults standardUserDefaults] boolForKey:@"CWFirstRun"]) {	   
+	   [[firstRunWebkit mainFrame] loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:[[NSBundle mainBundle] pathForResource:@"Welcome" ofType:@"html"]]]];
+	   [firstRunWindow setTitle:@""];
+	   [firstRunWindow makeKeyAndOrderFront:self];
+	   [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"CWFirstRun"];
+	}
 }
 
 -(void)clickMenu:(id)sender
@@ -84,7 +96,9 @@
 
 -(void)dealloc
 {
-	[cwh release];
+	if([self storeUsageHistory]) {
+		[cwh release];
+	}
     [statusItem release];
 	[super dealloc];
 }
@@ -98,7 +112,6 @@
 // clear UI, generally keep things from looking too silly.
 -(void)clearAllUI
 {
-	[statusItem setImage:[NSImage imageNamed:@"no-modem-menu.tif"]];
 	[signal setIntValue:0];
 	[mode setStringValue:@""];	
 	[statusItem setTitle:@""];
@@ -112,29 +125,32 @@
 	[transferReceive setStringValue:@""];
 	[transferTransmit setStringValue:@""];
 	[uptime setStringValue:@""];
+	[statusItem setToolTip:@"CheetahWatch - Not connected"];
 }
 
 -(void)updateHistory
 {
-	[cwh calculateTotalUsage];
-	int runningTotalSent = [cwh cachedTotalSent];
-	int runningTotalRecv = [cwh cachedTotalRecv];
-	[totalReceived setStringValue:[self prettyDataAmount:runningTotalRecv]];
-	[totalTransmitted setStringValue:[self prettyDataAmount:runningTotalSent]];
+	if([self storeUsageHistory]) {
+		[cwh calculateTotalUsage];
+		int runningTotalSent = [cwh cachedTotalSent];
+		int runningTotalRecv = [cwh cachedTotalRecv];
+		[totalReceived setStringValue:[self prettyDataAmount:runningTotalRecv]];
+		[totalTransmitted setStringValue:[self prettyDataAmount:runningTotalSent]];
+	}
 }
 
 // called by the monitor thread to say "no modem!"
 - (void)noModem:(id)sender
 {
-	[cwh willChangeValueForKey:@"theUptime"];
-	[cwh setValue:@"Hello 2" forKey:@"theUptime"];
-	[cwh didChangeValueForKey:@"theUptime" ];
-	
-	[cwh markConnectionAsClosed];
+	if([self storeUsageHistory]) {
+		[cwh markConnectionAsClosed];
+	}	
 	[self clearAllUI];
 	NSImage *imageFromBundle = [NSImage imageNamed:@"no-modem.png"];
 	[status setImage: imageFromBundle];
-	[statusItem setImage:[NSImage imageNamed:@"no-modem-menu.tif"]];
+	[statusItem setAttributedTitle:@""];
+	[statusItem setToolTip:@"CheetahWatch - No modem detected"];
+	[self performSelectorOnMainThread:@selector(changeStatusImageTo:) withObject: @"no-modem-menu.tif" waitUntilDone:NO];
 	[self performSelector:@selector(startMonitor:) withObject:self afterDelay:5];
 }
 
@@ -145,6 +161,7 @@
 	[statusItem setTitle:@"?"]; 
 	[status setImage: imageFromBundle];
 	[self clearAllUI];
+	[self performSelectorOnMainThread:@selector(changeStatusImageTo:) withObject: @"signal-0.tif" waitUntilDone:NO];
 }
 
 -(BOOL)storeUsageHistory
@@ -163,12 +180,20 @@
 {
 	[self toggleStoreUsageHistory];
 	[self makeMenuMatchStorageHistory];
+	[self updateHistory];
 }
 
 -(void)clearUsageHistory:(id)sender
 {
-	[cwh clearHistory];
-	[self updateHistory];
+	if([self storeUsageHistory]) {
+		[cwh clearHistory];
+		[self updateHistory];
+	}
+}
+
+-(void)dismissFirstRun:(id)sender
+{
+
 }
 
 -(NSString*)prettyDataAmount:(int)bytes
@@ -193,20 +218,22 @@
 	[speedTransmit setStringValue:[[self prettyDataAmount:[currentSpeedTransmit intValue]] stringByAppendingString:@"ps"]];
 	[transferReceive setStringValue:[self prettyDataAmount:[currentReceived intValue]]];
 	[transferTransmit setStringValue:[self prettyDataAmount:[currentTransmitted intValue]]];
-
-
-	[cwh flowReportSeconds:currentUptime withTransmitRate:currentSpeedTransmit
-		receiveRate:currentSpeedReceive 
-		totalSent:currentTransmitted 
-		andTotalReceived:currentReceived];
-
-	[self updateHistory];
 	
-//	int runningTotalSent = [cwh cachedTotalSent];
-//	int runningTotalRecv = [cwh cachedTotalRecv];
-//	
-//	NSLog(@"Running total sent/recv: %@/%@", [self prettyDataAmount:runningTotalSent], [self prettyDataAmount:runningTotalRecv]);
+	NSString *tooltip = [NSString stringWithFormat:@"CheetahWatch - %@ down / %@ up", 
+									[self prettyDataAmount:[currentReceived intValue]],
+									[self prettyDataAmount:[currentTransmitted intValue]]];
 	
+	[statusItem setToolTip:tooltip];
+
+
+	if([self storeUsageHistory]) {
+		[cwh flowReportSeconds:currentUptime withTransmitRate:currentSpeedTransmit
+			receiveRate:currentSpeedReceive 
+			totalSent:currentTransmitted 
+			andTotalReceived:currentReceived];
+
+		[self updateHistory];
+	}	
 }
 
 // this is the quasi-runloop (yeah, whatever) that follows the stream from the modem
@@ -221,6 +248,7 @@
 	if (fd < 0) {
 		[mainController performSelectorOnMainThread:@selector(noModem:) withObject:nil waitUntilDone:YES];
 		[pool release];
+		free(buf_stream);
 		return;
 	}	
 	[mainController haveModem];
@@ -240,6 +268,7 @@
 	}
 	[mainController performSelectorOnMainThread:@selector(noModem:) withObject:nil waitUntilDone:YES];
     [pool release];
+	free(buf_stream); 
 }
 
 // Update the signal strength display
@@ -262,58 +291,61 @@
 	[self performSelectorOnMainThread:@selector(changeStatusImageTo:) withObject:which waitUntilDone:YES];		
 }
 
+// Update the signal strength meter (on main thread)
 -(void)changeStatusImageTo:(NSString*)which
 {
 	[statusItem setImage:[NSImage imageNamed:which]];
 }
 
-// Update the "mode" display
+// Process a mode update
 -(void)modeChange:(char*)buff
 {
-	[mode setStringValue:@""];	
 	NSString *newMode = [NSString stringWithCString:buff length:1];
-	NSLog(@"BARG: %@", newMode);
 	[self performSelectorOnMainThread:@selector(modeChangeAction:) withObject:newMode waitUntilDone:YES];
 }
 
+// Update the "mode" displays (on main thread)
 -(void)modeChangeAction:(NSString*)newMode
-{//
-//	NSFont *stringFont = [NSFont fontWithName:@"Monaco" size:9.0];
-//	NSDictionary *stringAttributes = [NSDictionary dictionaryWithObject:stringFont forKey:NSFontAttributeName];
-//	NSAttributedString *lowerString = [[NSAttributedString alloc] 
-//							initWithString:stringFromElsewhere
-//						        attributes:stringAttributes];
-//								
+{
+
+	NSString *menuMode;
 
 	switch ([newMode cString][0]) {
 		case '0':
-			[statusItem setTitle:@"X"]; 
+			menuMode = @""; 
 			[mode setStringValue:@"None"];
 			break;
 		case '1':
-			[statusItem setTitle:@"G"]; 
+			menuMode = @" G"; 
 			[mode setStringValue:@"GPRS"];
 			break;
 		case '2':
-			[statusItem setTitle:@"G"]; 
+			menuMode = @" G"; 
 			[mode setStringValue:@"GPRS"];
 			break;
 		case '3':
-			[statusItem setTitle:@"E"]; 
+			menuMode = @" E"; 
 			[mode setStringValue:@"EDGE"];
 			break;
 		case '4':
-			[statusItem setTitle:@"W"]; 
+			menuMode = @" W"; 
 			[mode setStringValue:@"WCDMA"];
 			break;
 		case '5':
-			[statusItem setTitle:@"H"]; 
+			menuMode = @" H"; 
 			[mode setStringValue:@"HSDPA"];
 			break;
 		default:
-			[statusItem setTitle:@"?"]; 
+			menuMode = @""; 
 			[mode setStringValue:@"Unknown"];
 	}
+
+	NSFont *menuFont = [NSFont fontWithName:@"Monaco" size:10.0];
+	NSDictionary *stringAttributes = [NSDictionary dictionaryWithObject:menuFont forKey:NSFontAttributeName];
+	NSAttributedString *lowerString = [[NSAttributedString alloc] initWithString:menuMode attributes:stringAttributes];
+	[statusItem setAttributedTitle:lowerString];
+	[lowerString release];
+
 }
 
 // Update the connection time, speed, and data moved display

@@ -4,6 +4,7 @@
         {
             ACTIONS = {
                 clearUsageHistory = id; 
+                dismissFirstRun = id; 
                 noModem = id; 
                 startMonitor = id; 
                 storeUsageHistory = id; 
@@ -12,6 +13,8 @@
             LANGUAGE = ObjC; 
             OUTLETS = {
                 appMenu = id; 
+                firstRunWebkit = id; 
+                firstRunWindow = id; 
                 menuClearUsageHistory = id; 
                 menuStoreUsageHistory = id; 
                 mode = id; 

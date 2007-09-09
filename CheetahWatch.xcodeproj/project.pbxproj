@@ -12,16 +12,14 @@
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 		CD27C4340C8CC565009D1D26 /* no-modem-menu.tif in Resources */ = {isa = PBXBuildFile; fileRef = CD27C4330C8CC565009D1D26 /* no-modem-menu.tif */; };
-		CD62DE7A0C63CB8400E1E1D7 /* no-modem.png in Resources */ = {isa = PBXBuildFile; fileRef = CD62DE790C63CB8400E1E1D7 /* no-modem.png */; };
-		CD62DE800C63CCE800E1E1D7 /* have-modem.png in Resources */ = {isa = PBXBuildFile; fileRef = CD62DE7F0C63CCE800E1E1D7 /* have-modem.png */; };
-		CD8425460C8D40F300D08573 /* signal-4-rev.tif in Resources */ = {isa = PBXBuildFile; fileRef = CD84253C0C8D40F300D08573 /* signal-4-rev.tif */; };
-		CD8425470C8D40F300D08573 /* signal-3-rev.tif in Resources */ = {isa = PBXBuildFile; fileRef = CD84253D0C8D40F300D08573 /* signal-3-rev.tif */; };
-		CD8425480C8D40F300D08573 /* signal-2-rev.tif in Resources */ = {isa = PBXBuildFile; fileRef = CD84253E0C8D40F300D08573 /* signal-2-rev.tif */; };
+		CD391ACF0C8E03460008BABF /* Welcome.html in Resources */ = {isa = PBXBuildFile; fileRef = CD391ACD0C8E03460008BABF /* Welcome.html */; };
+		CD391AD70C8E036C0008BABF /* Credits.html in Resources */ = {isa = PBXBuildFile; fileRef = CD391AD50C8E036C0008BABF /* Credits.html */; };
+		CD391AFA0C8E04EC0008BABF /* have-modem.png in Resources */ = {isa = PBXBuildFile; fileRef = CD391AF60C8E04EC0008BABF /* have-modem.png */; };
+		CD391AFB0C8E04EC0008BABF /* no-modem.png in Resources */ = {isa = PBXBuildFile; fileRef = CD391AF80C8E04EC0008BABF /* no-modem.png */; };
+		CD391B5F0C8E07700008BABF /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD391B5A0C8E07700008BABF /* WebKit.framework */; };
 		CD8425490C8D40F300D08573 /* signal-0.tif in Resources */ = {isa = PBXBuildFile; fileRef = CD84253F0C8D40F300D08573 /* signal-0.tif */; };
 		CD84254A0C8D40F300D08573 /* signal-4.tif in Resources */ = {isa = PBXBuildFile; fileRef = CD8425400C8D40F300D08573 /* signal-4.tif */; };
 		CD84254B0C8D40F300D08573 /* signal-3.tif in Resources */ = {isa = PBXBuildFile; fileRef = CD8425410C8D40F300D08573 /* signal-3.tif */; };
-		CD84254C0C8D40F300D08573 /* signal-1-rev.tif in Resources */ = {isa = PBXBuildFile; fileRef = CD8425420C8D40F300D08573 /* signal-1-rev.tif */; };
-		CD84254D0C8D40F300D08573 /* signal-0-rev.tif in Resources */ = {isa = PBXBuildFile; fileRef = CD8425430C8D40F300D08573 /* signal-0-rev.tif */; };
 		CD84254E0C8D40F300D08573 /* signal-2.tif in Resources */ = {isa = PBXBuildFile; fileRef = CD8425440C8D40F300D08573 /* signal-2.tif */; };
 		CD84254F0C8D40F300D08573 /* signal-1.tif in Resources */ = {isa = PBXBuildFile; fileRef = CD8425450C8D40F300D08573 /* signal-1.tif */; };
 		CD8D972C0C63635E00FB394B /* CW Icon.icns in Resources */ = {isa = PBXBuildFile; fileRef = CD8D972B0C63635E00FB394B /* CW Icon.icns */; };
@@ -32,7 +30,6 @@
 		CDAF55580C763E3500E456AC /* CWHistorySupport.m in Sources */ = {isa = PBXBuildFile; fileRef = CDAF55560C763E3500E456AC /* CWHistorySupport.m */; };
 		CDD647D70C74D7AB004CA0FA /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CDD647D40C74D7AB004CA0FA /* Sparkle.framework */; };
 		CDD647F60C74D8CD004CA0FA /* Sparkle.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = CDD647D40C74D7AB004CA0FA /* Sparkle.framework */; };
-		CDF0193C0C67E1820076EE01 /* Credits.html in Resources */ = {isa = PBXBuildFile; fileRef = CDF0193B0C67E1820076EE01 /* Credits.html */; };
 		CDFC9E430C7508D700681B3F /* CWHistory.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = CDFC9E420C7508D700681B3F /* CWHistory.xcdatamodel */; };
 /* End PBXBuildFile section */
 
@@ -61,16 +58,14 @@
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* CheetahWatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CheetahWatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CD27C4330C8CC565009D1D26 /* no-modem-menu.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = "no-modem-menu.tif"; sourceTree = "<group>"; };
-		CD62DE790C63CB8400E1E1D7 /* no-modem.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "no-modem.png"; sourceTree = "<group>"; };
-		CD62DE7F0C63CCE800E1E1D7 /* have-modem.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "have-modem.png"; sourceTree = "<group>"; };
-		CD84253C0C8D40F300D08573 /* signal-4-rev.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = "signal-4-rev.tif"; sourceTree = "<group>"; };
-		CD84253D0C8D40F300D08573 /* signal-3-rev.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = "signal-3-rev.tif"; sourceTree = "<group>"; };
-		CD84253E0C8D40F300D08573 /* signal-2-rev.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = "signal-2-rev.tif"; sourceTree = "<group>"; };
+		CD391ACE0C8E03460008BABF /* English */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.html; name = English; path = English.lproj/Welcome.html; sourceTree = "<group>"; };
+		CD391AD60C8E036C0008BABF /* English */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.html; name = English; path = English.lproj/Credits.html; sourceTree = "<group>"; };
+		CD391AF70C8E04EC0008BABF /* English */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = English; path = "English.lproj/have-modem.png"; sourceTree = "<group>"; };
+		CD391AF90C8E04EC0008BABF /* English */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = English; path = "English.lproj/no-modem.png"; sourceTree = "<group>"; };
+		CD391B5A0C8E07700008BABF /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = /System/Library/Frameworks/WebKit.framework; sourceTree = "<absolute>"; };
 		CD84253F0C8D40F300D08573 /* signal-0.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = "signal-0.tif"; sourceTree = "<group>"; };
 		CD8425400C8D40F300D08573 /* signal-4.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = "signal-4.tif"; sourceTree = "<group>"; };
 		CD8425410C8D40F300D08573 /* signal-3.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = "signal-3.tif"; sourceTree = "<group>"; };
-		CD8425420C8D40F300D08573 /* signal-1-rev.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = "signal-1-rev.tif"; sourceTree = "<group>"; };
-		CD8425430C8D40F300D08573 /* signal-0-rev.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = "signal-0-rev.tif"; sourceTree = "<group>"; };
 		CD8425440C8D40F300D08573 /* signal-2.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = "signal-2.tif"; sourceTree = "<group>"; };
 		CD8425450C8D40F300D08573 /* signal-1.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = "signal-1.tif"; sourceTree = "<group>"; };
 		CD8D972B0C63635E00FB394B /* CW Icon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = "CW Icon.icns"; sourceTree = "<group>"; };
@@ -84,7 +79,6 @@
 		CDAF55550C763E3500E456AC /* CWHistorySupport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWHistorySupport.h; sourceTree = "<group>"; };
 		CDAF55560C763E3500E456AC /* CWHistorySupport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CWHistorySupport.m; sourceTree = "<group>"; };
 		CDD647D40C74D7AB004CA0FA /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Sparkle.framework; sourceTree = "<group>"; };
-		CDF0193B0C67E1820076EE01 /* Credits.html */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.html; path = Credits.html; sourceTree = "<group>"; };
 		CDFC9E420C7508D700681B3F /* CWHistory.xcdatamodel */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.xcdatamodel; path = CWHistory.xcdatamodel; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -96,6 +90,7 @@
 				8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */,
 				CDA4B1FA0C62947300E71C0C /* Carbon.framework in Frameworks */,
 				CDD647D70C74D7AB004CA0FA /* Sparkle.framework in Frameworks */,
+				CD391B5F0C8E07700008BABF /* WebKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -170,20 +165,16 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				CD84253C0C8D40F300D08573 /* signal-4-rev.tif */,
-				CD84253D0C8D40F300D08573 /* signal-3-rev.tif */,
-				CD84253E0C8D40F300D08573 /* signal-2-rev.tif */,
+				CD391AF60C8E04EC0008BABF /* have-modem.png */,
+				CD391AF80C8E04EC0008BABF /* no-modem.png */,
+				CD391AD50C8E036C0008BABF /* Credits.html */,
+				CD391ACD0C8E03460008BABF /* Welcome.html */,
 				CD84253F0C8D40F300D08573 /* signal-0.tif */,
 				CD8425400C8D40F300D08573 /* signal-4.tif */,
 				CD8425410C8D40F300D08573 /* signal-3.tif */,
-				CD8425420C8D40F300D08573 /* signal-1-rev.tif */,
-				CD8425430C8D40F300D08573 /* signal-0-rev.tif */,
 				CD8425440C8D40F300D08573 /* signal-2.tif */,
 				CD8425450C8D40F300D08573 /* signal-1.tif */,
 				CD27C4330C8CC565009D1D26 /* no-modem-menu.tif */,
-				CDF0193B0C67E1820076EE01 /* Credits.html */,
-				CD62DE7F0C63CCE800E1E1D7 /* have-modem.png */,
-				CD62DE790C63CB8400E1E1D7 /* no-modem.png */,
 				CD8D972B0C63635E00FB394B /* CW Icon.icns */,
 				8D1107310486CEB800E47090 /* Info.plist */,
 				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
@@ -195,6 +186,7 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				CD391B5A0C8E07700008BABF /* WebKit.framework */,
 				1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */,
 				1058C7A2FEA54F0111CA2CBB /* Other Frameworks */,
 			);
@@ -246,20 +238,16 @@
 				8D11072A0486CEB800E47090 /* MainMenu.nib in Resources */,
 				8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */,
 				CD8D972C0C63635E00FB394B /* CW Icon.icns in Resources */,
-				CD62DE7A0C63CB8400E1E1D7 /* no-modem.png in Resources */,
-				CD62DE800C63CCE800E1E1D7 /* have-modem.png in Resources */,
-				CDF0193C0C67E1820076EE01 /* Credits.html in Resources */,
 				CD27C4340C8CC565009D1D26 /* no-modem-menu.tif in Resources */,
-				CD8425460C8D40F300D08573 /* signal-4-rev.tif in Resources */,
-				CD8425470C8D40F300D08573 /* signal-3-rev.tif in Resources */,
-				CD8425480C8D40F300D08573 /* signal-2-rev.tif in Resources */,
 				CD8425490C8D40F300D08573 /* signal-0.tif in Resources */,
 				CD84254A0C8D40F300D08573 /* signal-4.tif in Resources */,
 				CD84254B0C8D40F300D08573 /* signal-3.tif in Resources */,
-				CD84254C0C8D40F300D08573 /* signal-1-rev.tif in Resources */,
-				CD84254D0C8D40F300D08573 /* signal-0-rev.tif in Resources */,
 				CD84254E0C8D40F300D08573 /* signal-2.tif in Resources */,
 				CD84254F0C8D40F300D08573 /* signal-1.tif in Resources */,
+				CD391ACF0C8E03460008BABF /* Welcome.html in Resources */,
+				CD391AD70C8E036C0008BABF /* Credits.html in Resources */,
+				CD391AFA0C8E04EC0008BABF /* have-modem.png in Resources */,
+				CD391AFB0C8E04EC0008BABF /* no-modem.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -296,6 +284,38 @@
 				29B97319FDCFA39411CA2CEA /* English */,
 			);
 			name = MainMenu.nib;
+			sourceTree = "<group>";
+		};
+		CD391ACD0C8E03460008BABF /* Welcome.html */ = {
+			isa = PBXVariantGroup;
+			children = (
+				CD391ACE0C8E03460008BABF /* English */,
+			);
+			name = Welcome.html;
+			sourceTree = "<group>";
+		};
+		CD391AD50C8E036C0008BABF /* Credits.html */ = {
+			isa = PBXVariantGroup;
+			children = (
+				CD391AD60C8E036C0008BABF /* English */,
+			);
+			name = Credits.html;
+			sourceTree = "<group>";
+		};
+		CD391AF60C8E04EC0008BABF /* have-modem.png */ = {
+			isa = PBXVariantGroup;
+			children = (
+				CD391AF70C8E04EC0008BABF /* English */,
+			);
+			name = "have-modem.png";
+			sourceTree = "<group>";
+		};
+		CD391AF80C8E04EC0008BABF /* no-modem.png */ = {
+			isa = PBXVariantGroup;
+			children = (
+				CD391AF90C8E04EC0008BABF /* English */,
+			);
+			name = "no-modem.png";
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
