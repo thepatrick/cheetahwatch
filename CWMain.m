@@ -49,9 +49,11 @@
 		[cwh setMainController:self];
 		[cwh setupCoreData];	
 	}
-
+	
+	
+	[NSThread detachNewThreadSelector:@selector(USBFinder:) toTarget:[CWMain class] withObject:self];
+	
 	[self clearAllUI];
-	[self startMonitor:nil];
 	[self updateHistory];
 
 	[self makeMenuMatchStorageHistory];
@@ -61,10 +63,12 @@
 	[statusItem setEnabled:YES];
 	[statusItem setToolTip:@"CheetahWatch"];
 
-	[statusItem setImage:[NSImage imageNamed:@"no-modem-menu.tif"]];
-
-	[statusItem setAction:@selector(clickMenu:)];
-	[statusItem setTarget:self];
+	[status setImage:[NSImage imageNamed:@"no-modem.png"]];
+	[statusItem setAttributedTitle:@""];
+	[statusItem setToolTip:@"CheetahWatch - No modem detected"];
+	[self performSelectorOnMainThread:@selector(changeStatusImageTo:) withObject: @"no-modem-menu.tif" waitUntilDone:NO];
+	
+	[statusItem setMenu:statusItemMenu];
 
 	[self showFirstRun];
 }
@@ -81,9 +85,22 @@
 
 -(void)clickMenu:(id)sender
 {
-//	NSLog(@"clickMenu!");
+	NSLog(@"CM!");
 	[NSApp activateIgnoringOtherApps:YES];
 	[theWindow makeKeyAndOrderFront:self];
+}
+
+-(void)showAbout:(id)sender
+{
+	[NSApp activateIgnoringOtherApps:YES];
+	[NSApp orderFrontStandardAboutPanel:sender];
+
+}
+
+-(void)checkUpdates:(id)sender
+{
+	[NSApp activateIgnoringOtherApps:YES];
+	[sparkler checkUpdates:sender];
 }
 
 - (BOOL)applicationShouldHandleReopen:(NSApplication *)app hasVisibleWindows:(BOOL)visible
@@ -103,7 +120,7 @@
 	[super dealloc];
 }
 
-// start a new thread running myrunner below
+// start a new thread running myrunner below, used to get this started from the usb monitor thread
 -(void)startMonitor:(id)sender
 {
 	[NSThread detachNewThreadSelector:@selector(MyRunner:) toTarget:[CWMain class] withObject:self];
@@ -151,7 +168,6 @@
 	[statusItem setAttributedTitle:@""];
 	[statusItem setToolTip:@"CheetahWatch - No modem detected"];
 	[self performSelectorOnMainThread:@selector(changeStatusImageTo:) withObject: @"no-modem-menu.tif" waitUntilDone:NO];
-	[self performSelector:@selector(startMonitor:) withObject:self afterDelay:5];
 }
 
 // called by the monitor thread to say "hoorah! w00t!"
@@ -168,14 +184,17 @@
 {
 	return [[NSUserDefaults standardUserDefaults] boolForKey:@"CWStoreHistory"];
 }
+
 -(void)toggleStoreUsageHistory
 {
 	[[NSUserDefaults standardUserDefaults] setBool:(![self storeUsageHistory]) forKey:@"CWStoreHistory"];
 }
+
 -(void)makeMenuMatchStorageHistory
 {
 	[menuStoreUsageHistory setState:([self storeUsageHistory] ? NSOnState : NSOffState)];
 }
+
 -(void)storeUsageHistory:(id)sender
 {
 	[self toggleStoreUsageHistory];
@@ -189,11 +208,6 @@
 		[cwh clearHistory];
 		[self updateHistory];
 	}
-}
-
--(void)dismissFirstRun:(id)sender
-{
-
 }
 
 -(NSString*)prettyDataAmount:(int)bytes
@@ -354,14 +368,88 @@
 	unsigned int SecondsConnected, SpeedTransmit, SpeedReceive, Transmitted, Received;
 	sscanf(buff,"%X,%X,%X,%X,%X", &SecondsConnected,&SpeedTransmit,&SpeedReceive,&Transmitted,&Received);
 		
-	// this should probably lock to prevent badness, but meh.
+	//@TODO this should probably lock to prevent badness, but meh.
 	currentUptime = [NSNumber numberWithInt:SecondsConnected];
 	currentSpeedReceive = [NSNumber numberWithInt:SpeedReceive];
 	currentSpeedTransmit = [NSNumber numberWithInt:SpeedTransmit];
 	currentTransmitted = [NSNumber numberWithInt:Transmitted];
 	currentReceived = [NSNumber numberWithInt:Received];
 	
-//	NSLog(@"Should see flowReport2...");
 	[self performSelectorOnMainThread:@selector(flowReport2:) withObject:nil waitUntilDone:YES];
 }
+
+// This function sets up some stuff to detect a USB device being plugged. be prepared for C...
++(void)USBFinder:(id)mainController
+{
+    mach_port_t				masterPort;
+    CFMutableDictionaryRef 	matchingDict;
+    CFRunLoopSourceRef		runLoopSource;
+    CFNumberRef				numberRef;
+    kern_return_t			kr;
+    long					usbVendor = kMyVendorID;
+    long					usbProduct = kMyProductID;
+	
+	gCWMain = mainController;
+	
+    // first create a master_port for my task
+    kr = IOMasterPort(MACH_PORT_NULL, &masterPort);
+    if (kr || !masterPort) {
+        printf("ERR: Couldn't create a master IOKit Port(%08x)\n", kr);
+        return;
+    }
+
+    matchingDict = IOServiceMatching(kIOUSBDeviceClassName);	// Interested in instances of class
+                                                                // IOUSBDevice and its subclasses
+    if (!matchingDict) {
+        printf("Can't create a USB matching dictionary\n");
+        mach_port_deallocate(mach_task_self(), masterPort);
+        return;
+    }
+
+	numberRef = CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt32Type, &usbVendor);
+    CFDictionarySetValue(matchingDict, CFSTR(kUSBVendorID), numberRef);
+    CFRelease(numberRef);
+ 	
+    numberRef = CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt32Type, &usbProduct);
+    CFDictionarySetValue(matchingDict, CFSTR(kUSBProductID), numberRef);
+    CFRelease(numberRef);
+    numberRef = 0;
+
+    // Create a notification port and add its run loop event source to our run loop
+    // This is how async notifications get set up.
+    gNotifyPort = IONotificationPortCreate(masterPort);
+    runLoopSource = IONotificationPortGetRunLoopSource(gNotifyPort);
+    
+    gRunLoop = CFRunLoopGetCurrent();
+    CFRunLoopAddSource(gRunLoop, runLoopSource, kCFRunLoopDefaultMode);
+
+    // Now set up a notification to be called when a device is first matched by I/O Kit.
+    // Note that this will not catch any devices that were already plugged in so we take
+    // care of those later.
+	// notifyPort, notificationType, matching, callback, refCon, notification
+    IOServiceAddMatchingNotification(gNotifyPort, kIOFirstMatchNotification,
+									 matchingDict, DeviceAdded, NULL, &gAddedIter);		
+    
+    // Iterate once to get already-present devices and arm the notification
+    DeviceAdded(NULL, gAddedIter);
+
+    // Now done with the master_port
+    mach_port_deallocate(mach_task_self(), masterPort);
+    masterPort = 0;
+
+    // Start the run loop. Now we'll receive notifications.
+    CFRunLoopRun();
+}
+
+// this is a (mmm C) callback function when a USB device we care about is connected. 
+void DeviceAdded(void *refCon, io_iterator_t iterator)
+{
+    io_service_t		usbDevice;
+    while ( (usbDevice = IOIteratorNext(iterator)) )
+    {		
+		[gCWMain performSelectorOnMainThread:@selector(startMonitor:) withObject:nil waitUntilDone:YES];
+        IOObjectRelease(usbDevice);
+    }
+}
+
 @end

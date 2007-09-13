@@ -11,6 +11,7 @@
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
+		CD0FE26A0C95ADC20071D806 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD0FE2690C95ADC20071D806 /* IOKit.framework */; };
 		CD27C4340C8CC565009D1D26 /* no-modem-menu.tif in Resources */ = {isa = PBXBuildFile; fileRef = CD27C4330C8CC565009D1D26 /* no-modem-menu.tif */; };
 		CD391ACF0C8E03460008BABF /* Welcome.html in Resources */ = {isa = PBXBuildFile; fileRef = CD391ACD0C8E03460008BABF /* Welcome.html */; };
 		CD391AD70C8E036C0008BABF /* Credits.html in Resources */ = {isa = PBXBuildFile; fileRef = CD391AD50C8E036C0008BABF /* Credits.html */; };
@@ -57,6 +58,7 @@
 		32CA4F630368D1EE00C91783 /* CheetahWatch_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CheetahWatch_Prefix.pch; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* CheetahWatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CheetahWatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		CD0FE2690C95ADC20071D806 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = /System/Library/Frameworks/IOKit.framework; sourceTree = "<absolute>"; };
 		CD27C4330C8CC565009D1D26 /* no-modem-menu.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = "no-modem-menu.tif"; sourceTree = "<group>"; };
 		CD391ACE0C8E03460008BABF /* English */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.html; name = English; path = English.lproj/Welcome.html; sourceTree = "<group>"; };
 		CD391AD60C8E036C0008BABF /* English */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.html; name = English; path = English.lproj/Credits.html; sourceTree = "<group>"; };
@@ -91,6 +93,7 @@
 				CDA4B1FA0C62947300E71C0C /* Carbon.framework in Frameworks */,
 				CDD647D70C74D7AB004CA0FA /* Sparkle.framework in Frameworks */,
 				CD391B5F0C8E07700008BABF /* WebKit.framework in Frameworks */,
+				CD0FE26A0C95ADC20071D806 /* IOKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -115,6 +118,8 @@
 		1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				CD391B5A0C8E07700008BABF /* WebKit.framework */,
+				CD0FE2690C95ADC20071D806 /* IOKit.framework */,
 				CDD647D40C74D7AB004CA0FA /* Sparkle.framework */,
 				CDA4B1F90C62947300E71C0C /* Carbon.framework */,
 				1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */,
@@ -186,7 +191,6 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				CD391B5A0C8E07700008BABF /* WebKit.framework */,
 				1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */,
 				1058C7A2FEA54F0111CA2CBB /* Other Frameworks */,
 			);

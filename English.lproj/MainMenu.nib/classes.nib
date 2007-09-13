@@ -4,8 +4,10 @@
         {
             ACTIONS = {
                 clearUsageHistory = id; 
+                clickMenu = id; 
                 dismissFirstRun = id; 
                 noModem = id; 
+                showAbout = id; 
                 startMonitor = id; 
                 storeUsageHistory = id; 
             }; 
@@ -19,9 +21,11 @@
                 menuStoreUsageHistory = id; 
                 mode = id; 
                 signal = id; 
+                sparkler = id; 
                 speedReceive = id; 
                 speedTransmit = id; 
                 status = id; 
+                statusItemMenu = id; 
                 theWindow = StyledWindow; 
                 totalReceived = id; 
                 totalTransmitted = id; 

@@ -23,12 +23,34 @@
 
 #import <Cocoa/Cocoa.h>
 #import <WebKit/WebKit.h>
+
+#include <IOKit/IOKitLib.h>
+#include <IOKit/IOMessage.h>
+#include <IOKit/IOCFPlugIn.h>
+#include <IOKit/usb/IOUSBLib.h>
+
+#include <mach/mach.h>
+#include <unistd.h>
+
 #import "StyledWindow.h"
+
 #import "CWHistorySupport.h"
 
 #define BAUDRATE B9600
 #define MODEMUIDEV "/dev/tty.HUAWEIMobile-Pcui"
 #define BUFSIZE 256
+
+#define kMyVendorID		4817
+#define kMyProductID	4099
+
+typedef struct MyPrivateData {
+    io_object_t			notification;
+    IOUSBDeviceInterface *	*deviceInterface;
+    CFStringRef			deviceName;
+    UInt32			locationID;
+} MyPrivateData;
+
+
 
 @interface CWMain : NSObject
 {
@@ -48,6 +70,8 @@
 	IBOutlet id menuClearUsageHistory;
 	IBOutlet id firstRunWindow;
 	IBOutlet id firstRunWebkit;
+	IBOutlet id statusItemMenu;
+	IBOutlet id sparkler;
 	
 	bool weHaveAModem;
 	NSStatusItem *statusItem;
@@ -59,7 +83,6 @@
 	NSNumber *currentSpeedTransmit;
 	NSNumber *currentTransmitted;
 	NSNumber *currentReceived;
-	
 }
 
 -(void)showFirstRun;
@@ -83,8 +106,7 @@
 
 -(void)storeUsageHistory:(id)sender;
 -(void)clearUsageHistory:(id)sender;
-
--(void)dismissFirstRun:(id)sender;
+-(void)showAbout:(id)sender;
 
 -(void)signalStrength:(char*)buff;
 -(void)modeChange:(char*)buff;
@@ -92,5 +114,14 @@
 
 +(void)MyRunner:(id)mainController;
 
++(void)USBFinder:(id)mainController;
+
+void DeviceAdded(void *refCon, io_iterator_t iterator);
 
 @end
+
+
+static IONotificationPortRef	gNotifyPort;
+static io_iterator_t	gAddedIter;
+static CFRunLoopRef		gRunLoop;
+static CWMain			*gCWMain;
