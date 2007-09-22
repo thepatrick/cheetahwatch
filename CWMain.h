@@ -25,12 +25,15 @@
 #import <WebKit/WebKit.h>
 
 #include <IOKit/IOKitLib.h>
+#include <IOKit/serial/IOSerialKeys.h>
+#include <IOKit/IOBSD.h>
 #include <IOKit/IOMessage.h>
 #include <IOKit/IOCFPlugIn.h>
 #include <IOKit/usb/IOUSBLib.h>
 
 #include <mach/mach.h>
 #include <unistd.h>
+#include <termios.h>
 
 #import "StyledWindow.h"
 
@@ -42,6 +45,14 @@
 
 #define kMyVendorID		4817
 #define kMyProductID	4099
+ 
+enum
+{
+    kNumRetries = 3
+};
+
+
+
 
 typedef struct MyPrivateData {
     io_object_t			notification;
@@ -73,6 +84,13 @@ typedef struct MyPrivateData {
 	IBOutlet id statusItemMenu;
 	IBOutlet id sparkler;
 	
+	IBOutlet id modemInfoWindow;
+	IBOutlet id modemInfoHWVersion;
+	IBOutlet id modemInfoNetwork;
+	IBOutlet id modemInfoAPN;
+	IBOutlet id modemInfoIMEI;
+	IBOutlet id modemInfoIMSI;
+	
 	bool weHaveAModem;
 	NSStatusItem *statusItem;
 
@@ -95,7 +113,6 @@ typedef struct MyPrivateData {
 
 -(BOOL)storeUsageHistory;
 -(void)toggleStoreUsageHistory;
--(void)makeMenuMatchStorageHistory;
 
 -(void)changeStatusImageTo:(NSString*)which;
 
@@ -106,11 +123,15 @@ typedef struct MyPrivateData {
 
 -(void)storeUsageHistory:(id)sender;
 -(void)clearUsageHistory:(id)sender;
+
+-(void)showModemInfo:(id)sender;
+-(void)clickMenu:(id)sender;
 -(void)showAbout:(id)sender;
 
 -(void)signalStrength:(char*)buff;
 -(void)modeChange:(char*)buff;
 -(void)flowReport:(char*)buff;
+-(NSString*)GetATResult:(NSString*)command forDev:(int)dev;
 
 +(void)MyRunner:(id)mainController;
 

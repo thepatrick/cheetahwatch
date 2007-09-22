@@ -85,9 +85,14 @@
 
 -(void)clickMenu:(id)sender
 {
-	NSLog(@"CM!");
 	[NSApp activateIgnoringOtherApps:YES];
 	[theWindow makeKeyAndOrderFront:self];
+}
+
+-(void)showModemInfo:(id)sender
+{
+	[NSApp activateIgnoringOtherApps:YES];	
+	[modemInfoWindow makeKeyAndOrderFront:self];
 }
 
 -(void)showAbout:(id)sender
@@ -250,6 +255,23 @@
 	}	
 }
 
+-(void)setAPN:(NSString*)theApn
+{
+	[modemInfoAPN setStringValue:theApn];
+}
+-(void)setHardwareVersion:(NSString*)theVersion
+{
+	[modemInfoHWVersion setStringValue:theVersion];
+}
+-(void)setIMEI:(NSString*)theIMEI
+{
+	[modemInfoIMEI setStringValue:theIMEI];
+}
+-(void)setIMSI:(NSString*)theIMSI
+{
+	[modemInfoIMSI setStringValue:theIMSI];
+}
+
 // this is the quasi-runloop (yeah, whatever) that follows the stream from the modem
 // the functions below are all run on the second thread.
 + (void)MyRunner:(id)mainController
@@ -258,7 +280,7 @@
 	char *buf_stream, *buf_lineStart;
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	buf_stream=(char *)malloc(BUFSIZE*sizeof(char));
-	fd = open(MODEMUIDEV, O_RDONLY | O_NOCTTY ); 
+	fd = open(MODEMUIDEV, O_RDWR | O_NOCTTY ); 
 	if (fd < 0) {
 		[mainController performSelectorOnMainThread:@selector(noModem:) withObject:nil waitUntilDone:YES];
 		[pool release];
@@ -266,6 +288,25 @@
 		return;
 	}	
 	[mainController haveModem];
+	
+	NSString *apn = [[mainController GetATResult:@"AT+CGDCONT?\r" forDev:fd] substringFromIndex:18];
+	apn = [apn substringToIndex:([apn rangeOfString:@","].location - 1)];	
+	[mainController performSelectorOnMainThread:@selector(setAPN:) withObject:apn waitUntilDone:YES];
+
+	NSString *version = [mainController GetATResult:@"AT^HWVER\r" forDev:fd];
+	version = [version substringWithRange:NSMakeRange(8,[version length]-9)];
+	[mainController performSelectorOnMainThread:@selector(setHardwareVersion:) 
+									 withObject:version waitUntilDone:YES];
+	
+	[mainController performSelectorOnMainThread:@selector(setIMEI:) 
+									 withObject:[mainController GetATResult:@"AT+CGSN\r" forDev:fd]
+								  waitUntilDone:YES];
+								
+	[mainController performSelectorOnMainThread:@selector(setIMSI:) 
+									 withObject:[mainController GetATResult:@"AT+CIMI\r" forDev:fd]
+								  waitUntilDone:YES];
+
+	
 	while(bytes = read(fd,buf_stream,255)){
 		buf_lineStart=strchr(buf_stream,'^');
 		buf_stream[bytes]=0x00;  
@@ -276,6 +317,7 @@
 					case 'D': [mainController flowReport:(buf_stream+11)]; break;
 					case 'M': [mainController modeChange:(buf_stream+8)]; break;
 					case 'R': [mainController signalStrength:(buf_stream+6)]; break;
+					case 'B': break;
 				}
 			}
 		}	
@@ -284,6 +326,9 @@
     [pool release];
 	free(buf_stream); 
 }
+
+
+
 
 // Update the signal strength display
 -(void)signalStrength:(char*)buff
@@ -377,6 +422,35 @@
 	
 	[self performSelectorOnMainThread:@selector(flowReport2:) withObject:nil waitUntilDone:YES];
 }
+
+-(NSString*)GetATResult:(NSString*)command forDev:(int)dev
+{
+	int bytes;
+	char *buf_stream, *buf_lineStart, *buf_scanned;
+	buf_stream=(char *)malloc(BUFSIZE*sizeof(char));
+	buf_scanned=(char *)malloc(BUFSIZE*sizeof(char));
+	NSString *returnValue;
+	
+	returnValue = @"";
+	
+	write(dev, [command cString], [command cStringLength]);
+	read(dev,buf_stream,255);
+	bytes = read(dev,buf_stream,255);
+	buf_lineStart=strchr(buf_stream,'\n');
+	buf_stream[bytes]=0x00;  
+	if (buf_lineStart) {
+		strcpy(buf_stream, buf_lineStart); 
+		if (buf_stream[0]=='\n') {
+			sscanf(buf_stream, "\n%[^\r\n]", buf_scanned);
+			returnValue =  [NSString stringWithCString:buf_scanned];
+		}
+	}	
+	
+	free(buf_stream);
+	free(buf_scanned);
+	return returnValue;
+}
+
 
 // This function sets up some stuff to detect a USB device being plugged. be prepared for C...
 +(void)USBFinder:(id)mainController
