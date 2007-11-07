@@ -35,6 +35,8 @@
 #include <unistd.h>
 #include <termios.h>
 
+#include <SystemConfiguration/SCNetworkConnection.h>
+
 #import "StyledWindow.h"
 
 #import "CWHistorySupport.h"
@@ -133,6 +135,22 @@ typedef struct MyPrivateData {
 -(void)flowReport:(char*)buff;
 -(NSString*)GetATResult:(NSString*)command forDev:(int)dev;
 
+
+-(void)setAPN:(NSString*)theApn;
+-(void)setHardwareVersion:(NSString*)theVersion;
+
+
+-(void)gotHWVersion:(char*)buff;
+-(void)gotAPN:(char*)buff;
+-(void)setIMEI:(NSString*)theIMEI;
+-(void)setIMSI:(NSString*)theIMSI;
+
+-(void)getIMSI:(id)sender;
+-(void)getIMSI2:(id)sender;
+
+-(NSString*)GetATResult:(NSString*)command forDev:(int)dev;
+-(void)sendATCommand:(NSString*)command toDevice:(int)dev;
+
 +(void)MyRunner:(id)mainController;
 
 +(void)USBFinder:(id)mainController;
@@ -141,8 +159,8 @@ void DeviceAdded(void *refCon, io_iterator_t iterator);
 
 @end
 
-
 static IONotificationPortRef	gNotifyPort;
 static io_iterator_t	gAddedIter;
 static CFRunLoopRef		gRunLoop;
 static CWMain			*gCWMain;
+static fd; // the connection to the modem

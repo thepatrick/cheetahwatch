@@ -32,6 +32,34 @@
 	[[NSUserDefaults standardUserDefaults] registerDefaults:dd];
 }
 
+SCNetworkConnectionContext gScncCtx;
+SCNetworkConnectionStatus gStat = kSCNetworkConnectionInvalid;
+
+const char *statusMsg (SCNetworkConnectionStatus stat)
+{
+	static const char *statusString[] = {
+		"kSCNetworkConnectionInvalid",
+		"kSCNetworkConnectionDisconnected",
+		"kSCNetworkConnectionConnecting",
+		"kSCNetworkConnectionConnected",
+		"kSCNetworkConnectionDisconnecting"
+	};
+	const char *msg = NULL;
+	if (kSCNetworkConnectionInvalid <= stat && stat <= kSCNetworkConnectionDisconnecting)
+		msg = statusString [stat + 1];
+	else
+		msg = "Unknown status";
+	return msg;
+}
+
+void calloutProc ( 
+    SCNetworkConnectionRef connection, 
+    SCNetworkConnectionStatus status, 
+    void *info )
+{
+	gStat = status;
+}
+
 -(void)awakeFromNib
 {
 	[signal setEnabled:NO]; //disables user interaction, enabled by default
@@ -71,6 +99,36 @@
 	[statusItem setMenu:statusItemMenu];
 
 	[self showFirstRun];
+	
+	CFStringRef serviceID;
+	CFDictionaryRef userOptions;
+	
+	if(SCNetworkConnectionCopyUserPreferences(NULL, &serviceID, &userOptions)) {
+		NSLog(@"ServiceID: %@\n", serviceID);
+		
+		SCNetworkConnectionRef scncRef = SCNetworkConnectionCreateWithServiceID (NULL, serviceID, calloutProc, &gScncCtx);
+		
+		const char *msg = NULL;
+		int err = kSCStatusOK, mainRes = 0;
+		
+		if (scncRef == NULL) {
+			msg = "SCNetworkConnectionCreateWithServiceID failed";
+			err = SCError ();
+			mainRes = 1;
+		} else {
+			gStat = SCNetworkConnectionGetStatus (scncRef);
+			msg = statusMsg (gStat);
+			mainRes = 0;
+						
+			if (msg != NULL)
+				printf ("%s\n", msg);
+		}
+		
+	} else {
+		NSLog(@"No service to dial...?");
+	}
+	
+	
 }
 
 -(void)showFirstRun
@@ -137,6 +195,10 @@
 	[signal setIntValue:0];
 	[mode setStringValue:@""];	
 	[statusItem setTitle:@""];
+	
+	[self setHardwareVersion:@""];
+	[self setIMEI:@""];
+	[self setIMSI:@""];	
 	[self clearConnectionUI];
 }
 
@@ -271,12 +333,40 @@
 {
 	[modemInfoIMSI setStringValue:theIMSI];
 }
+-(void)getIMSI:(id)sender
+{
+	NSLog(@"Calling -getIMSI:");
+	[self performSelector:@selector(getIMSI2:) withObject:nil afterDelay:5];
+}
+
+-(void)getIMSI2:(id)sender
+{
+	[self sendATCommand:@"AT+CGDCONT?\r" toDevice:fd];
+	[self sendATCommand:@"AT+CGDCONT?\r" toDevice:fd];
+	
+//	NSLog(@"Calling -getIMSI2:");
+//	NSString *apn = [[self GetATResult:@"AT+CGDCONT?\r" forDev:fd] substringFromIndex:18];
+//	NSLog(@"Location of ,: %i", [apn rangeOfString:@","].location);
+//	if([apn rangeOfString:@","].location < [apn length]) {
+//		apn = [apn substringToIndex:([apn rangeOfString:@","].location - 1)];	
+//		[self performSelectorOnMainThread:@selector(setAPN:) withObject:apn waitUntilDone:YES];
+//	} else {
+//		NSLog(@"Index out of bounds, try again...");
+//		usleep(10000);
+//		apn = [self GetATResult:@"AT+CGDCONT?\r" forDev:fd];
+//		NSLog(@"Location of ,: %@", apn);
+//		usleep(20000);
+//		apn = [self GetATResult:@"AT+CGDCONT?\r" forDev:fd];
+//		NSLog(@"Location of ,: %@", apn);
+//	}
+
+}
 
 // this is the quasi-runloop (yeah, whatever) that follows the stream from the modem
 // the functions below are all run on the second thread.
 + (void)MyRunner:(id)mainController
 {
-	int fd, bytes;
+	int bytes;
 	char *buf_stream, *buf_lineStart;
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	buf_stream=(char *)malloc(BUFSIZE*sizeof(char));
@@ -288,27 +378,40 @@
 		return;
 	}	
 	[mainController haveModem];
-	
-	NSString *apn = [[mainController GetATResult:@"AT+CGDCONT?\r" forDev:fd] substringFromIndex:18];
-	apn = [apn substringToIndex:([apn rangeOfString:@","].location - 1)];	
-	[mainController performSelectorOnMainThread:@selector(setAPN:) withObject:apn waitUntilDone:YES];
-
-	NSString *version = [mainController GetATResult:@"AT^HWVER\r" forDev:fd];
-	version = [version substringWithRange:NSMakeRange(8,[version length]-9)];
-	[mainController performSelectorOnMainThread:@selector(setHardwareVersion:) 
-									 withObject:version waitUntilDone:YES];
-	
+	[mainController performSelectorOnMainThread:@selector(getIMSI:) withObject:nil waitUntilDone:NO];
+		
 	[mainController performSelectorOnMainThread:@selector(setIMEI:) 
 									 withObject:[mainController GetATResult:@"AT+CGSN\r" forDev:fd]
 								  waitUntilDone:YES];
 								
-	[mainController performSelectorOnMainThread:@selector(setIMSI:) 
-									 withObject:[mainController GetATResult:@"AT+CIMI\r" forDev:fd]
-								  waitUntilDone:YES];
+//	[mainController performSelectorOnMainThread:@selector(setIMSI:) 
+//									 withObject:[mainController GetATResult:@"AT+CIMI\r" forDev:fd]
+//								  waitUntilDone:YES];
+								  
+								  
+//	NSString *apn = [[mainController GetATResult:@"AT+CGDCONT?\r" forDev:fd] substringFromIndex:18];
+//	NSLog(@"Location of ,: %i", [apn rangeOfString:@","].location);
+//	if([apn rangeOfString:@","].location < [apn length]) {
+//		apn = [apn substringToIndex:([apn rangeOfString:@","].location - 1)];	
+//		[mainController performSelectorOnMainThread:@selector(setAPN:) withObject:apn waitUntilDone:YES];
+//	} else {
+//		NSLog(@"Index out of bounds, try again...");
+//		usleep(10000);
+//		apn = [mainController GetATResult:@"AT+CGDCONT?\r" forDev:fd];
+//		NSLog(@"Location of ,: %@", apn);
+//		usleep(20000);
+//		apn = [mainController GetATResult:@"AT+CGDCONT?\r" forDev:fd];
+//		NSLog(@"Location of ,: %@", apn);
+//	}
 
+	[mainController sendATCommand:@"AT^HWVER\r" toDevice:fd];
 	
 	while(bytes = read(fd,buf_stream,255)){
 		buf_lineStart=strchr(buf_stream,'^');
+		if(buf_lineStart == 0) {
+			buf_lineStart=strchr(buf_stream,'+');
+			printf("\nDidn't find ^, looked for +, found it at: %i\n", buf_lineStart);
+		}
 		buf_stream[bytes]=0x00;  
 		if (buf_lineStart) {
 			strcpy(buf_stream, buf_lineStart); 
@@ -317,7 +420,21 @@
 					case 'D': [mainController flowReport:(buf_stream+11)]; break;
 					case 'M': [mainController modeChange:(buf_stream+8)]; break;
 					case 'R': [mainController signalStrength:(buf_stream+6)]; break;
+					case 'H': [mainController gotHWVersion:(buf_stream+7)]; break;
 					case 'B': break;
+				}
+			}
+			if (buf_stream[0]=='+') {
+				if(buf_stream[1] == 'C' && buf_stream[2] == 'G') {
+					if(buf_stream[8] == '?') {
+						printf("APN, but not with details. Try again.");
+					} else if(buf_stream[8] == ':') {
+						[mainController gotAPN:(buf_stream+8)];
+					}
+				}
+				if(buf_stream[1] == 'C' && buf_stream[2] == 'M' && buf_stream[3] == 'E') {
+					// this is probably an error condition
+					//[mainController gotCME:(buf_stream+4)];
 				}
 			}
 		}	
@@ -328,7 +445,29 @@
 }
 
 
+-(void)gotHWVersion:(char*)buff
+{
+	NSString *version = [NSString stringWithCString:(buff + 1)];
+	if([version length] > 0) {
+		NSLog(@"\" location in version: %i", [version rangeOfString:@"\""].location);
+		if([version rangeOfString:@"\""].location > [version length]) {
+		} else {
+			version = [version substringWithRange:NSMakeRange(0,[version rangeOfString:@"\""].location)];
+		}
+	}	
+	[self performSelectorOnMainThread:@selector(setHardwareVersion:) 
+									 withObject:version waitUntilDone:NO];
+}
 
+-(void)gotAPN:(char*)buff
+{
+	NSString *apn = [[NSString stringWithCString:buff] substringFromIndex:10];
+	NSLog(@"Location of ,: %i", [apn rangeOfString:@","].location);
+	if([apn rangeOfString:@","].location < [apn length]) {
+		apn = [apn substringToIndex:([apn rangeOfString:@","].location - 1)];	
+		[self performSelectorOnMainThread:@selector(setAPN:) withObject:apn waitUntilDone:YES];
+	} 
+}
 
 // Update the signal strength display
 -(void)signalStrength:(char*)buff
@@ -451,6 +590,15 @@
 	return returnValue;
 }
 
+
+-(void)sendATCommand:(NSString*)command toDevice:(int)dev
+{		
+	char *buf_stream;
+	buf_stream=(char *)malloc(BUFSIZE*sizeof(char));
+	write(dev, [command cString], [command cStringLength]);
+	read(dev,buf_stream,255);
+	free(buf_stream);
+}
 
 // This function sets up some stuff to detect a USB device being plugged. be prepared for C...
 +(void)USBFinder:(id)mainController
