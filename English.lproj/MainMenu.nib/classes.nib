@@ -5,6 +5,10 @@
             ACTIONS = {
                 clearUsageHistory = id; 
                 clickMenu = id; 
+                connectNetwork = id; 
+                disconnectNetwork = id; 
+                getIMSI = id; 
+                getIMSI2 = id; 
                 noModem = id; 
                 showAbout = id; 
                 showModemInfo = id; 
@@ -31,6 +35,9 @@
                 speedReceive = id; 
                 speedTransmit = id; 
                 status = id; 
+                statusItemConectedFor = id; 
+                statusItemConnect = id; 
+                statusItemDisconnect = id; 
                 statusItemMenu = id; 
                 theWindow = StyledWindow; 
                 totalReceived = id; 

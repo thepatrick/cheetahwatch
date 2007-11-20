@@ -53,9 +53,6 @@ enum
     kNumRetries = 3
 };
 
-
-
-
 typedef struct MyPrivateData {
     io_object_t			notification;
     IOUSBDeviceInterface *	*deviceInterface;
@@ -63,15 +60,13 @@ typedef struct MyPrivateData {
     UInt32			locationID;
 } MyPrivateData;
 
-
-
 @interface CWMain : NSObject
 {
     IBOutlet id mode;
     IBOutlet id signal;
     IBOutlet id speedReceive;
     IBOutlet id speedTransmit;
-    IBOutlet id status;
+    IBOutlet id status;	
 	IBOutlet StyledWindow *theWindow;
     IBOutlet id transferReceive;
     IBOutlet id transferTransmit;
@@ -84,6 +79,9 @@ typedef struct MyPrivateData {
 	IBOutlet id firstRunWindow;
 	IBOutlet id firstRunWebkit;
 	IBOutlet id statusItemMenu;
+	IBOutlet id statusItemConectedFor;
+	IBOutlet id statusItemConnect;
+	IBOutlet id statusItemDisconnect;
 	IBOutlet id sparkler;
 	
 	IBOutlet id modemInfoWindow;
@@ -103,7 +101,15 @@ typedef struct MyPrivateData {
 	NSNumber *currentSpeedTransmit;
 	NSNumber *currentTransmitted;
 	NSNumber *currentReceived;
+	
+	// Relating to PPP connect/disconnecting	
+	SCNetworkConnectionRef scncRef;
+	CFDictionaryRef userOptions;		
+	SCNetworkConnectionContext gScncCtx;
+	SCNetworkConnectionStatus gStat;
 }
+
+-(void)setupDialing;
 
 -(void)showFirstRun;
 
@@ -125,6 +131,9 @@ typedef struct MyPrivateData {
 
 -(void)storeUsageHistory:(id)sender;
 -(void)clearUsageHistory:(id)sender;
+
+-(void)connectNetwork:(id)sender;
+-(void)disconnectNetwork:(id)sender;
 
 -(void)showModemInfo:(id)sender;
 -(void)clickMenu:(id)sender;
@@ -157,7 +166,10 @@ typedef struct MyPrivateData {
 
 void DeviceAdded(void *refCon, io_iterator_t iterator);
 
+void calloutProc (SCNetworkConnectionRef connection, SCNetworkConnectionStatus status, void *info );
+
 @end
+
 
 static IONotificationPortRef	gNotifyPort;
 static io_iterator_t	gAddedIter;

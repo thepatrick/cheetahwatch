@@ -32,10 +32,7 @@
 	[[NSUserDefaults standardUserDefaults] registerDefaults:dd];
 }
 
-SCNetworkConnectionContext gScncCtx;
-SCNetworkConnectionStatus gStat = kSCNetworkConnectionInvalid;
-
-const char *statusMsg (SCNetworkConnectionStatus stat)
+const char *statusMsgA (SCNetworkConnectionStatus stat)
 {
 	static const char *statusString[] = {
 		"kSCNetworkConnectionInvalid",
@@ -52,12 +49,13 @@ const char *statusMsg (SCNetworkConnectionStatus stat)
 	return msg;
 }
 
-void calloutProc ( 
-    SCNetworkConnectionRef connection, 
-    SCNetworkConnectionStatus status, 
-    void *info )
+void calloutProc (SCNetworkConnectionRef connection, SCNetworkConnectionStatus status, void *info )
 {
-	gStat = status;
+	NSLog(@"calloutProc!");
+	SCNetworkConnectionStatus gStat = status;
+	const char *msg = statusMsgA(gStat);				
+	if (msg != NULL)
+		printf ("%s\n", msg);
 }
 
 -(void)awakeFromNib
@@ -72,63 +70,49 @@ void calloutProc (
 	[theWindow setBackgroundColor:[theWindow styledBackground]];
 	[theWindow setDelegate:self];
 
+	[status setImage:[NSImage imageNamed:@"no-modem.png"]];
+	
+	statusItem = [[[NSStatusBar systemStatusBar] statusItemWithLength:NSVariableStatusItemLength] retain];
+	[statusItem setHighlightMode:YES];
+	[statusItem setEnabled:YES];
+	[statusItem setToolTip:@"CheetahWatch"];
+	[statusItem setAttributedTitle:@""];
+	[statusItem setToolTip:@"CheetahWatch - No modem detected"];
+	[statusItem setMenu:statusItemMenu];		
+	[statusItemConnect retain];
+	[statusItemDisconnect retain];
+
+	[self performSelectorOnMainThread:@selector(changeStatusImageTo:) withObject: @"no-modem-menu.tif" waitUntilDone:NO];	
 	if([self storeUsageHistory]) {
 		cwh = [[CWHistorySupport alloc] init];	
 		[cwh setMainController:self];
 		[cwh setupCoreData];	
 	}
-	
-	
 	[NSThread detachNewThreadSelector:@selector(USBFinder:) toTarget:[CWMain class] withObject:self];
-	
 	[self clearAllUI];
 	[self updateHistory];
-
 	[self makeMenuMatchStorageHistory];
-
-	statusItem = [[[NSStatusBar systemStatusBar] statusItemWithLength:NSVariableStatusItemLength] retain];
-	[statusItem setHighlightMode:YES];
-	[statusItem setEnabled:YES];
-	[statusItem setToolTip:@"CheetahWatch"];
-
-	[status setImage:[NSImage imageNamed:@"no-modem.png"]];
-	[statusItem setAttributedTitle:@""];
-	[statusItem setToolTip:@"CheetahWatch - No modem detected"];
-	[self performSelectorOnMainThread:@selector(changeStatusImageTo:) withObject: @"no-modem-menu.tif" waitUntilDone:NO];
-	
-	[statusItem setMenu:statusItemMenu];
-
+	[self setupDialing];	
 	[self showFirstRun];
-	
+}
+
+-(void)setupDialing
+{
+	gStat = kSCNetworkConnectionInvalid;
 	CFStringRef serviceID;
-	CFDictionaryRef userOptions;
-	
 	if(SCNetworkConnectionCopyUserPreferences(NULL, &serviceID, &userOptions)) {
-		NSLog(@"ServiceID: %@\n", serviceID);
-		
-		SCNetworkConnectionRef scncRef = SCNetworkConnectionCreateWithServiceID (NULL, serviceID, calloutProc, &gScncCtx);
-		
-		const char *msg = NULL;
-		int err = kSCStatusOK, mainRes = 0;
-		
+		scncRef = SCNetworkConnectionCreateWithServiceID (NULL, serviceID, calloutProc, &gScncCtx);
 		if (scncRef == NULL) {
-			msg = "SCNetworkConnectionCreateWithServiceID failed";
-			err = SCError ();
-			mainRes = 1;
+			NSLog(@"SCNetworkConnectionCreateWithServiceID failed");
 		} else {
 			gStat = SCNetworkConnectionGetStatus (scncRef);
-			msg = statusMsg (gStat);
-			mainRes = 0;
-						
-			if (msg != NULL)
-				printf ("%s\n", msg);
+//			const char *msg = statusMsgA(gStat);
+//			if (msg != NULL)
+//				NSLog(@"Connection status is: %s", msg);
 		}
-		
 	} else {
-		NSLog(@"No service to dial...?");
+		NSLog(@"No PPP services configured.");
 	}
-	
-	
 }
 
 -(void)showFirstRun
@@ -157,7 +141,6 @@ void calloutProc (
 {
 	[NSApp activateIgnoringOtherApps:YES];
 	[NSApp orderFrontStandardAboutPanel:sender];
-
 }
 
 -(void)checkUpdates:(id)sender
@@ -179,6 +162,8 @@ void calloutProc (
 	if([self storeUsageHistory]) {
 		[cwh release];
 	}
+	[statusItemConnect release];
+	[statusItemDisconnect release];
     [statusItem release];
 	[super dealloc];
 }
@@ -195,11 +180,17 @@ void calloutProc (
 	[signal setIntValue:0];
 	[mode setStringValue:@""];	
 	[statusItem setTitle:@""];
-	
 	[self setHardwareVersion:@""];
 	[self setIMEI:@""];
 	[self setIMSI:@""];	
+	if([statusItemMenu indexOfItem:statusItemDisconnect] != -1) {
+		[statusItemMenu removeItem:statusItemDisconnect];
+	}
+	if([statusItemMenu indexOfItem:statusItemConnect] != -1) {
+		[statusItemMenu removeItem:statusItemConnect];
+	}	
 	[self clearConnectionUI];
+	[statusItemConectedFor setTitle:@"No modem connected"];
 }
 
 -(void)clearConnectionUI
@@ -210,6 +201,10 @@ void calloutProc (
 	[transferTransmit setStringValue:@""];
 	[uptime setStringValue:@""];
 	[statusItem setToolTip:@"CheetahWatch - Not connected"];
+	[statusItemConectedFor setTitle:@"Not connected"];
+	if([statusItemMenu indexOfItem:statusItemDisconnect] != -1) {
+		[statusItemMenu removeItem:statusItemDisconnect];	
+	}
 }
 
 -(void)updateHistory
@@ -228,13 +223,22 @@ void calloutProc (
 {
 	if([self storeUsageHistory]) {
 		[cwh markConnectionAsClosed];
-	}	
+	}
 	[self clearAllUI];
 	NSImage *imageFromBundle = [NSImage imageNamed:@"no-modem.png"];
 	[status setImage: imageFromBundle];
 	[statusItem setAttributedTitle:@""];
 	[statusItem setToolTip:@"CheetahWatch - No modem detected"];
+	[statusItemConectedFor setTitle:@"No modem connected"];
 	[self performSelectorOnMainThread:@selector(changeStatusImageTo:) withObject: @"no-modem-menu.tif" waitUntilDone:NO];
+}
+
+-(void)haveModemMain:(id)ignore
+{
+	if([statusItemMenu indexOfItem:statusItemConnect] < 0) {
+		NSLog(@"adding..");
+		[statusItemMenu insertItem:statusItemConnect atIndex:([statusItemMenu indexOfItem:statusItemConectedFor] + 1)];
+	}
 }
 
 // called by the monitor thread to say "hoorah! w00t!"
@@ -245,6 +249,11 @@ void calloutProc (
 	[status setImage: imageFromBundle];
 	[self clearAllUI];
 	[self performSelectorOnMainThread:@selector(changeStatusImageTo:) withObject: @"signal-0.tif" waitUntilDone:NO];
+	[self performSelectorOnMainThread:@selector(haveModemMain:) withObject:nil waitUntilDone:YES];
+	
+	[statusItemConectedFor setTitle:@"Not connected"];
+
+
 }
 
 -(BOOL)storeUsageHistory
@@ -277,6 +286,16 @@ void calloutProc (
 	}
 }
 
+-(void)connectNetwork:(id)sender
+{	
+	SCNetworkConnectionStart(scncRef, userOptions, true);
+}
+
+-(void)disconnectNetwork:(id)sender
+{	
+	SCNetworkConnectionStop(scncRef, true);
+}
+
 -(NSString*)prettyDataAmount:(int)bytes
 {
 	if(bytes < 1024) // bytes
@@ -303,16 +322,29 @@ void calloutProc (
 	NSString *tooltip = [NSString stringWithFormat:@"CheetahWatch - %@ down / %@ up", 
 									[self prettyDataAmount:[currentReceived intValue]],
 									[self prettyDataAmount:[currentTransmitted intValue]]];
+									
+									
+	NSString *connectedFor = [NSString stringWithFormat:@"Connected %@", 
+									[NSString stringWithFormat:@"%.0f:%.2d", MinutesConnected, (SecondsConnected - ((int)MinutesConnected * 60 ))]];
 	
 	[statusItem setToolTip:tooltip];
-
+	[statusItemConectedFor setTitle:connectedFor];
+	
+	int index = [statusItemMenu indexOfItem:statusItemConnect];
+	if(index != -1) {
+		[statusItemMenu removeItem:statusItemConnect];	
+		if([statusItemMenu indexOfItem:statusItemDisconnect] == -1) {
+			[statusItemMenu insertItem:statusItemDisconnect atIndex:([statusItemMenu indexOfItem:statusItemConectedFor] + 1)];
+		}
+	}
+	
+//	[statusItemConnect setEnabled:NO];//
 
 	if([self storeUsageHistory]) {
 		[cwh flowReportSeconds:currentUptime withTransmitRate:currentSpeedTransmit
 			receiveRate:currentSpeedReceive 
 			totalSent:currentTransmitted 
 			andTotalReceived:currentReceived];
-
 		[self updateHistory];
 	}	
 }
