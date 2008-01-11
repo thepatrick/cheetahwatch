@@ -1,5 +1,5 @@
-/* CheetahWatch, v1.0.2
- * Copyright (c) 2007 Patrick Quinn-Graham
+/* CheetahWatch, v1.2
+ * Copyright (c) 2007-2008 Patrick Quinn-Graham
  * 
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
@@ -61,14 +61,15 @@ void calloutProc (SCNetworkConnectionRef connection, SCNetworkConnectionStatus s
 -(void)awakeFromNib
 {
 	[signal setEnabled:NO]; //disables user interaction, enabled by default
-	[theWindow setTopBorder:24.0];
-	[theWindow setBottomBorder:255];
-	[theWindow setBorderStartColor:[NSColor colorWithDeviceWhite:0.9 alpha:0.5]];
-	[theWindow setBorderEndColor:[NSColor colorWithDeviceWhite:0.5 alpha:0.5]];
-	[theWindow setBorderEdgeColor:[NSColor colorWithDeviceWhite:0.8 alpha:0.5]];
-	[theWindow setBgColor:[NSColor colorWithDeviceWhite:0.95 alpha:1.0]];
-	[theWindow setBackgroundColor:[theWindow styledBackground]];
-	[theWindow setDelegate:self];
+	
+//	[theWindow setTopBorder:24.0];
+//	[theWindow setBottomBorder:255];
+//	[theWindow setBorderStartColor:[NSColor colorWithDeviceWhite:0.9 alpha:0.5]];
+//	[theWindow setBorderEndColor:[NSColor colorWithDeviceWhite:0.5 alpha:0.5]];
+//	[theWindow setBorderEdgeColor:[NSColor colorWithDeviceWhite:0.8 alpha:0.5]];
+//	[theWindow setBgColor:[NSColor colorWithDeviceWhite:0.95 alpha:1.0]];
+//	[theWindow setBackgroundColor:[theWindow styledBackground]];
+//	[theWindow setDelegate:self];
 
 	[status setImage:[NSImage imageNamed:@"no-modem.png"]];
 	
@@ -146,7 +147,7 @@ void calloutProc (SCNetworkConnectionRef connection, SCNetworkConnectionStatus s
 -(void)checkUpdates:(id)sender
 {
 	[NSApp activateIgnoringOtherApps:YES];
-	[sparkler checkUpdates:sender];
+	[sparkler checkForUpdates:sender];
 }
 
 - (BOOL)applicationShouldHandleReopen:(NSApplication *)app hasVisibleWindows:(BOOL)visible
@@ -180,9 +181,10 @@ void calloutProc (SCNetworkConnectionRef connection, SCNetworkConnectionStatus s
 	[signal setIntValue:0];
 	[mode setStringValue:@""];	
 	[statusItem setTitle:@""];
+	[carrierInMenu setTitle:@"Carrier:"];
+	
 	[self setHardwareVersion:@""];
 	[self setIMEI:@""];
-	[self setIMSI:@""];	
 	if([statusItemMenu indexOfItem:statusItemDisconnect] != -1) {
 		[statusItemMenu removeItem:statusItemDisconnect];
 	}
@@ -204,6 +206,9 @@ void calloutProc (SCNetworkConnectionRef connection, SCNetworkConnectionStatus s
 	[statusItemConectedFor setTitle:@"Not connected"];
 	if([statusItemMenu indexOfItem:statusItemDisconnect] != -1) {
 		[statusItemMenu removeItem:statusItemDisconnect];	
+		if([statusItemMenu indexOfItem:statusItemConnect] == -1) {
+			[statusItemMenu insertItem:statusItemConnect atIndex:([statusItemMenu indexOfItem:statusItemConectedFor] + 1)];
+		}
 	}
 }
 
@@ -236,7 +241,6 @@ void calloutProc (SCNetworkConnectionRef connection, SCNetworkConnectionStatus s
 -(void)haveModemMain:(id)ignore
 {
 	if([statusItemMenu indexOfItem:statusItemConnect] < 0) {
-		NSLog(@"adding..");
 		[statusItemMenu insertItem:statusItemConnect atIndex:([statusItemMenu indexOfItem:statusItemConectedFor] + 1)];
 	}
 }
@@ -250,10 +254,7 @@ void calloutProc (SCNetworkConnectionRef connection, SCNetworkConnectionStatus s
 	[self clearAllUI];
 	[self performSelectorOnMainThread:@selector(changeStatusImageTo:) withObject: @"signal-0.tif" waitUntilDone:NO];
 	[self performSelectorOnMainThread:@selector(haveModemMain:) withObject:nil waitUntilDone:YES];
-	
 	[statusItemConectedFor setTitle:@"Not connected"];
-
-
 }
 
 -(BOOL)storeUsageHistory
@@ -361,38 +362,30 @@ void calloutProc (SCNetworkConnectionRef connection, SCNetworkConnectionStatus s
 {
 	[modemInfoIMEI setStringValue:theIMEI];
 }
--(void)setIMSI:(NSString*)theIMSI
-{
-	[modemInfoIMSI setStringValue:theIMSI];
-}
--(void)getIMSI:(id)sender
-{
-	NSLog(@"Calling -getIMSI:");
-	[self performSelector:@selector(getIMSI2:) withObject:nil afterDelay:5];
-}
 
--(void)getIMSI2:(id)sender
+
+-(void)sendAPNATCommands:(id)sender
 {
 	[self sendATCommand:@"AT+CGDCONT?\r" toDevice:fd];
 	[self sendATCommand:@"AT+CGDCONT?\r" toDevice:fd];
-	
-//	NSLog(@"Calling -getIMSI2:");
-//	NSString *apn = [[self GetATResult:@"AT+CGDCONT?\r" forDev:fd] substringFromIndex:18];
-//	NSLog(@"Location of ,: %i", [apn rangeOfString:@","].location);
-//	if([apn rangeOfString:@","].location < [apn length]) {
-//		apn = [apn substringToIndex:([apn rangeOfString:@","].location - 1)];	
-//		[self performSelectorOnMainThread:@selector(setAPN:) withObject:apn waitUntilDone:YES];
-//	} else {
-//		NSLog(@"Index out of bounds, try again...");
-//		usleep(10000);
-//		apn = [self GetATResult:@"AT+CGDCONT?\r" forDev:fd];
-//		NSLog(@"Location of ,: %@", apn);
-//		usleep(20000);
-//		apn = [self GetATResult:@"AT+CGDCONT?\r" forDev:fd];
-//		NSLog(@"Location of ,: %@", apn);
-//	}
-
 }
+
+-(void)startAPNATCommandsTimer:(id)sender
+{
+	[self performSelector:@selector(sendAPNATCommands:) withObject:nil afterDelay:5];
+}
+
+-(void)sendATCommandsTimerAction:(id)thing
+{
+	[self sendATCommand:thing toDevice:fd];
+}
+
+-(void)sendATCommandsTimer:(id)thing
+{
+	[self performSelector:@selector(sendATCommandsTimerAction:) withObject:thing afterDelay:1];
+}
+
+#pragma mark Modem interface thread
 
 // this is the quasi-runloop (yeah, whatever) that follows the stream from the modem
 // the functions below are all run on the second thread.
@@ -410,39 +403,23 @@ void calloutProc (SCNetworkConnectionRef connection, SCNetworkConnectionStatus s
 		return;
 	}	
 	[mainController haveModem];
-	[mainController performSelectorOnMainThread:@selector(getIMSI:) withObject:nil waitUntilDone:NO];
-		
+	
 	[mainController performSelectorOnMainThread:@selector(setIMEI:) 
 									 withObject:[mainController GetATResult:@"AT+CGSN\r" forDev:fd]
 								  waitUntilDone:YES];
-								
-//	[mainController performSelectorOnMainThread:@selector(setIMSI:) 
-//									 withObject:[mainController GetATResult:@"AT+CIMI\r" forDev:fd]
-//								  waitUntilDone:YES];
-								  
-								  
-//	NSString *apn = [[mainController GetATResult:@"AT+CGDCONT?\r" forDev:fd] substringFromIndex:18];
-//	NSLog(@"Location of ,: %i", [apn rangeOfString:@","].location);
-//	if([apn rangeOfString:@","].location < [apn length]) {
-//		apn = [apn substringToIndex:([apn rangeOfString:@","].location - 1)];	
-//		[mainController performSelectorOnMainThread:@selector(setAPN:) withObject:apn waitUntilDone:YES];
-//	} else {
-//		NSLog(@"Index out of bounds, try again...");
-//		usleep(10000);
-//		apn = [mainController GetATResult:@"AT+CGDCONT?\r" forDev:fd];
-//		NSLog(@"Location of ,: %@", apn);
-//		usleep(20000);
-//		apn = [mainController GetATResult:@"AT+CGDCONT?\r" forDev:fd];
-//		NSLog(@"Location of ,: %@", apn);
-//	}
+						
+	BOOL waitingOnAPN = YES;
+	[mainController performSelectorOnMainThread:@selector(startAPNATCommandsTimer:) withObject:nil waitUntilDone:NO];
 
-	[mainController sendATCommand:@"AT^HWVER\r" toDevice:fd];
+	BOOL waitingOnCarrierName = YES;
+	[mainController performSelectorOnMainThread:@selector(sendATCommandsTimer:) withObject:@"AT+COPS?\r" waitUntilDone:NO];	
+	[mainController performSelectorOnMainThread:@selector(sendATCommandsTimer:) withObject:@"AT+CSQ\r" waitUntilDone:NO];	
+	[mainController performSelectorOnMainThread:@selector(sendATCommandsTimer:) withObject:@"AT^HWVER\r" waitUntilDone:NO];
 	
 	while(bytes = read(fd,buf_stream,255)){
 		buf_lineStart=strchr(buf_stream,'^');
 		if(buf_lineStart == 0) {
 			buf_lineStart=strchr(buf_stream,'+');
-			printf("\nDidn't find ^, looked for +, found it at: %i\n", buf_lineStart);
 		}
 		buf_stream[bytes]=0x00;  
 		if (buf_lineStart) {
@@ -458,10 +435,23 @@ void calloutProc (SCNetworkConnectionRef connection, SCNetworkConnectionStatus s
 			}
 			if (buf_stream[0]=='+') {
 				if(buf_stream[1] == 'C' && buf_stream[2] == 'G') {
-					if(buf_stream[8] == '?') {
+					if(buf_stream[8] == '?' && waitingOnAPN) {
 						printf("APN, but not with details. Try again.");
+						[mainController performSelectorOnMainThread:@selector(startAPNATCommandsTimer:) withObject:nil waitUntilDone:NO];
 					} else if(buf_stream[8] == ':') {
 						[mainController gotAPN:(buf_stream+8)];
+						waitingOnAPN = NO;
+					}
+				}
+				if(buf_stream[1] == 'C' && buf_stream[2] == 'S' && buf_stream[3] == 'Q') {
+					[mainController signalStrengthFromCSQ:(buf_stream+6)];
+				}
+				if(buf_stream[1] == 'C' && buf_stream[2] == 'O' && buf_stream[3] == 'P' && buf_stream[4] == 'S') {
+					if(buf_stream[5] == '?' && waitingOnCarrierName) {
+						[mainController performSelectorOnMainThread:@selector(sendATCommandsTimer:) withObject:@"AT+COPS?\r" waitUntilDone:NO];
+					} else if (buf_stream[5] == ':') {
+						waitingOnCarrierName = NO;
+						[mainController gotCarrier:(buf_stream+5)];
 					}
 				}
 				if(buf_stream[1] == 'C' && buf_stream[2] == 'M' && buf_stream[3] == 'E') {
@@ -481,7 +471,7 @@ void calloutProc (SCNetworkConnectionRef connection, SCNetworkConnectionStatus s
 {
 	NSString *version = [NSString stringWithCString:(buff + 1)];
 	if([version length] > 0) {
-		NSLog(@"\" location in version: %i", [version rangeOfString:@"\""].location);
+		//NSLog(@"\" location in version: %i", [version rangeOfString:@"\""].location);
 		if([version rangeOfString:@"\""].location > [version length]) {
 		} else {
 			version = [version substringWithRange:NSMakeRange(0,[version rangeOfString:@"\""].location)];
@@ -494,20 +484,30 @@ void calloutProc (SCNetworkConnectionRef connection, SCNetworkConnectionStatus s
 -(void)gotAPN:(char*)buff
 {
 	NSString *apn = [[NSString stringWithCString:buff] substringFromIndex:10];
-	NSLog(@"Location of ,: %i", [apn rangeOfString:@","].location);
+//	NSLog(@"Location of ,: %i", [apn rangeOfString:@","].location);
 	if([apn rangeOfString:@","].location < [apn length]) {
 		apn = [apn substringToIndex:([apn rangeOfString:@","].location - 1)];	
 		[self performSelectorOnMainThread:@selector(setAPN:) withObject:apn waitUntilDone:YES];
 	} 
 }
 
-// Update the signal strength display
--(void)signalStrength:(char*)buff
+-(void)gotCarrier:(char*)buff
 {
-	int z_signal;
-	z_signal=atoi(buff);
-	if(z_signal > 20) printf("Claimed that signal was %i\n", z_signal);
-	if(z_signal > 50) z_signal = 0;
+	NSString *carrier = [NSString stringWithCString:buff];	
+	if([carrier rangeOfString:@"\""].location < [carrier length]) {
+		carrier = [carrier substringFromIndex:([carrier rangeOfString:@"\""].location + 1)];
+		if([carrier rangeOfString:@"\""].location < [carrier length]) {
+			carrier = [carrier substringToIndex:([carrier rangeOfString:@"\""].location)];
+			[carrierInMenu performSelectorOnMainThread:@selector(setTitle:) withObject:[@"Carrier: " stringByAppendingString:carrier] waitUntilDone:NO];
+		}
+	}
+}
+
+-(void)doSetSignalStrength:(int)z_signal
+{
+	NSLog(@"doSetSignalStrength:%i",z_signal);
+	if(z_signal > 30) NSLog(@"Claimed that signal was %i\n", z_signal);
+	if(z_signal > 30) z_signal = 0;
 	[signal setIntValue:z_signal];
 	
 	NSString *which;
@@ -516,9 +516,25 @@ void calloutProc (SCNetworkConnectionRef connection, SCNetworkConnectionStatus s
 	else if(z_signal < 11) which = @"signal-2.tif";
 	else if(z_signal < 16) which = @"signal-3.tif";
 	else if(z_signal >= 16) which = @"signal-4.tif";
-	else if(z_signal > 30) which = @"signal-0.tif";
 	
 	[self performSelectorOnMainThread:@selector(changeStatusImageTo:) withObject:which waitUntilDone:YES];		
+}
+
+-(void)signalStrengthFromCSQ:(char*)buff
+{
+	NSString *strength = [NSString stringWithCString:buff];	
+	if([strength rangeOfString:@","].location < [strength length]) {
+		strength = [strength substringToIndex:([strength rangeOfString:@","].location)];
+		NSLog(@"Signal Strength From CSQ is: %@", strength);
+		[self doSetSignalStrength:atoi([strength cString])];
+	}
+	
+}
+
+// Update the signal strength display
+-(void)signalStrength:(char*)buff
+{
+	[self doSetSignalStrength:atoi(buff)];
 }
 
 // Update the signal strength meter (on main thread)
@@ -632,6 +648,7 @@ void calloutProc (SCNetworkConnectionRef connection, SCNetworkConnectionStatus s
 	free(buf_stream);
 }
 
+#pragma mark USB Finder thread
 // This function sets up some stuff to detect a USB device being plugged. be prepared for C...
 +(void)USBFinder:(id)mainController
 {

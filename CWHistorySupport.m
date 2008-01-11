@@ -1,5 +1,5 @@
-/* CheetahWatch, v1.0.2
- * Copyright (c) 2007 Patrick Quinn-Graham
+/* CheetahWatch, v1.2
+ * Copyright (c) 2007-2008 Patrick Quinn-Graham
  * 
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
@@ -45,6 +45,8 @@
 	if(activeConnection == nil) {
 		activeConnection = [self doWeHaveAnUnclosedConnection];
 		if(activeConnection == nil) {
+			[cheezburgerWatch invalidate];
+			cheezburgerWatch = nil;
 			return;
 		}
 	}

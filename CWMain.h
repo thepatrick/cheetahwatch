@@ -1,5 +1,5 @@
-/* CheetahWatch, v1.0.2
- * Copyright (c) 2007 Patrick Quinn-Graham
+/* CheetahWatch, v1.2
+ * Copyright (c) 2007-2008 Patrick Quinn-Graham
  * 
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
@@ -30,6 +30,7 @@
 #include <IOKit/IOMessage.h>
 #include <IOKit/IOCFPlugIn.h>
 #include <IOKit/usb/IOUSBLib.h>
+#import <Sparkle/Sparkle.h>
 
 #include <mach/mach.h>
 #include <unistd.h>
@@ -37,7 +38,7 @@
 
 #include <SystemConfiguration/SCNetworkConnection.h>
 
-#import "StyledWindow.h"
+//#import "StyledWindow.h"
 
 #import "CWHistorySupport.h"
 
@@ -67,7 +68,7 @@ typedef struct MyPrivateData {
     IBOutlet id speedReceive;
     IBOutlet id speedTransmit;
     IBOutlet id status;	
-	IBOutlet StyledWindow *theWindow;
+	IBOutlet id theWindow;
     IBOutlet id transferReceive;
     IBOutlet id transferTransmit;
     IBOutlet id uptime;
@@ -82,7 +83,7 @@ typedef struct MyPrivateData {
 	IBOutlet id statusItemConectedFor;
 	IBOutlet id statusItemConnect;
 	IBOutlet id statusItemDisconnect;
-	IBOutlet id sparkler;
+	IBOutlet SUUpdater *sparkler;
 	
 	IBOutlet id modemInfoWindow;
 	IBOutlet id modemInfoHWVersion;
@@ -90,6 +91,9 @@ typedef struct MyPrivateData {
 	IBOutlet id modemInfoAPN;
 	IBOutlet id modemInfoIMEI;
 	IBOutlet id modemInfoIMSI;
+	
+	IBOutlet id carrierSeperator;
+	IBOutlet id carrierInMenu;
 	
 	bool weHaveAModem;
 	NSStatusItem *statusItem;
@@ -107,6 +111,8 @@ typedef struct MyPrivateData {
 	CFDictionaryRef userOptions;		
 	SCNetworkConnectionContext gScncCtx;
 	SCNetworkConnectionStatus gStat;
+	
+	BOOL waitingOnCarrierName;
 }
 
 -(void)setupDialing;
@@ -138,6 +144,7 @@ typedef struct MyPrivateData {
 -(void)showModemInfo:(id)sender;
 -(void)clickMenu:(id)sender;
 -(void)showAbout:(id)sender;
+-(void)checkUpdates:(id)sender;
 
 -(void)signalStrength:(char*)buff;
 -(void)modeChange:(char*)buff;
@@ -150,17 +157,24 @@ typedef struct MyPrivateData {
 
 
 -(void)gotHWVersion:(char*)buff;
--(void)gotAPN:(char*)buff;
--(void)setIMEI:(NSString*)theIMEI;
--(void)setIMSI:(NSString*)theIMSI;
 
--(void)getIMSI:(id)sender;
--(void)getIMSI2:(id)sender;
+-(void)gotAPN:(char*)buff;
+-(void)gotCarrier:(char*)buff;
+
+-(void)setIMEI:(NSString*)theIMEI;
 
 -(NSString*)GetATResult:(NSString*)command forDev:(int)dev;
 -(void)sendATCommand:(NSString*)command toDevice:(int)dev;
 
+-(void)sendATCommandsTimerAction:(id)thing;
+-(void)sendATCommandsTimer:(id)thing;
+
+#pragma mark Modem interface thread
+
 +(void)MyRunner:(id)mainController;
+
+-(void)doSetSignalStrength:(int)z_signal;
+-(void)signalStrengthFromCSQ:(char*)buff;
 
 +(void)USBFinder:(id)mainController;
 
