@@ -34,6 +34,7 @@
 
 const char *statusMsgA (SCNetworkConnectionStatus stat)
 {
+	NSLog(@"statusMsgA called. Should be happy now. Mmm happy.");
 	static const char *statusString[] = {
 		"kSCNetworkConnectionInvalid",
 		"kSCNetworkConnectionDisconnected",
@@ -61,15 +62,6 @@ void calloutProc (SCNetworkConnectionRef connection, SCNetworkConnectionStatus s
 -(void)awakeFromNib
 {
 	[signal setEnabled:NO]; //disables user interaction, enabled by default
-	
-//	[theWindow setTopBorder:24.0];
-//	[theWindow setBottomBorder:255];
-//	[theWindow setBorderStartColor:[NSColor colorWithDeviceWhite:0.9 alpha:0.5]];
-//	[theWindow setBorderEndColor:[NSColor colorWithDeviceWhite:0.5 alpha:0.5]];
-//	[theWindow setBorderEdgeColor:[NSColor colorWithDeviceWhite:0.8 alpha:0.5]];
-//	[theWindow setBgColor:[NSColor colorWithDeviceWhite:0.95 alpha:1.0]];
-//	[theWindow setBackgroundColor:[theWindow styledBackground]];
-//	[theWindow setDelegate:self];
 
 	[status setImage:[NSImage imageNamed:@"no-modem.png"]];
 	
@@ -287,14 +279,66 @@ void calloutProc (SCNetworkConnectionRef connection, SCNetworkConnectionStatus s
 	}
 }
 
+-(void)connectNetworkTimeoutCheck:(id)sender
+{
+	SCNetworkConnectionStatus lStat = SCNetworkConnectionGetStatus (scncRef);
+	
+	if(lStat == kSCNetworkConnectionConnected) { // we've connected, stop now
+		return;
+	}
+	if(lStat == kSCNetworkConnectionConnecting) { // we're connecting still
+		[statusItemConectedFor setTitle:@"Connecting..."];
+		[self performSelector:@selector(connectNetworkTimeoutCheck:) withObject:sender afterDelay:1];
+		return;
+	}
+	if(lStat == kSCNetworkConnectionDisconnecting) {
+		[statusItemConectedFor setTitle:@"Disconnecting..."];
+		// cancelling out...
+		return;
+	}
+	if(lStat == kSCNetworkConnectionDisconnected) {
+		// cancelled out...
+		[statusItemConectedFor setTitle:@"Not connected"];
+		if([statusItemMenu indexOfItem:statusItemDisconnect] != -1) {
+			[statusItemMenu removeItem:statusItemDisconnect];	
+			if([statusItemMenu indexOfItem:statusItemConnect] == -1) {
+				[statusItemMenu insertItem:statusItemConnect atIndex:([statusItemMenu indexOfItem:statusItemConectedFor] + 1)];
+			}
+		}
+		return;
+	}	
+}
+
 -(void)connectNetwork:(id)sender
 {	
 	SCNetworkConnectionStart(scncRef, userOptions, true);
+	[statusItemConectedFor setTitle:@"Connecting..."];
+	[self performSelector:@selector(connectNetworkTimeoutCheck:) withObject:sender afterDelay:1];
+	
+	int index = [statusItemMenu indexOfItem:statusItemConnect];
+	if(index != -1) {
+		[statusItemMenu removeItem:statusItemConnect];	
+		if([statusItemMenu indexOfItem:statusItemDisconnect] == -1) {
+			[statusItemMenu insertItem:statusItemDisconnect atIndex:([statusItemMenu indexOfItem:statusItemConectedFor] + 1)];
+		}
+	}
+}
+
+-(void)disconnectNetworkTimeoutCheck:(id)sender
+{
+	SCNetworkConnectionStatus lStat = SCNetworkConnectionGetStatus (scncRef);	
+	if(lStat == kSCNetworkConnectionDisconnecting) {
+		[statusItemConectedFor setTitle:@"Disconnecting..."];
+		[self performSelector:@selector(disconnectNetworkTimeoutCheck:) withObject:sender afterDelay:1];
+		// cancelling out...
+		return;
+	}
 }
 
 -(void)disconnectNetwork:(id)sender
 {	
 	SCNetworkConnectionStop(scncRef, true);
+	[self performSelector:@selector(disconnectNetworkTimeoutCheck:) withObject:sender afterDelay:1];
 }
 
 -(NSString*)prettyDataAmount:(int)bytes

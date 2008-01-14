@@ -85,7 +85,7 @@
 				<key>signal</key>
 				<string>id</string>
 				<key>sparkler</key>
-				<string>id</string>
+				<string>SUUpdater</string>
 				<key>speedReceive</key>
 				<string>id</string>
 				<key>speedTransmit</key>
