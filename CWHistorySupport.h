@@ -36,8 +36,8 @@
 
 	NSTimer *cheezburgerWatch;
 	NSString *theUptime;
-	
-	int cachedSent, cachedRecv, cachedTotalSent, cachedTotalRecv;
+	 
+	SInt64 cachedSent, cachedRecv, cachedTotalSent, cachedTotalRecv;
 }
 
 -(void)setMainController:(NSObject*)cont;
@@ -49,8 +49,8 @@
 -(void)flowReportSeconds:(NSNumber*)connected withTransmitRate:(NSNumber*)transmit receiveRate:(NSNumber*)receive totalSent:(NSNumber*)sent andTotalReceived:(NSNumber*)received;
 -(void)calculateTotalUsage;
 -(void)calculateTotalUsageForCaching;
--(int)cachedTotalSent;
--(int)cachedTotalRecv;
+-(SInt64)cachedTotalSent;
+-(SInt64)cachedTotalRecv;
 
 -(void)clearHistory;
 

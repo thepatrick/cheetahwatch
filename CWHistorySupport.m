@@ -169,11 +169,11 @@
 
 -(void)calculateTotalUsage
 {
-	int thisSent = 0, thisRecv = 0;
+	SInt64 thisSent = 0, thisRecv = 0;
 	
 	if(activeConnection != nil) {
-		thisRecv = [[activeConnection valueForKey:@"recvData"] intValue];
-		thisSent = [[activeConnection valueForKey:@"sentData"] intValue];
+		thisRecv = [[activeConnection valueForKey:@"recvData"] longLongValue];
+		thisSent = [[activeConnection valueForKey:@"sentData"] longLongValue];
 	}
 	
 	cachedTotalSent = (cachedSent + thisSent);
@@ -182,11 +182,11 @@
 	//NSLog(@"Totals: Sent %i, Received %i", cachedTotalSent, cachedTotalRecv);
 }
 
--(int)cachedTotalSent
+-(SInt64)cachedTotalSent
 {
 	return cachedTotalSent;
 }
--(int)cachedTotalRecv
+-(SInt64)cachedTotalRecv
 {
 	return cachedTotalRecv;
 }
@@ -217,13 +217,14 @@
 	cachedSent = 0;
 	cachedRecv = 0;
 	int results = [array count], i = 0;
+	
 	// [activeConnection valueForKey:@"startTime"]
 	for(i = 0; i < results; i++) {
-		cachedRecv = cachedRecv + [[[array objectAtIndex:i] valueForKey:@"recvData"] intValue];
-		cachedSent = cachedSent + [[[array objectAtIndex:i] valueForKey:@"sentData"] intValue];
+		cachedRecv = cachedRecv + [[[array objectAtIndex:i] valueForKey:@"recvData"] longLongValue];
+		cachedSent = cachedSent + [[[array objectAtIndex:i] valueForKey:@"sentData"] longLongValue];
 	}
 	
-	//NSLog(@"Caching totals: Sent %i, Received %i", cachedSent, cachedRecv);
+	NSLog(@"Caching totals: Sent %lld, Received %lld", cachedSent, cachedRecv);
 }
 
 -(void)clearHistory

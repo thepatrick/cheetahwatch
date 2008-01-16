@@ -208,10 +208,10 @@ void calloutProc (SCNetworkConnectionRef connection, SCNetworkConnectionStatus s
 {
 	if([self storeUsageHistory]) {
 		[cwh calculateTotalUsage];
-		int runningTotalSent = [cwh cachedTotalSent];
-		int runningTotalRecv = [cwh cachedTotalRecv];
-		[totalReceived setStringValue:[self prettyDataAmount:runningTotalRecv]];
-		[totalTransmitted setStringValue:[self prettyDataAmount:runningTotalSent]];
+		SInt64 runningTotalSent = [cwh cachedTotalSent];
+		SInt64 runningTotalRecv = [cwh cachedTotalRecv];
+		[totalReceived setStringValue:[self prettyDataAmount64:runningTotalRecv]];
+		[totalTransmitted setStringValue:[self prettyDataAmount64:runningTotalSent]];
 	}
 }
 
@@ -353,6 +353,17 @@ void calloutProc (SCNetworkConnectionRef connection, SCNetworkConnectionStatus s
 	return [NSString stringWithFormat:@"%.1fGB", ((double)bytes / (1024 * 1024 * 1024))];
 }
 
+-(NSString*)prettyDataAmount64:(SInt64)bytes
+{
+	if(bytes < 1024) // bytes
+		return [NSString stringWithFormat:@"%.0fB", (double)bytes];
+	if(bytes < (1024 * 1024)) // KB
+		return [NSString stringWithFormat:@"%.1fKB", ((double)bytes / 1024)];
+	if(bytes < (1024 * 1024 * 1024)) // MB
+		return [NSString stringWithFormat:@"%.1fMB", ((double)bytes / (1024 * 1024))];
+	return [NSString stringWithFormat:@"%.1fGB", ((double)bytes / (1024 * 1024 * 1024))];
+}
+
 // called by the secondary thread flowReport, notifies History of update
 -(void)flowReport2:(id)nothing
 {
@@ -362,6 +373,7 @@ void calloutProc (SCNetworkConnectionRef connection, SCNetworkConnectionStatus s
 	[uptime setStringValue:[NSString stringWithFormat:@"%.0f:%.2d", MinutesConnected, (SecondsConnected - ((int)MinutesConnected * 60 ))]];
 	[speedReceive setStringValue:[[self prettyDataAmount:[currentSpeedReceive intValue]] stringByAppendingString:@"ps"]];
 	[speedTransmit setStringValue:[[self prettyDataAmount:[currentSpeedTransmit intValue]] stringByAppendingString:@"ps"]];
+	
 	[transferReceive setStringValue:[self prettyDataAmount:[currentReceived intValue]]];
 	[transferTransmit setStringValue:[self prettyDataAmount:[currentTransmitted intValue]]];
 	

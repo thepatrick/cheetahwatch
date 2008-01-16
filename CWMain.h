@@ -131,6 +131,7 @@ typedef struct MyPrivateData {
 -(void)changeStatusImageTo:(NSString*)which;
 
 -(NSString*)prettyDataAmount:(int)bytes;
+-(NSString*)prettyDataAmount64:(SInt64)bytes;
 
 -(void)noModem:(id)sender;
 -(void)haveModem;
