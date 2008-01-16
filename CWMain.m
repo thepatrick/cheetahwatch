@@ -293,6 +293,7 @@ void calloutProc (SCNetworkConnectionRef connection, SCNetworkConnectionStatus s
 	}
 	if(lStat == kSCNetworkConnectionDisconnecting) {
 		[statusItemConectedFor setTitle:@"Disconnecting..."];
+		[self performSelector:@selector(connectNetworkTimeoutCheck:) withObject:sender afterDelay:1];
 		// cancelling out...
 		return;
 	}
