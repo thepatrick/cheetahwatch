@@ -99,9 +99,6 @@ void calloutProc (SCNetworkConnectionRef connection, SCNetworkConnectionStatus s
 			NSLog(@"SCNetworkConnectionCreateWithServiceID failed");
 		} else {
 			gStat = SCNetworkConnectionGetStatus (scncRef);
-//			const char *msg = statusMsgA(gStat);
-//			if (msg != NULL)
-//				NSLog(@"Connection status is: %s", msg);
 		}
 	} else {
 		NSLog(@"No PPP services configured.");
@@ -364,26 +361,43 @@ void calloutProc (SCNetworkConnectionRef connection, SCNetworkConnectionStatus s
 	return [NSString stringWithFormat:@"%.1fGB", ((double)bytes / (1024 * 1024 * 1024))];
 }
 
+-(NSString*)prettyTime:(SInt32)seconds
+{
+	int SecondsConnected = seconds;
+	float MinutesConnected = SecondsConnected / 60;	
+	float HoursConnected = MinutesConnected / 60;	
+	float DaysConnected = HoursConnected / 24;
+	
+	int justSecondsConnected = (SecondsConnected - ((int)MinutesConnected * 60 ));
+	int justMinutesConnected = (MinutesConnected - ((int)HoursConnected * 60 ));
+	int justHoursConnected = (HoursConnected - ((int)DaysConnected * 24 ));
+	
+	if(seconds < 60) // X seconds
+		return [NSString stringWithFormat:@"%d seconds", seconds];
+	if(seconds < (60 * 60)) // X:X minutes
+		return [NSString stringWithFormat:@"00:%.2d:%.2d", (int)MinutesConnected, justSecondsConnected];
+	if(seconds < (60 * 60 * 24)) // X:X:X
+		return [NSString stringWithFormat:@"%.2d:%.2d:%.2d", (int)HoursConnected, justMinutesConnected, justSecondsConnected];
+	return [NSString stringWithFormat:@"%.0f days, %.0f:%.2d:%.2d", DaysConnected, justHoursConnected, justMinutesConnected, justSecondsConnected];
+}
+
 // called by the secondary thread flowReport, notifies History of update
 -(void)flowReport2:(id)nothing
 {
-	int SecondsConnected = [currentUptime intValue];
+	[uptime setStringValue:[self prettyTime:[currentUptime intValue]]];
 	
-	float MinutesConnected = SecondsConnected / 60;	
-	[uptime setStringValue:[NSString stringWithFormat:@"%.0f:%.2d", MinutesConnected, (SecondsConnected - ((int)MinutesConnected * 60 ))]];
 	[speedReceive setStringValue:[[self prettyDataAmount:[currentSpeedReceive intValue]] stringByAppendingString:@"ps"]];
 	[speedTransmit setStringValue:[[self prettyDataAmount:[currentSpeedTransmit intValue]] stringByAppendingString:@"ps"]];
 	
-	[transferReceive setStringValue:[self prettyDataAmount:[currentReceived intValue]]];
-	[transferTransmit setStringValue:[self prettyDataAmount:[currentTransmitted intValue]]];
+	[transferReceive setStringValue:[self prettyDataAmount64:[currentReceived longLongValue]]];
+	[transferTransmit setStringValue:[self prettyDataAmount64:[currentTransmitted longLongValue]]];
 	
 	NSString *tooltip = [NSString stringWithFormat:@"CheetahWatch - %@ down / %@ up", 
-									[self prettyDataAmount:[currentReceived intValue]],
-									[self prettyDataAmount:[currentTransmitted intValue]]];
+									[self prettyDataAmount64:[currentReceived longLongValue]],
+									[self prettyDataAmount64:[currentTransmitted longLongValue]]];
 									
 									
-	NSString *connectedFor = [NSString stringWithFormat:@"Connected %@", 
-									[NSString stringWithFormat:@"%.0f:%.2d", MinutesConnected, (SecondsConnected - ((int)MinutesConnected * 60 ))]];
+	NSString *connectedFor = [NSString stringWithFormat:@"Connected %@", [self prettyTime:[currentUptime intValue]]];
 	
 	[statusItem setToolTip:tooltip];
 	[statusItemConectedFor setTitle:connectedFor];
@@ -562,7 +576,7 @@ void calloutProc (SCNetworkConnectionRef connection, SCNetworkConnectionStatus s
 
 -(void)doSetSignalStrength:(int)z_signal
 {
-	NSLog(@"doSetSignalStrength:%i",z_signal);
+	//NSLog(@"doSetSignalStrength:%i",z_signal);
 	if(z_signal > 30) NSLog(@"Claimed that signal was %i\n", z_signal);
 	if(z_signal > 30) z_signal = 0;
 	[signal setIntValue:z_signal];
@@ -582,7 +596,7 @@ void calloutProc (SCNetworkConnectionRef connection, SCNetworkConnectionStatus s
 	NSString *strength = [NSString stringWithCString:buff];	
 	if([strength rangeOfString:@","].location < [strength length]) {
 		strength = [strength substringToIndex:([strength rangeOfString:@","].location)];
-		NSLog(@"Signal Strength From CSQ is: %@", strength);
+		//NSLog(@"Signal Strength From CSQ is: %@", strength);
 		[self doSetSignalStrength:atoi([strength cString])];
 	}
 	
@@ -654,16 +668,25 @@ void calloutProc (SCNetworkConnectionRef connection, SCNetworkConnectionStatus s
 // Update the connection time, speed, and data moved display
 -(void)flowReport:(char*)buff
 {
-	unsigned int SecondsConnected, SpeedTransmit, SpeedReceive, Transmitted, Received;
-	sscanf(buff,"%X,%X,%X,%X,%X", &SecondsConnected,&SpeedTransmit,&SpeedReceive,&Transmitted,&Received);
-		
-	//@TODO this should probably lock to prevent badness, but meh.
+	unsigned int SecondsConnected, SpeedTransmit, SpeedReceive;
+	UInt64 Transmitted, Received;
+	
+	char *TransmittedC, *TransmittedC2;
+	TransmittedC = (char *)malloc(BUFSIZE*sizeof(char));
+
+	sscanf(buff,"%X,%X,%X,%s", &SecondsConnected,&SpeedTransmit,&SpeedReceive,&*TransmittedC);
+
+	Transmitted = strtoull(TransmittedC, &TransmittedC2, 16);
+	Received = strtoull((TransmittedC2+1), NULL, 16);
+
+	free(TransmittedC);
+	
 	currentUptime = [NSNumber numberWithInt:SecondsConnected];
 	currentSpeedReceive = [NSNumber numberWithInt:SpeedReceive];
 	currentSpeedTransmit = [NSNumber numberWithInt:SpeedTransmit];
-	currentTransmitted = [NSNumber numberWithInt:Transmitted];
-	currentReceived = [NSNumber numberWithInt:Received];
-	
+	currentTransmitted = [NSNumber numberWithLongLong:Transmitted];
+	currentReceived = [NSNumber numberWithLongLong:Received];
+
 	[self performSelectorOnMainThread:@selector(flowReport2:) withObject:nil waitUntilDone:YES];
 }
 

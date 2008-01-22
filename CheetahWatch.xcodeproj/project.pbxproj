@@ -11,9 +11,7 @@
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
-		CD0465B00CE11FE600EDA0BD /* ppp_msg.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = CD0465AD0CE11FE600EDA0BD /* ppp_msg.h */; };
 		CD0465B10CE11FE600EDA0BD /* PPPLib.c in Sources */ = {isa = PBXBuildFile; fileRef = CD0465AE0CE11FE600EDA0BD /* PPPLib.c */; };
-		CD0465B20CE11FE600EDA0BD /* PPPLib.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = CD0465AF0CE11FE600EDA0BD /* PPPLib.h */; };
 		CD0FE26A0C95ADC20071D806 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD0FE2690C95ADC20071D806 /* IOKit.framework */; };
 		CD27C4340C8CC565009D1D26 /* no-modem-menu.tif in Resources */ = {isa = PBXBuildFile; fileRef = CD27C4330C8CC565009D1D26 /* no-modem-menu.tif */; };
 		CD391ACF0C8E03460008BABF /* Welcome.html in Resources */ = {isa = PBXBuildFile; fileRef = CD391ACD0C8E03460008BABF /* Welcome.html */; };
@@ -28,9 +26,7 @@
 		CD84254B0C8D40F300D08573 /* signal-3.tif in Resources */ = {isa = PBXBuildFile; fileRef = CD8425410C8D40F300D08573 /* signal-3.tif */; };
 		CD84254E0C8D40F300D08573 /* signal-2.tif in Resources */ = {isa = PBXBuildFile; fileRef = CD8425440C8D40F300D08573 /* signal-2.tif */; };
 		CD84254F0C8D40F300D08573 /* signal-1.tif in Resources */ = {isa = PBXBuildFile; fileRef = CD8425450C8D40F300D08573 /* signal-1.tif */; };
-		CD8D972C0C63635E00FB394B /* CW Icon.icns in Resources */ = {isa = PBXBuildFile; fileRef = CD8D972B0C63635E00FB394B /* CW Icon.icns */; };
 		CD8D973C0C63677C00FB394B /* CTGradient.m in Sources */ = {isa = PBXBuildFile; fileRef = CD8D973B0C63677C00FB394B /* CTGradient.m */; };
-		CD8D97550C6367FD00FB394B /* StyledWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = CD8D97540C6367FD00FB394B /* StyledWindow.m */; };
 		CDA4AEB70C625BAA00E71C0C /* CWMain.m in Sources */ = {isa = PBXBuildFile; fileRef = CDA4AEB60C625BAA00E71C0C /* CWMain.m */; };
 		CDA4B1FA0C62947300E71C0C /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CDA4B1F90C62947300E71C0C /* Carbon.framework */; };
 		CDAF55580C763E3500E456AC /* CWHistorySupport.m in Sources */ = {isa = PBXBuildFile; fileRef = CDAF55560C763E3500E456AC /* CWHistorySupport.m */; };
@@ -47,8 +43,6 @@
 			dstSubfolderSpec = 10;
 			files = (
 				CDD647F60C74D8CD004CA0FA /* Sparkle.framework in CopyFiles */,
-				CD0465B00CE11FE600EDA0BD /* ppp_msg.h in CopyFiles */,
-				CD0465B20CE11FE600EDA0BD /* PPPLib.h in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -85,8 +79,6 @@
 		CD8D972B0C63635E00FB394B /* CW Icon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = "CW Icon.icns"; sourceTree = "<group>"; };
 		CD8D973A0C63677C00FB394B /* CTGradient.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CTGradient.h; sourceTree = "<group>"; };
 		CD8D973B0C63677C00FB394B /* CTGradient.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = CTGradient.m; sourceTree = "<group>"; };
-		CD8D97530C6367FD00FB394B /* StyledWindow.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = StyledWindow.h; sourceTree = "<group>"; };
-		CD8D97540C6367FD00FB394B /* StyledWindow.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.objc; fileEncoding = 30; path = StyledWindow.m; sourceTree = "<group>"; };
 		CDA4AEB50C625BAA00E71C0C /* CWMain.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CWMain.h; sourceTree = "<group>"; };
 		CDA4AEB60C625BAA00E71C0C /* CWMain.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = CWMain.m; sourceTree = "<group>"; };
 		CDA4B1F90C62947300E71C0C /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
@@ -118,8 +110,6 @@
 			children = (
 				CDAF55550C763E3500E456AC /* CWHistorySupport.h */,
 				CDAF55560C763E3500E456AC /* CWHistorySupport.m */,
-				CD8D97530C6367FD00FB394B /* StyledWindow.h */,
-				CD8D97540C6367FD00FB394B /* StyledWindow.m */,
 				CD8D973A0C63677C00FB394B /* CTGradient.h */,
 				CD8D973B0C63677C00FB394B /* CTGradient.m */,
 				CDA4AEB50C625BAA00E71C0C /* CWMain.h */,
@@ -162,9 +152,6 @@
 		29B97314FDCFA39411CA2CEA /* CheetahWatch */ = {
 			isa = PBXGroup;
 			children = (
-				CD0465AD0CE11FE600EDA0BD /* ppp_msg.h */,
-				CD0465AE0CE11FE600EDA0BD /* PPPLib.c */,
-				CD0465AF0CE11FE600EDA0BD /* PPPLib.h */,
 				080E96DDFE201D6D7F000001 /* Classes */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
 				29B97317FDCFA39411CA2CEA /* Resources */,
@@ -177,6 +164,9 @@
 		29B97315FDCFA39411CA2CEA /* Other Sources */ = {
 			isa = PBXGroup;
 			children = (
+				CD0465AD0CE11FE600EDA0BD /* ppp_msg.h */,
+				CD0465AE0CE11FE600EDA0BD /* PPPLib.c */,
+				CD0465AF0CE11FE600EDA0BD /* PPPLib.h */,
 				CDFC9E420C7508D700681B3F /* CWHistory.xcdatamodel */,
 				32CA4F630368D1EE00C91783 /* CheetahWatch_Prefix.pch */,
 				29B97316FDCFA39411CA2CEA /* main.m */,
@@ -261,7 +251,6 @@
 			files = (
 				8D11072A0486CEB800E47090 /* MainMenu.nib in Resources */,
 				8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */,
-				CD8D972C0C63635E00FB394B /* CW Icon.icns in Resources */,
 				CD27C4340C8CC565009D1D26 /* no-modem-menu.tif in Resources */,
 				CD8425490C8D40F300D08573 /* signal-0.tif in Resources */,
 				CD84254A0C8D40F300D08573 /* signal-4.tif in Resources */,
@@ -286,7 +275,6 @@
 				8D11072D0486CEB800E47090 /* main.m in Sources */,
 				CDA4AEB70C625BAA00E71C0C /* CWMain.m in Sources */,
 				CD8D973C0C63677C00FB394B /* CTGradient.m in Sources */,
-				CD8D97550C6367FD00FB394B /* StyledWindow.m in Sources */,
 				CDFC9E430C7508D700681B3F /* CWHistory.xcdatamodel in Sources */,
 				CDAF55580C763E3500E456AC /* CWHistorySupport.m in Sources */,
 				CD0465B10CE11FE600EDA0BD /* PPPLib.c in Sources */,

@@ -143,8 +143,8 @@
 				PBXFileTableDataSourceColumnSortingKey = PBXFileDataSource_Filename_ColumnID;
 				PBXFileTableDataSourceColumnWidthsKey = (
 					20,
-					200,
-					193,
+					204,
+					60,
 					20,
 					48,
 					43,
@@ -160,12 +160,12 @@
 					PBXFileDataSource_Warnings_ColumnID,
 				);
 			};
-			PBXPerProjectTemplateStateSaveDate = 222205856;
-			PBXWorkspaceStateSaveDate = 222205856;
+			PBXPerProjectTemplateStateSaveDate = 222686866;
+			PBXWorkspaceStateSaveDate = 222686866;
 		};
 		perUserProjectItems = {
-			CDA3976D0D3E9C270029C68A /* PBXBookmark */ = CDA3976D0D3E9C270029C68A /* PBXBookmark */;
-			CDA397730D3E9C5E0029C68A /* PBXTextBookmark */ = CDA397730D3E9C5E0029C68A /* PBXTextBookmark */;
+			CD189E5E0D45F3A100EBCA50 /* PBXBookmark */ = CD189E5E0D45F3A100EBCA50 /* PBXBookmark */;
+			CD189E620D45F3AC00EBCA50 /* PBXTextBookmark */ = CD189E620D45F3AC00EBCA50 /* PBXTextBookmark */;
 		};
 		sourceControlManager = CDA4AEB30C624B1500E71C0C /* Source Control */;
 		userBuildSettings = {
@@ -197,8 +197,8 @@
 	};
 	8D1107310486CEB800E47090 /* Info.plist */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {674, 615}}";
-			sepNavSelRange = "{778, 0}";
+			sepNavIntBoundsRect = "{{0, 0}, {674, 592}}";
+			sepNavSelRange = "{715, 0}";
 			sepNavVisRange = "{0, 1101}";
 			sepNavVisRect = "{{0, 0}, {597, 614}}";
 			sepNavWindowFrame = "{{794, 83}, {636, 743}}";
@@ -215,9 +215,9 @@
 	};
 	CD0465AE0CE11FE600EDA0BD /* PPPLib.c */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {904, 6524}}";
+			sepNavIntBoundsRect = "{{0, 0}, {919, 6412}}";
 			sepNavSelRange = "{3165, 44}";
-			sepNavVisRange = "{2998, 236}";
+			sepNavVisRange = "{2599, 1170}";
 			sepNavVisRect = "{{0, 1877}, {924, 181}}";
 			sepNavWindowFrame = "{{593, 69}, {978, 809}}";
 		};
@@ -229,6 +229,20 @@
 			sepNavVisRect = "{{0, 0}, {939, 680}}";
 			sepNavWindowFrame = "{{15, 64}, {978, 809}}";
 		};
+	};
+	CD189E5E0D45F3A100EBCA50 /* PBXBookmark */ = {
+		isa = PBXBookmark;
+		fRef = 8D1107310486CEB800E47090 /* Info.plist */;
+	};
+	CD189E620D45F3AC00EBCA50 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 8D1107310486CEB800E47090 /* Info.plist */;
+		name = "Info.plist: 22";
+		rLen = 0;
+		rLoc = 715;
+		rType = 0;
+		vrLen = 1101;
+		vrLoc = 0;
 	};
 	CD27C4330C8CC565009D1D26 /* no-modem-menu.tif */ = {
 		uiCtxt = {
@@ -245,8 +259,9 @@
 	};
 	CD391AD60C8E036C0008BABF /* English */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {788, 626}}";
-			sepNavSelRange = "{0, 0}";
+			sepNavIntBoundsRect = "{{0, 0}, {776, 627}}";
+			sepNavSelRange = "{934, 0}";
+			sepNavVisRange = "{0, 1039}";
 			sepNavVisRect = "{{0, 0}, {711, 626}}";
 			sepNavWindowFrame = "{{84, 55}, {750, 755}}";
 		};
@@ -279,24 +294,6 @@
 			sepNavWindowFrame = "{{38, 43}, {1283, 835}}";
 		};
 	};
-	CD8D97530C6367FD00FB394B /* StyledWindow.h */ = {
-		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {2792, 812}}";
-			sepNavSelRange = "{54, 0}";
-			sepNavVisRange = "{0, 1970}";
-			sepNavVisRect = "{{0, 0}, {1244, 703}}";
-			sepNavWindowFrame = "{{15, 46}, {1283, 832}}";
-		};
-	};
-	CD8D97540C6367FD00FB394B /* StyledWindow.m */ = {
-		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {2792, 2842}}";
-			sepNavSelRange = "{0, 0}";
-			sepNavVisRange = "{0, 2327}";
-			sepNavVisRect = "{{0, 0}, {1244, 703}}";
-			sepNavWindowFrame = "{{15, 46}, {1283, 832}}";
-		};
-	};
 	CDA397320D3E982A0029C68A /* CWHistorySupport.m:223 */ = {
 		isa = PBXFileBreakpoint;
 		actions = (
@@ -311,22 +308,8 @@
 		ignoreCount = 0;
 		lineNumber = 223;
 		location = CheetahWatch;
-		modificationTime = 222207058.061842;
+		modificationTime = 222688105.743864;
 		state = 0;
-	};
-	CDA3976D0D3E9C270029C68A /* PBXBookmark */ = {
-		isa = PBXBookmark;
-		fRef = CDA4AEB50C625BAA00E71C0C /* CWMain.h */;
-	};
-	CDA397730D3E9C5E0029C68A /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = CDA4AEB50C625BAA00E71C0C /* CWMain.h */;
-		name = "CWMain.h: 133";
-		rLen = 0;
-		rLoc = 3613;
-		rType = 0;
-		vrLen = 986;
-		vrLoc = 3153;
 	};
 	CDA4AEA40C624B0D00E71C0C /* CheetahWatch */ = {
 		isa = PBXExecutable;
@@ -371,20 +354,20 @@
 	};
 	CDA4AEB50C625BAA00E71C0C /* CWMain.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {608, 2702}}";
-			sepNavSelRange = "{3613, 0}";
-			sepNavVisRange = "{3153, 986}";
+			sepNavIntBoundsRect = "{{0, 0}, {577, 2548}}";
+			sepNavSelRange = "{1536, 0}";
+			sepNavVisRange = "{356, 1365}";
 			sepNavVisRect = "{{0, 1934}, {597, 614}}";
-			sepNavWindowFrame = "{{582, 122}, {636, 743}}";
+			sepNavWindowFrame = "{{467, 121}, {636, 743}}";
 		};
 	};
 	CDA4AEB60C625BAA00E71C0C /* CWMain.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1004, 10850}}";
-			sepNavSelRange = "{6756, 18}";
-			sepNavVisRange = "{5911, 1519}";
+			sepNavIntBoundsRect = "{{0, 0}, {1223, 10822}}";
+			sepNavSelRange = "{12579, 0}";
+			sepNavVisRange = "{11346, 2277}";
 			sepNavVisRect = "{{0, 0}, {911, 649}}";
-			sepNavWindowFrame = "{{339, 100}, {950, 778}}";
+			sepNavWindowFrame = "{{158, 87}, {1282, 766}}";
 		};
 	};
 	CDAF55550C763E3500E456AC /* CWHistorySupport.h */ = {
@@ -419,7 +402,7 @@
 		ignoreCount = 0;
 		lineNumber = 59;
 		location = CheetahWatch;
-		modificationTime = 222207058.058693;
+		modificationTime = 222688105.724377;
 		state = 0;
 	};
 	CDFC9E420C7508D700681B3F /* CWHistory.xcdatamodel */ = {

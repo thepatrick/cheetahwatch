@@ -38,8 +38,6 @@
 
 #include <SystemConfiguration/SCNetworkConnection.h>
 
-//#import "StyledWindow.h"
-
 #import "CWHistorySupport.h"
 
 #define BAUDRATE B9600
