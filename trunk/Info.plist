@@ -19,9 +19,9 @@
 	<key>CFBundleSignature</key>
 	<string>PQG0</string>
 	<key>CFBundleVersion</key>
-	<string>25</string>
+	<string>27</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.2.1</string>
+	<string>1.2.2a1</string>
 	<key>LSUIElement</key>
 	<true/>
 	<key>NSMainNibFile</key>

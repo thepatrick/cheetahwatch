@@ -39,6 +39,7 @@
 #include <SystemConfiguration/SCNetworkConnection.h>
 
 #import "CWHistorySupport.h"
+#import "NBInvocationQueue.h"
 
 #define BAUDRATE B9600
 #define MODEMUIDEV "/dev/tty.HUAWEIMobile-Pcui"
@@ -53,10 +54,10 @@ enum
 };
 
 typedef struct MyPrivateData {
-    io_object_t			notification;
+    io_object_t				notification;
     IOUSBDeviceInterface *	*deviceInterface;
-    CFStringRef			deviceName;
-    UInt32			locationID;
+    CFStringRef				deviceName;
+    UInt32					locationID;
 } MyPrivateData;
 
 @interface CWMain : NSObject
@@ -103,6 +104,10 @@ typedef struct MyPrivateData {
 	NSNumber *currentSpeedTransmit;
 	NSNumber *currentTransmitted;
 	NSNumber *currentReceived;
+	
+	NSTimer *carrierNameTimer;
+	
+	NBInvocationQueue *atWorker;
 	
 	// Relating to PPP connect/disconnecting	
 	SCNetworkConnectionRef scncRef;
@@ -167,6 +172,8 @@ typedef struct MyPrivateData {
 
 -(void)sendATCommandsTimerAction:(id)thing;
 -(void)sendATCommandsTimer:(id)thing;
+
+-(void)sendCarrierRequest:(NSTimer*)timer;
 
 #pragma mark Modem interface thread
 

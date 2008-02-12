@@ -61,6 +61,9 @@ void calloutProc (SCNetworkConnectionRef connection, SCNetworkConnectionStatus s
 
 -(void)awakeFromNib
 {
+	atWorker = [[NBInvocationQueue alloc] init];
+	[NSThread detachNewThreadSelector:@selector(runQueueThread) toTarget:atWorker withObject:nil];
+
 	[signal setEnabled:NO]; //disables user interaction, enabled by default
 
 	[status setImage:[NSImage imageNamed:@"no-modem.png"]];
@@ -218,6 +221,10 @@ void calloutProc (SCNetworkConnectionRef connection, SCNetworkConnectionStatus s
 	if([self storeUsageHistory]) {
 		[cwh markConnectionAsClosed];
 	}
+	if(carrierNameTimer != nil) {
+		[carrierNameTimer invalidate];
+		carrierNameTimer = nil;
+	}
 	[self clearAllUI];
 	NSImage *imageFromBundle = [NSImage imageNamed:@"no-modem.png"];
 	[status setImage: imageFromBundle];
@@ -244,6 +251,7 @@ void calloutProc (SCNetworkConnectionRef connection, SCNetworkConnectionStatus s
 	[self performSelectorOnMainThread:@selector(changeStatusImageTo:) withObject: @"signal-0.tif" waitUntilDone:NO];
 	[self performSelectorOnMainThread:@selector(haveModemMain:) withObject:nil waitUntilDone:YES];
 	[statusItemConectedFor setTitle:@"Not connected"];
+	carrierNameTimer = [NSTimer scheduledTimerWithTimeInterval:10 target:self selector:@selector(sendCarrierRequest:) userInfo:nil repeats:YES];
 }
 
 -(BOOL)storeUsageHistory
@@ -328,7 +336,6 @@ void calloutProc (SCNetworkConnectionRef connection, SCNetworkConnectionStatus s
 	if(lStat == kSCNetworkConnectionDisconnecting) {
 		[statusItemConectedFor setTitle:@"Disconnecting..."];
 		[self performSelector:@selector(disconnectNetworkTimeoutCheck:) withObject:sender afterDelay:1];
-		// cancelling out...
 		return;
 	}
 }
@@ -437,23 +444,30 @@ void calloutProc (SCNetworkConnectionRef connection, SCNetworkConnectionStatus s
 
 -(void)sendAPNATCommands:(id)sender
 {
-	[self sendATCommand:@"AT+CGDCONT?\r" toDevice:fd];
-	[self sendATCommand:@"AT+CGDCONT?\r" toDevice:fd];
+	NSLog(@"[CWMain sendAPNATCommands:] is deprecated.");
 }
 
 -(void)startAPNATCommandsTimer:(id)sender
-{
-	[self performSelector:@selector(sendAPNATCommands:) withObject:nil afterDelay:5];
+{	
+	[[atWorker performThreadedWithTarget:self afterDelay:5] sendATCommand:@"AT+CGDCONT?\r" toDevice:fd];
+	[[atWorker performThreadedWithTarget:self afterDelay:5] sendATCommand:@"AT+CGDCONT?\r" toDevice:fd];
 }
 
 -(void)sendATCommandsTimerAction:(id)thing
 {
-	[self sendATCommand:thing toDevice:fd];
+	NSLog(@"[CWMain sendATCommandsTimerAction:] is deprecated.");
 }
 
 -(void)sendATCommandsTimer:(id)thing
 {
-	[self performSelector:@selector(sendATCommandsTimerAction:) withObject:thing afterDelay:1];
+	NSLog(@"Passing AT command to atWorker.");
+	[[atWorker performThreadedWithTarget:self afterDelay:1] sendATCommand:thing toDevice:fd];
+}
+
+-(void)sendCarrierRequest:(NSTimer*)timer
+{
+//	[self sendATCommandsTimerAction:@"AT+COPS?\r"];
+	[[atWorker performThreadedWithTarget:self] sendATCommand:@"AT+COPS?\r" toDevice:fd];
 }
 
 #pragma mark Modem interface thread
@@ -577,16 +591,16 @@ void calloutProc (SCNetworkConnectionRef connection, SCNetworkConnectionStatus s
 -(void)doSetSignalStrength:(int)z_signal
 {
 	//NSLog(@"doSetSignalStrength:%i",z_signal);
-	if(z_signal > 30) NSLog(@"Claimed that signal was %i\n", z_signal);
-	if(z_signal > 30) z_signal = 0;
+	if(z_signal > 31) NSLog(@"Claimed that signal was %i\n", z_signal);
+	if(z_signal > 31) z_signal = 0;
 	[signal setIntValue:z_signal];
 	
 	NSString *which;
 	if(z_signal == 0) which = @"signal-0.tif";
-	else if(z_signal < 6) which = @"signal-1.tif";
-	else if(z_signal < 11) which = @"signal-2.tif";
-	else if(z_signal < 16) which = @"signal-3.tif";
-	else if(z_signal >= 16) which = @"signal-4.tif";
+	else if(z_signal < 10) which = @"signal-1.tif";
+	else if(z_signal < 15) which = @"signal-2.tif";
+	else if(z_signal < 20) which = @"signal-3.tif";
+	else if(z_signal >= 20) which = @"signal-4.tif";
 	
 	[self performSelectorOnMainThread:@selector(changeStatusImageTo:) withObject:which waitUntilDone:YES];		
 }
@@ -718,6 +732,12 @@ void calloutProc (SCNetworkConnectionRef connection, SCNetworkConnectionStatus s
 	return returnValue;
 }
 
+-(void)sendATCommandThread:(NSString*)command
+{
+	NSLog(@"sendATCommandThread starting...");
+	[self sendATCommand:command toDevice:fd];
+	NSLog(@"sendATCommandThread ending.");
+}
 
 -(void)sendATCommand:(NSString*)command toDevice:(int)dev
 {		
