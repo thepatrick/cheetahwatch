@@ -239,6 +239,7 @@ void calloutProc (SCNetworkConnectionRef connection, SCNetworkConnectionStatus s
 	if([statusItemMenu indexOfItem:statusItemConnect] < 0) {
 		[statusItemMenu insertItem:statusItemConnect atIndex:([statusItemMenu indexOfItem:statusItemConectedFor] + 1)];
 	}
+	carrierNameTimer = [NSTimer scheduledTimerWithTimeInterval:10 target:self selector:@selector(sendCarrierRequest:) userInfo:nil repeats:YES];
 }
 
 // called by the monitor thread to say "hoorah! w00t!"
@@ -251,7 +252,6 @@ void calloutProc (SCNetworkConnectionRef connection, SCNetworkConnectionStatus s
 	[self performSelectorOnMainThread:@selector(changeStatusImageTo:) withObject: @"signal-0.tif" waitUntilDone:NO];
 	[self performSelectorOnMainThread:@selector(haveModemMain:) withObject:nil waitUntilDone:YES];
 	[statusItemConectedFor setTitle:@"Not connected"];
-	carrierNameTimer = [NSTimer scheduledTimerWithTimeInterval:10 target:self selector:@selector(sendCarrierRequest:) userInfo:nil repeats:YES];
 }
 
 -(BOOL)storeUsageHistory
@@ -460,13 +460,11 @@ void calloutProc (SCNetworkConnectionRef connection, SCNetworkConnectionStatus s
 
 -(void)sendATCommandsTimer:(id)thing
 {
-	NSLog(@"Passing AT command to atWorker.");
 	[[atWorker performThreadedWithTarget:self afterDelay:1] sendATCommand:thing toDevice:fd];
 }
 
 -(void)sendCarrierRequest:(NSTimer*)timer
 {
-//	[self sendATCommandsTimerAction:@"AT+COPS?\r"];
 	[[atWorker performThreadedWithTarget:self] sendATCommand:@"AT+COPS?\r" toDevice:fd];
 }
 
@@ -489,17 +487,27 @@ void calloutProc (SCNetworkConnectionRef connection, SCNetworkConnectionStatus s
 	}	
 	[mainController haveModem];
 	
+	NSString *a;
+	a = [mainController GetATResult:@"AT+CGSN\r" forDev:fd];
+	
+	if([a cString][0] >= '0' && [a cString][0] <= '9') {
+		 
+		a = [mainController GetATResult:@"AT+CGSN\r" forDev:fd];
+		 
+	 }
+	
 	[mainController performSelectorOnMainThread:@selector(setIMEI:) 
-									 withObject:[mainController GetATResult:@"AT+CGSN\r" forDev:fd]
+									 withObject:a
 								  waitUntilDone:YES];
 						
 	BOOL waitingOnAPN = YES;
-	[mainController performSelectorOnMainThread:@selector(startAPNATCommandsTimer:) withObject:nil waitUntilDone:NO];
+	[mainController startAPNATCommandsTimer:nil];
+//	[mainController performSelectorOnMainThread:@selector(startAPNATCommandsTimer:) withObject:nil waitUntilDone:NO];
 
 	BOOL waitingOnCarrierName = YES;
-	[mainController performSelectorOnMainThread:@selector(sendATCommandsTimer:) withObject:@"AT+COPS?\r" waitUntilDone:NO];	
-	[mainController performSelectorOnMainThread:@selector(sendATCommandsTimer:) withObject:@"AT+CSQ\r" waitUntilDone:NO];	
-	[mainController performSelectorOnMainThread:@selector(sendATCommandsTimer:) withObject:@"AT^HWVER\r" waitUntilDone:NO];
+	[mainController sendCarrierRequest:nil];
+	[mainController sendATCommandsTimer:@"AT+CSQ\r"];	
+	[mainController sendATCommandsTimer:@"AT^HWVER\r"];
 	
 	while(bytes = read(fd,buf_stream,255)){
 		buf_lineStart=strchr(buf_stream,'^');
@@ -521,7 +529,6 @@ void calloutProc (SCNetworkConnectionRef connection, SCNetworkConnectionStatus s
 			if (buf_stream[0]=='+') {
 				if(buf_stream[1] == 'C' && buf_stream[2] == 'G') {
 					if(buf_stream[8] == '?' && waitingOnAPN) {
-						printf("APN, but not with details. Try again.");
 						[mainController performSelectorOnMainThread:@selector(startAPNATCommandsTimer:) withObject:nil waitUntilDone:NO];
 					} else if(buf_stream[8] == ':') {
 						[mainController gotAPN:(buf_stream+8)];
@@ -533,7 +540,7 @@ void calloutProc (SCNetworkConnectionRef connection, SCNetworkConnectionStatus s
 				}
 				if(buf_stream[1] == 'C' && buf_stream[2] == 'O' && buf_stream[3] == 'P' && buf_stream[4] == 'S') {
 					if(buf_stream[5] == '?' && waitingOnCarrierName) {
-						[mainController performSelectorOnMainThread:@selector(sendATCommandsTimer:) withObject:@"AT+COPS?\r" waitUntilDone:NO];
+						[mainController sendCarrierRequest:nil];
 					} else if (buf_stream[5] == ':') {
 						waitingOnCarrierName = NO;
 						[mainController gotCarrier:(buf_stream+5)];
@@ -730,13 +737,6 @@ void calloutProc (SCNetworkConnectionRef connection, SCNetworkConnectionStatus s
 	free(buf_stream);
 	free(buf_scanned);
 	return returnValue;
-}
-
--(void)sendATCommandThread:(NSString*)command
-{
-	NSLog(@"sendATCommandThread starting...");
-	[self sendATCommand:command toDevice:fd];
-	NSLog(@"sendATCommandThread ending.");
 }
 
 -(void)sendATCommand:(NSString*)command toDevice:(int)dev

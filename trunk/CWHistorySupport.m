@@ -224,7 +224,7 @@
 		cachedSent = cachedSent + [[[array objectAtIndex:i] valueForKey:@"sentData"] longLongValue];
 	}
 	
-	NSLog(@"Caching totals: Sent %lld, Received %lld", cachedSent, cachedRecv);
+	//NSLog(@"Caching totals: Sent %lld, Received %lld", cachedSent, cachedRecv);
 }
 
 -(void)clearHistory
@@ -299,7 +299,7 @@
 	if(activeConnection == nil)
 		return; // no connection.. duh.
 
-	NSLog(@"Marking connection as closed...");
+//	NSLog(@"Marking connection as closed...");
 	
 	[activeConnection setValue:[NSNumber numberWithBool:YES] forKey:@"hasTerminated"];
 	[managedObjectContext save:&coreDataError];
@@ -310,8 +310,8 @@
 		
 	[activeConnection release];
 	activeConnection = nil;
-	NSLog(@"Done.");
-	NSLog(@"mOC: %@", managedObjectContext);
+//	NSLog(@"Done.");
+//	NSLog(@"mOC: %@", managedObjectContext);
 	[managedObjectContext save:&coreDataError];
 	if(coreDataError != nil) {
 		NSLog(@"markConnectionAsClosed save error: %@", coreDataError);
