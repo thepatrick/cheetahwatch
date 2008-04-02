@@ -19,6 +19,7 @@
 		CD391AFA0C8E04EC0008BABF /* have-modem.png in Resources */ = {isa = PBXBuildFile; fileRef = CD391AF60C8E04EC0008BABF /* have-modem.png */; };
 		CD391AFB0C8E04EC0008BABF /* no-modem.png in Resources */ = {isa = PBXBuildFile; fileRef = CD391AF80C8E04EC0008BABF /* no-modem.png */; };
 		CD391B5F0C8E07700008BABF /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD391B5A0C8E07700008BABF /* WebKit.framework */; };
+		CD3EEC480DA2CC5F00381326 /* CWUsagePrefsController.m in Sources */ = {isa = PBXBuildFile; fileRef = CD3EEC470DA2CC5F00381326 /* CWUsagePrefsController.m */; };
 		CD45AC720D61A31F000A0A2D /* NBInvocationQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = CD45AC700D61A31F000A0A2D /* NBInvocationQueue.m */; };
 		CD5633BE0D742DF500418D48 /* Sparkle.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = CD73FE020D6373DD0043AFDD /* Sparkle.framework */; };
 		CD6F1ABE0CE23B45005CD8D9 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD6F1ABB0CE23B45005CD8D9 /* SystemConfiguration.framework */; };
@@ -29,6 +30,7 @@
 		CD84254B0C8D40F300D08573 /* signal-3.tif in Resources */ = {isa = PBXBuildFile; fileRef = CD8425410C8D40F300D08573 /* signal-3.tif */; };
 		CD84254E0C8D40F300D08573 /* signal-2.tif in Resources */ = {isa = PBXBuildFile; fileRef = CD8425440C8D40F300D08573 /* signal-2.tif */; };
 		CD84254F0C8D40F300D08573 /* signal-1.tif in Resources */ = {isa = PBXBuildFile; fileRef = CD8425450C8D40F300D08573 /* signal-1.tif */; };
+		CD9EE8530DA3EAE900C2230A /* OperatorList.lst in Resources */ = {isa = PBXBuildFile; fileRef = CD9EE8520DA3EAE900C2230A /* OperatorList.lst */; };
 		CDA4AEB70C625BAA00E71C0C /* CWMain.m in Sources */ = {isa = PBXBuildFile; fileRef = CDA4AEB60C625BAA00E71C0C /* CWMain.m */; };
 		CDA4B1FA0C62947300E71C0C /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CDA4B1F90C62947300E71C0C /* Carbon.framework */; };
 		CDAF55580C763E3500E456AC /* CWHistorySupport.m in Sources */ = {isa = PBXBuildFile; fileRef = CDAF55560C763E3500E456AC /* CWHistorySupport.m */; };
@@ -69,6 +71,8 @@
 		CD391AF70C8E04EC0008BABF /* English */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = English; path = "English.lproj/have-modem.png"; sourceTree = "<group>"; };
 		CD391AF90C8E04EC0008BABF /* English */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = English; path = "English.lproj/no-modem.png"; sourceTree = "<group>"; };
 		CD391B5A0C8E07700008BABF /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = /System/Library/Frameworks/WebKit.framework; sourceTree = "<absolute>"; };
+		CD3EEC460DA2CC5F00381326 /* CWUsagePrefsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWUsagePrefsController.h; sourceTree = "<group>"; };
+		CD3EEC470DA2CC5F00381326 /* CWUsagePrefsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CWUsagePrefsController.m; sourceTree = "<group>"; };
 		CD45AC700D61A31F000A0A2D /* NBInvocationQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NBInvocationQueue.m; sourceTree = "<group>"; };
 		CD45AC710D61A31F000A0A2D /* NBInvocationQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NBInvocationQueue.h; sourceTree = "<group>"; };
 		CD6F1ABB0CE23B45005CD8D9 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = /System/Library/Frameworks/SystemConfiguration.framework; sourceTree = "<absolute>"; };
@@ -80,6 +84,7 @@
 		CD8425440C8D40F300D08573 /* signal-2.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = "signal-2.tif"; sourceTree = "<group>"; };
 		CD8425450C8D40F300D08573 /* signal-1.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = "signal-1.tif"; sourceTree = "<group>"; };
 		CD8D972B0C63635E00FB394B /* CW Icon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = "CW Icon.icns"; sourceTree = "<group>"; };
+		CD9EE8520DA3EAE900C2230A /* OperatorList.lst */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = OperatorList.lst; sourceTree = "<group>"; };
 		CDA4AEB50C625BAA00E71C0C /* CWMain.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CWMain.h; sourceTree = "<group>"; };
 		CDA4AEB60C625BAA00E71C0C /* CWMain.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = CWMain.m; sourceTree = "<group>"; };
 		CDA4B1F90C62947300E71C0C /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
@@ -114,6 +119,8 @@
 				CDAF55560C763E3500E456AC /* CWHistorySupport.m */,
 				CDA4AEB50C625BAA00E71C0C /* CWMain.h */,
 				CDA4AEB60C625BAA00E71C0C /* CWMain.m */,
+				CD3EEC460DA2CC5F00381326 /* CWUsagePrefsController.h */,
+				CD3EEC470DA2CC5F00381326 /* CWUsagePrefsController.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -177,6 +184,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				CD9EE8520DA3EAE900C2230A /* OperatorList.lst */,
 				CD04F3FC0D722E7D00AE8411 /* Info Window */,
 				CD04F3FB0D722E6D00AE8411 /* App Icon */,
 				CD04F3F90D722E5600AE8411 /* Menu Icons */,
@@ -286,6 +294,7 @@
 				CD391AFA0C8E04EC0008BABF /* have-modem.png in Resources */,
 				CD391AFB0C8E04EC0008BABF /* no-modem.png in Resources */,
 				CD7CAB7E0D33E90C001A37B8 /* CW Icon - 512.icns in Resources */,
+				CD9EE8530DA3EAE900C2230A /* OperatorList.lst in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -302,6 +311,7 @@
 				CDAF55580C763E3500E456AC /* CWHistorySupport.m in Sources */,
 				CD0465B10CE11FE600EDA0BD /* PPPLib.c in Sources */,
 				CD45AC720D61A31F000A0A2D /* NBInvocationQueue.m in Sources */,
+				CD3EEC480DA2CC5F00381326 /* CWUsagePrefsController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

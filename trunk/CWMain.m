@@ -21,6 +21,9 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+#import "NBInvocationQueue.h"
+#import "CWUsagePrefsController.h"
+#import "CWHistorySupport.h"
 #import "CWMain.h"
 
 @implementation CWMain
@@ -29,6 +32,10 @@
 {
 	NSMutableDictionary *dd = [NSMutableDictionary dictionaryWithObject:@"YES" forKey:@"CWStoreHistory"];
 	[dd setValue:@"YES" forKey:@"CWFirstRun"];
+	[dd setValue:@"YES" forKey:@"CWShowStatsBox"];
+	
+	[CWUsagePrefsController setDefaultUserDefaults:dd];
+	
 	[[NSUserDefaults standardUserDefaults] registerDefaults:dd];
 }
 
@@ -66,7 +73,7 @@ void calloutProc (SCNetworkConnectionRef connection, SCNetworkConnectionStatus s
 
 	[signal setEnabled:NO]; //disables user interaction, enabled by default
 
-	[status setImage:[NSImage imageNamed:@"no-modem.png"]];
+	//[status setImage:[NSImage imageNamed:@"no-modem.png"]];
 	
 	statusItem = [[[NSStatusBar systemStatusBar] statusItemWithLength:NSVariableStatusItemLength] retain];
 	[statusItem setHighlightMode:YES];
@@ -90,6 +97,11 @@ void calloutProc (SCNetworkConnectionRef connection, SCNetworkConnectionStatus s
 	[self makeMenuMatchStorageHistory];
 	[self setupDialing];	
 	[self showFirstRun];
+	
+	if(![[NSUserDefaults standardUserDefaults] boolForKey:@"CWShowStatsBox"]) {
+		[self makeTheWindowCompactAnimating:NO];
+		[toggleStatsDisplay setState:0];
+	}
 }
 
 -(void)setupDialing
@@ -174,16 +186,23 @@ void calloutProc (SCNetworkConnectionRef connection, SCNetworkConnectionStatus s
 	[mode setStringValue:@""];	
 	[statusItem setTitle:@""];
 	[carrierInMenu setTitle:@"Carrier:"];
+	[carrierInStatus setStringValue:@""];
 	
 	[self setHardwareVersion:@""];
 	[self setIMEI:@""];
+	
+	[self clearConnectionUI];
+	
 	if([statusItemMenu indexOfItem:statusItemDisconnect] != -1) {
-		[statusItemMenu removeItem:statusItemDisconnect];
+		[statusItemMenu removeItem:statusItemDisconnect];	
 	}
 	if([statusItemMenu indexOfItem:statusItemConnect] != -1) {
 		[statusItemMenu removeItem:statusItemConnect];
 	}	
-	[self clearConnectionUI];
+
+	[statusWindowConnect setHidden:YES];
+	[statusWindowDisonnect setHidden:YES];
+
 	[statusItemConectedFor setTitle:@"No modem connected"];
 }
 
@@ -193,15 +212,19 @@ void calloutProc (SCNetworkConnectionRef connection, SCNetworkConnectionStatus s
 	[speedTransmit setStringValue:@""];
 	[transferReceive setStringValue:@""];
 	[transferTransmit setStringValue:@""];
-	[uptime setStringValue:@""];
+	//[uptime setStringValue:@""];
 	[statusItem setToolTip:@"CheetahWatch - Not connected"];
 	[statusItemConectedFor setTitle:@"Not connected"];
+	[connectedInStatus setStringValue:@"Not connected"];
 	if([statusItemMenu indexOfItem:statusItemDisconnect] != -1) {
 		[statusItemMenu removeItem:statusItemDisconnect];	
 		if([statusItemMenu indexOfItem:statusItemConnect] == -1) {
 			[statusItemMenu insertItem:statusItemConnect atIndex:([statusItemMenu indexOfItem:statusItemConectedFor] + 1)];
 		}
 	}
+	[statusWindowConnect setHidden:NO];
+	[statusWindowDisonnect setHidden:YES];
+
 }
 
 -(void)updateHistory
@@ -226,11 +249,12 @@ void calloutProc (SCNetworkConnectionRef connection, SCNetworkConnectionStatus s
 		carrierNameTimer = nil;
 	}
 	[self clearAllUI];
-	NSImage *imageFromBundle = [NSImage imageNamed:@"no-modem.png"];
-	[status setImage: imageFromBundle];
+	//NSImage *imageFromBundle = [NSImage imageNamed:@"no-modem.png"];
+	//[status setImage: imageFromBundle];
 	[statusItem setAttributedTitle:@""];
 	[statusItem setToolTip:@"CheetahWatch - No modem detected"];
 	[statusItemConectedFor setTitle:@"No modem connected"];
+	[connectedInStatus setStringValue:@"No modem connected"];
 	[self performSelectorOnMainThread:@selector(changeStatusImageTo:) withObject: @"no-modem-menu.tif" waitUntilDone:NO];
 }
 
@@ -239,19 +263,22 @@ void calloutProc (SCNetworkConnectionRef connection, SCNetworkConnectionStatus s
 	if([statusItemMenu indexOfItem:statusItemConnect] < 0) {
 		[statusItemMenu insertItem:statusItemConnect atIndex:([statusItemMenu indexOfItem:statusItemConectedFor] + 1)];
 	}
+	[statusWindowDisonnect setHidden:YES];
+	[statusWindowConnect setHidden:NO];
 	carrierNameTimer = [NSTimer scheduledTimerWithTimeInterval:10 target:self selector:@selector(sendCarrierRequest:) userInfo:nil repeats:YES];
 }
 
 // called by the monitor thread to say "hoorah! w00t!"
 -(void)haveModem
 {
-	NSImage *imageFromBundle = [NSImage imageNamed:@"have-modem.png"];
+//	NSImage *imageFromBundle = [NSImage imageNamed:@"have-modem.png"];
 	[statusItem setTitle:@"?"]; 
-	[status setImage: imageFromBundle];
+	//[status setImage: imageFromBundle];
 	[self clearAllUI];
 	[self performSelectorOnMainThread:@selector(changeStatusImageTo:) withObject: @"signal-0.tif" waitUntilDone:NO];
 	[self performSelectorOnMainThread:@selector(haveModemMain:) withObject:nil waitUntilDone:YES];
 	[statusItemConectedFor setTitle:@"Not connected"];
+	[connectedInStatus setStringValue:@"Not connected"];
 }
 
 -(BOOL)storeUsageHistory
@@ -284,6 +311,49 @@ void calloutProc (SCNetworkConnectionRef connection, SCNetworkConnectionStatus s
 	}
 }
 
+-(void)makeTheWindowCompactAnimating:(BOOL)animated
+{
+	NSRect frame = [theWindow frame];
+	
+	float newHeight = 138;
+	[statsBox setHidden:YES];
+	[statsBoxSubstitute setHidden:NO];
+
+	frame.origin.y += frame.size.height - newHeight;
+	frame.size.height = newHeight;
+	
+	[theWindow setFrame:frame display:YES animate:animated];
+	[[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"CWShowStatsBox"];
+}
+
+-(void)makeTheWindowBigAnimating:(BOOL)animated
+{
+	NSRect frame = [theWindow frame];
+	
+	float newHeight = 248;
+		[statsBox setHidden:NO];
+		[statsBoxSubstitute setHidden:YES];
+
+	frame.origin.y += frame.size.height - newHeight;
+	frame.size.height = newHeight;
+	
+	[theWindow setFrame:frame display:YES animate:animated];
+	
+	[[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"CWShowStatsBox"];
+}
+
+-(void)handleDisclosureTriangleFun:(id)sender
+{
+	NSRect frame = [theWindow frame];
+	
+	if(frame.size.height != 138) {
+		[self makeTheWindowCompactAnimating:YES];
+	} else {
+		[self makeTheWindowBigAnimating:YES];
+	}
+	
+}
+
 -(void)connectNetworkTimeoutCheck:(id)sender
 {
 	SCNetworkConnectionStatus lStat = SCNetworkConnectionGetStatus (scncRef);
@@ -293,11 +363,13 @@ void calloutProc (SCNetworkConnectionRef connection, SCNetworkConnectionStatus s
 	}
 	if(lStat == kSCNetworkConnectionConnecting) { // we're connecting still
 		[statusItemConectedFor setTitle:@"Connecting..."];
+		[connectedInStatus setStringValue:@"Connecting..."];
 		[self performSelector:@selector(connectNetworkTimeoutCheck:) withObject:sender afterDelay:1];
 		return;
 	}
 	if(lStat == kSCNetworkConnectionDisconnecting) {
 		[statusItemConectedFor setTitle:@"Disconnecting..."];
+		[connectedInStatus setStringValue:@"Disonnecting..."];
 		[self performSelector:@selector(connectNetworkTimeoutCheck:) withObject:sender afterDelay:1];
 		// cancelling out...
 		return;
@@ -305,12 +377,16 @@ void calloutProc (SCNetworkConnectionRef connection, SCNetworkConnectionStatus s
 	if(lStat == kSCNetworkConnectionDisconnected) {
 		// cancelled out...
 		[statusItemConectedFor setTitle:@"Not connected"];
+		[connectedInStatus setStringValue:@"Not connected"];
 		if([statusItemMenu indexOfItem:statusItemDisconnect] != -1) {
-			[statusItemMenu removeItem:statusItemDisconnect];	
-			if([statusItemMenu indexOfItem:statusItemConnect] == -1) {
+			[statusItemMenu removeItem:statusItemDisconnect];		
+			if([statusItemMenu indexOfItem:statusItemConnect] == -1) {	
 				[statusItemMenu insertItem:statusItemConnect atIndex:([statusItemMenu indexOfItem:statusItemConectedFor] + 1)];
 			}
 		}
+		[statusWindowConnect setHidden:NO];
+		[statusWindowDisonnect setHidden:YES];
+
 		return;
 	}	
 }
@@ -319,15 +395,20 @@ void calloutProc (SCNetworkConnectionRef connection, SCNetworkConnectionStatus s
 {	
 	SCNetworkConnectionStart(scncRef, userOptions, true);
 	[statusItemConectedFor setTitle:@"Connecting..."];
+	[connectedInStatus setStringValue:@"Connecting..."];
 	[self performSelector:@selector(connectNetworkTimeoutCheck:) withObject:sender afterDelay:1];
 	
 	int index = [statusItemMenu indexOfItem:statusItemConnect];
 	if(index != -1) {
-		[statusItemMenu removeItem:statusItemConnect];	
+		[statusItemMenu removeItem:statusItemConnect];		
 		if([statusItemMenu indexOfItem:statusItemDisconnect] == -1) {
 			[statusItemMenu insertItem:statusItemDisconnect atIndex:([statusItemMenu indexOfItem:statusItemConectedFor] + 1)];
 		}
 	}
+	
+	[statusWindowConnect setHidden:YES];
+	[statusWindowDisonnect setHidden:NO];
+
 }
 
 -(void)disconnectNetworkTimeoutCheck:(id)sender
@@ -335,6 +416,7 @@ void calloutProc (SCNetworkConnectionRef connection, SCNetworkConnectionStatus s
 	SCNetworkConnectionStatus lStat = SCNetworkConnectionGetStatus (scncRef);	
 	if(lStat == kSCNetworkConnectionDisconnecting) {
 		[statusItemConectedFor setTitle:@"Disconnecting..."];
+		[connectedInStatus setStringValue:@"Disconnecting..."];
 		[self performSelector:@selector(disconnectNetworkTimeoutCheck:) withObject:sender afterDelay:1];
 		return;
 	}
@@ -391,7 +473,7 @@ void calloutProc (SCNetworkConnectionRef connection, SCNetworkConnectionStatus s
 // called by the secondary thread flowReport, notifies History of update
 -(void)flowReport2:(id)nothing
 {
-	[uptime setStringValue:[self prettyTime:[currentUptime intValue]]];
+//	[uptime setStringValue:[self prettyTime:[currentUptime intValue]]];
 	
 	[speedReceive setStringValue:[[self prettyDataAmount:[currentSpeedReceive intValue]] stringByAppendingString:@"ps"]];
 	[speedTransmit setStringValue:[[self prettyDataAmount:[currentSpeedTransmit intValue]] stringByAppendingString:@"ps"]];
@@ -408,14 +490,17 @@ void calloutProc (SCNetworkConnectionRef connection, SCNetworkConnectionStatus s
 	
 	[statusItem setToolTip:tooltip];
 	[statusItemConectedFor setTitle:connectedFor];
+	[connectedInStatus setStringValue:connectedFor];
 	
 	int index = [statusItemMenu indexOfItem:statusItemConnect];
 	if(index != -1) {
 		[statusItemMenu removeItem:statusItemConnect];	
 		if([statusItemMenu indexOfItem:statusItemDisconnect] == -1) {
-			[statusItemMenu insertItem:statusItemDisconnect atIndex:([statusItemMenu indexOfItem:statusItemConectedFor] + 1)];
+			[statusItemMenu insertItem:statusItemDisconnect atIndex:([statusItemMenu indexOfItem:statusItemConectedFor] + 1)];	
 		}
-	}
+	}	
+	[statusWindowConnect setHidden:YES];
+	[statusWindowDisonnect setHidden:NO];
 	
 //	[statusItemConnect setEnabled:NO];//
 
@@ -591,6 +676,7 @@ void calloutProc (SCNetworkConnectionRef connection, SCNetworkConnectionStatus s
 		if([carrier rangeOfString:@"\""].location < [carrier length]) {
 			carrier = [carrier substringToIndex:([carrier rangeOfString:@"\""].location)];
 			[carrierInMenu performSelectorOnMainThread:@selector(setTitle:) withObject:[@"Carrier: " stringByAppendingString:carrier] waitUntilDone:NO];
+			[carrierInStatus performSelectorOnMainThread:@selector(setStringValue:) withObject:carrier waitUntilDone:NO];
 		}
 	}
 }

@@ -38,9 +38,6 @@
 
 #include <SystemConfiguration/SCNetworkConnection.h>
 
-#import "CWHistorySupport.h"
-#import "NBInvocationQueue.h"
-
 #define BAUDRATE B9600
 #define MODEMUIDEV "/dev/tty.HUAWEIMobile-Pcui"
 #define BUFSIZE 256
@@ -60,8 +57,13 @@ typedef struct MyPrivateData {
     UInt32					locationID;
 } MyPrivateData;
 
+
+@class CWHistorySupport;
+@class NBInvocationQueue;
+
 @interface CWMain : NSObject
 {
+	#pragma mark Status window
     IBOutlet id mode;
     IBOutlet id signal;
     IBOutlet id speedReceive;
@@ -70,20 +72,34 @@ typedef struct MyPrivateData {
 	IBOutlet id theWindow;
     IBOutlet id transferReceive;
     IBOutlet id transferTransmit;
-    IBOutlet id uptime;
-	IBOutlet id appMenu;	
+    IBOutlet id uptime;	
 	IBOutlet id totalReceived;
-	IBOutlet id totalTransmitted;	
-	IBOutlet id menuStoreUsageHistory;
-	IBOutlet id menuClearUsageHistory;
+	IBOutlet id totalTransmitted;		
+	IBOutlet NSButton *statusWindowConnect;
+	IBOutlet NSButton *statusWindowDisonnect;
+	IBOutlet NSButton *toggleStatsDisplay;
+	IBOutlet NSBox *statsBox;
+	IBOutlet NSTextField *statsBoxSubstitute; 
+	
+	#pragma mark First Run window
 	IBOutlet id firstRunWindow;
 	IBOutlet id firstRunWebkit;
+	
+	#pragma mark StatusItem
+	NSStatusItem *statusItem;
+	IBOutlet id appMenu;
+	IBOutlet id menuStoreUsageHistory;
+	IBOutlet id menuClearUsageHistory;
 	IBOutlet id statusItemMenu;
 	IBOutlet id statusItemConectedFor;
 	IBOutlet id statusItemConnect;
 	IBOutlet id statusItemDisconnect;
-	IBOutlet SUUpdater *sparkler;
+	IBOutlet id carrierSeperator;
+	IBOutlet id carrierInMenu;
+	IBOutlet id connectedInStatus;
+	IBOutlet id carrierInStatus;
 	
+	#pragma mark Modem info window (not shown at present)
 	IBOutlet id modemInfoWindow;
 	IBOutlet id modemInfoHWVersion;
 	IBOutlet id modemInfoNetwork;
@@ -91,11 +107,11 @@ typedef struct MyPrivateData {
 	IBOutlet id modemInfoIMEI;
 	IBOutlet id modemInfoIMSI;
 	
-	IBOutlet id carrierSeperator;
-	IBOutlet id carrierInMenu;
+	#pragma mark Everything else :)
+
+	IBOutlet SUUpdater *sparkler;
 	
 	bool weHaveAModem;
-	NSStatusItem *statusItem;
 
  	CWHistorySupport *cwh;
 	
@@ -117,6 +133,8 @@ typedef struct MyPrivateData {
 	
 	BOOL waitingOnCarrierName;
 }
+
+#pragma mark Methods start here
 
 -(void)setupDialing;
 
@@ -150,6 +168,13 @@ typedef struct MyPrivateData {
 -(void)showAbout:(id)sender;
 -(void)checkUpdates:(id)sender;
 
+-(void)makeTheWindowCompactAnimating:(BOOL)animated;
+-(void)makeTheWindowBigAnimating:(BOOL)animated;
+
+-(void)handleDisclosureTriangleFun:(id)sender;
+
+#pragma mark Things that are called by the modem
+
 -(void)signalStrength:(char*)buff;
 -(void)modeChange:(char*)buff;
 -(void)flowReport:(char*)buff;
@@ -181,6 +206,8 @@ typedef struct MyPrivateData {
 
 -(void)doSetSignalStrength:(int)z_signal;
 -(void)signalStrengthFromCSQ:(char*)buff;
+
+#pragma mark Modem/USB Probe thread
 
 +(void)USBFinder:(id)mainController;
 

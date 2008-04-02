@@ -37,6 +37,8 @@
 				<string>id</string>
 				<key>getIMSI2</key>
 				<string>id</string>
+				<key>handleDisclosureTriangleFun</key>
+				<string>id</string>
 				<key>noModem</key>
 				<string>id</string>
 				<key>showAbout</key>
@@ -58,7 +60,11 @@
 				<string>id</string>
 				<key>carrierInMenu</key>
 				<string>id</string>
+				<key>carrierInStatus</key>
+				<string>id</string>
 				<key>carrierSeperator</key>
+				<string>id</string>
+				<key>connectedInStatus</key>
 				<string>id</string>
 				<key>firstRunWebkit</key>
 				<string>id</string>
@@ -90,6 +96,10 @@
 				<string>id</string>
 				<key>speedTransmit</key>
 				<string>id</string>
+				<key>statsBox</key>
+				<string>NSBox</string>
+				<key>statsBoxSubstitute</key>
+				<string>NSTextField</string>
 				<key>status</key>
 				<string>id</string>
 				<key>statusItemConectedFor</key>
@@ -100,8 +110,14 @@
 				<string>id</string>
 				<key>statusItemMenu</key>
 				<string>id</string>
+				<key>statusWindowConnect</key>
+				<string>NSButton</string>
+				<key>statusWindowDisonnect</key>
+				<string>NSButton</string>
 				<key>theWindow</key>
 				<string>id</string>
+				<key>toggleStatsDisplay</key>
+				<string>NSButton</string>
 				<key>totalReceived</key>
 				<string>id</string>
 				<key>totalTransmitted</key>
@@ -126,6 +142,50 @@
 			<string>SUUpdater</string>
 			<key>LANGUAGE</key>
 			<string>ObjC</string>
+			<key>SUPERCLASS</key>
+			<string>NSObject</string>
+		</dict>
+		<dict>
+			<key>ACTIONS</key>
+			<dict>
+				<key>changeAutoResetFrequency2</key>
+				<string>id</string>
+				<key>showPrefsWindow</key>
+				<string>id</string>
+			</dict>
+			<key>CLASS</key>
+			<string>CWUsagePrefsController</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>OUTLETS</key>
+			<dict>
+				<key>afterReset</key>
+				<string>NSPopUpButton</string>
+				<key>autoReset</key>
+				<string>NSButton</string>
+				<key>autoResetFrequency2</key>
+				<string>NSSegmentedControl</string>
+				<key>autoResetFrequencyView</key>
+				<string>NSView</string>
+				<key>autoResetFrequencyViewContainer</key>
+				<string>NSBox</string>
+				<key>freqDailyView</key>
+				<string>NSView</string>
+				<key>freqMonthlyView</key>
+				<string>NSView</string>
+				<key>freqWeeklyView</key>
+				<string>NSView</string>
+				<key>prefsWindow</key>
+				<string>NSWindow</string>
+				<key>warnMe</key>
+				<string>NSButton</string>
+				<key>warnMeFileSize</key>
+				<string>NSTextField</string>
+				<key>warnMeFileSizeMultiplier</key>
+				<string>NSPopUpButton</string>
+				<key>warnMeWhichType</key>
+				<string>NSPopUpButton</string>
+			</dict>
 			<key>SUPERCLASS</key>
 			<string>NSObject</string>
 		</dict>
