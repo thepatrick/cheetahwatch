@@ -27,6 +27,17 @@
 	IBOutlet NSView			*freqWeeklyView;
 	IBOutlet NSView			*freqMonthlyView;
 	
+	IBOutlet NSButton		*autoResetWeeklySunday;
+	IBOutlet NSButton		*autoResetWeeklyMonday;
+	IBOutlet NSButton		*autoResetWeeklyTuesday;
+	IBOutlet NSButton		*autoResetWeeklyWednesday;
+	IBOutlet NSButton		*autoResetWeeklyThursday;
+	IBOutlet NSButton		*autoResetWeeklyFriday;
+	IBOutlet NSButton		*autoResetWeeklySaturday;
+	
+	IBOutlet NSButton		*autoResetMonthlyEach;
+	IBOutlet NSButton		*autoResetMonthlyOnThe;
+	
 	NSString *presentFrequency;
 	
 }
@@ -36,5 +47,9 @@
 -(void)changeFrequency:(NSString*)newFrequency;
 -(void)changeAutoResetFrequency2:(id)sender;
 -(void)showPrefsWindow:(id)sender;
+
+-(void)toggleAutoResetWeekdays:(NSButton*)sender;
+
+-(void)changeAutoResetMonthlyMode:(NSButton*)sender;
 
 @end

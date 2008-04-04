@@ -135,23 +135,14 @@
 		<dict>
 			<key>ACTIONS</key>
 			<dict>
-				<key>checkForUpdates</key>
-				<string>id</string>
-			</dict>
-			<key>CLASS</key>
-			<string>SUUpdater</string>
-			<key>LANGUAGE</key>
-			<string>ObjC</string>
-			<key>SUPERCLASS</key>
-			<string>NSObject</string>
-		</dict>
-		<dict>
-			<key>ACTIONS</key>
-			<dict>
 				<key>changeAutoResetFrequency2</key>
 				<string>id</string>
+				<key>changeAutoResetMonthlyMode</key>
+				<string>NSButton</string>
 				<key>showPrefsWindow</key>
 				<string>id</string>
+				<key>toggleAutoResetWeekdays</key>
+				<string>NSButton</string>
 			</dict>
 			<key>CLASS</key>
 			<string>CWUsagePrefsController</string>
@@ -169,6 +160,24 @@
 				<string>NSView</string>
 				<key>autoResetFrequencyViewContainer</key>
 				<string>NSBox</string>
+				<key>autoResetMonthlyEach</key>
+				<string>NSButton</string>
+				<key>autoResetMonthlyOnThe</key>
+				<string>NSButton</string>
+				<key>autoResetWeeklyFriday</key>
+				<string>NSButton</string>
+				<key>autoResetWeeklyMonday</key>
+				<string>NSButton</string>
+				<key>autoResetWeeklySaturday</key>
+				<string>NSButton</string>
+				<key>autoResetWeeklySunday</key>
+				<string>NSButton</string>
+				<key>autoResetWeeklyThursday</key>
+				<string>NSButton</string>
+				<key>autoResetWeeklyTuesday</key>
+				<string>NSButton</string>
+				<key>autoResetWeeklyWednesday</key>
+				<string>NSButton</string>
 				<key>freqDailyView</key>
 				<string>NSView</string>
 				<key>freqMonthlyView</key>
@@ -186,6 +195,19 @@
 				<key>warnMeWhichType</key>
 				<string>NSPopUpButton</string>
 			</dict>
+			<key>SUPERCLASS</key>
+			<string>NSObject</string>
+		</dict>
+		<dict>
+			<key>ACTIONS</key>
+			<dict>
+				<key>checkForUpdates</key>
+				<string>id</string>
+			</dict>
+			<key>CLASS</key>
+			<string>SUUpdater</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
 			<key>SUPERCLASS</key>
 			<string>NSObject</string>
 		</dict>

@@ -14,12 +14,86 @@
 +(void)setDefaultUserDefaults:(NSMutableDictionary*)dd
 {
 	[dd setValue:@"daily" forKey:@"CWUsageFrequency"];
+	[dd setValue:@"NO" forKey:@"CWActivateUsageWarning"];
+	[dd setValue:[NSNumber numberWithInt:0] forKey:@"CWActivateUsageWarningWhen"];
+	[dd setValue:[NSNumber numberWithInt:0] forKey:@"CWActivateUsageWarningValue"];
+	[dd setValue:[NSNumber numberWithInt:0] forKey:@"CWActivateUsageWarningValueMultiplier"];
+	[dd setValue:@"NO" forKey:@"CWAutoReset"];
+	
+	[dd setValue:[NSNumber numberWithInt:1] forKey:@"CWAutoResetPostAction"];
+	[dd setValue:[NSNumber numberWithInt:1] forKey:@"CWAutoResetDailyDays"];
+	
+	[dd setValue:[NSNumber numberWithInt:1] forKey:@"CWAutoResetWeeklyWeeks"];
+	
+	
+	[dd setValue:@"NO" forKey:@"CWAutoResetWeeklySunday"];
+	[dd setValue:@"NO" forKey:@"CWAutoResetWeeklyMonday"];
+	[dd setValue:@"NO" forKey:@"CWAutoResetWeeklyTuesday"];
+	[dd setValue:@"NO" forKey:@"CWAutoResetWeeklyWednesday"];
+	[dd setValue:@"NO" forKey:@"CWAutoResetWeeklyThursday"];
+	[dd setValue:@"NO" forKey:@"CWAutoResetWeeklyFriday"];
+	[dd setValue:@"NO" forKey:@"CWAutoResetWeeklySaturday"];
+	
+	
+	[dd setValue:[NSNumber numberWithInt:1] forKey:@"CWAutoResetMonthlyMonths"];
+	
+	
+	[dd setValue:[NSNumber numberWithInt:0] forKey:@"CWAutoResetMonthlyOnTheMode"];
+	[dd setValue:[NSNumber numberWithInt:0] forKey:@"CWAutoResetMonthlyOnTheWhich"];
+	[dd setValue:[NSNumber numberWithInt:0] forKey:@"CWAutoResetMonthlyOnTheDayOfWeek"];
+	
+}
+
+-(int)mixedStateFromBOOL:(BOOL)src
+{
+	return src ? NSOnState : NSOffState;
 }
 
 -(void)awakeFromNib
 {
 	NSLog(@"Good morning everybody!");
 	[self changeFrequency:[[NSUserDefaults standardUserDefaults] stringForKey:@"CWUsageFrequency"]];
+	
+	NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
+	
+	[autoResetWeeklySunday    setState:[self mixedStateFromBOOL:[ud boolForKey:@"CWAutoResetWeeklySunday"]]];
+	[autoResetWeeklyMonday    setState:[self mixedStateFromBOOL:[ud boolForKey:@"CWAutoResetWeeklyMonday"]]];
+	[autoResetWeeklyTuesday   setState:[self mixedStateFromBOOL:[ud boolForKey:@"CWAutoResetWeeklyTuesday"]]];
+	[autoResetWeeklyWednesday setState:[self mixedStateFromBOOL:[ud boolForKey:@"CWAutoResetWeeklyWednesday"]]];
+	[autoResetWeeklyThursday  setState:[self mixedStateFromBOOL:[ud boolForKey:@"CWAutoResetWeeklyThursday"]]];
+	[autoResetWeeklyFriday    setState:[self mixedStateFromBOOL:[ud boolForKey:@"CWAutoResetWeeklyFriday"]]];
+	[autoResetWeeklySaturday  setState:[self mixedStateFromBOOL:[ud boolForKey:@"CWAutoResetWeeklySaturday"]]];
+	
+	
+	[autoResetMonthlyEach  setState:[self mixedStateFromBOOL:([ud integerForKey:@"CWAutoResetMonthlyOnTheMode"] == 0)]];
+	[autoResetMonthlyOnThe  setState:[self mixedStateFromBOOL:([ud integerForKey:@"CWAutoResetMonthlyOnTheMode"] == 1)]];
+}
+
+-(void)toggleAutoResetWeekdays:(NSButton*)sender
+{
+	NSString *whichDay = @"";
+	
+	if(sender == autoResetWeeklySunday)	   whichDay = @"CWAutoResetWeeklySunday";
+	if(sender == autoResetWeeklyMonday)    whichDay = @"CWAutoResetWeeklyMonday";
+	if(sender == autoResetWeeklyTuesday)   whichDay = @"CWAutoResetWeeklyTuesday";
+	if(sender == autoResetWeeklyWednesday) whichDay = @"CWAutoResetWeeklyWednesday";
+	if(sender == autoResetWeeklyThursday)  whichDay = @"CWAutoResetWeeklyThursday";
+	if(sender == autoResetWeeklyFriday)    whichDay = @"CWAutoResetWeeklyFriday";
+	if(sender == autoResetWeeklySaturday)  whichDay = @"CWAutoResetWeeklySaturday";
+	
+	if(![whichDay isEqualToString:@""]) {
+		[[NSUserDefaults standardUserDefaults] setBool:([sender state] == NSOnState) forKey:whichDay];	
+	}
+}
+
+-(void)changeAutoResetMonthlyMode:(NSButton*)sender
+{
+	if(sender == autoResetMonthlyEach) {
+		[autoResetMonthlyOnThe setState:NSOffState];
+	} else if(sender == autoResetMonthlyOnThe) {
+		[autoResetMonthlyEach setState:NSOffState];	
+	}
+	[[NSUserDefaults standardUserDefaults] setInteger:[sender tag] forKey:@"CWAutoResetMonthlyOnTheMode"];
 }
 
 -(void)changeFrequency:(NSString*)newFrequency
