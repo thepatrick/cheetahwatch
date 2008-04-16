@@ -132,6 +132,8 @@ typedef struct MyPrivateData {
 	SCNetworkConnectionStatus gStat;
 	
 	BOOL waitingOnCarrierName;
+	
+	BOOL shouldHideStatusWhenConnected;
 }
 
 #pragma mark Methods start here

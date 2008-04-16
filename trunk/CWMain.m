@@ -33,6 +33,7 @@
 	NSMutableDictionary *dd = [NSMutableDictionary dictionaryWithObject:@"YES" forKey:@"CWStoreHistory"];
 	[dd setValue:@"YES" forKey:@"CWFirstRun"];
 	[dd setValue:@"YES" forKey:@"CWShowStatsBox"];
+	[dd setValue:@"YES" forKey:@"CWShowStatusWhileConnecting"];
 	
 	[CWUsagePrefsController setDefaultUserDefaults:dd];
 	
@@ -72,8 +73,6 @@ void calloutProc (SCNetworkConnectionRef connection, SCNetworkConnectionStatus s
 	[NSThread detachNewThreadSelector:@selector(runQueueThread) toTarget:atWorker withObject:nil];
 
 	[signal setEnabled:NO]; //disables user interaction, enabled by default
-
-	//[status setImage:[NSImage imageNamed:@"no-modem.png"]];
 	
 	statusItem = [[[NSStatusBar systemStatusBar] statusItemWithLength:NSVariableStatusItemLength] retain];
 	[statusItem setHighlightMode:YES];
@@ -82,16 +81,22 @@ void calloutProc (SCNetworkConnectionRef connection, SCNetworkConnectionStatus s
 	[statusItem setAttributedTitle:@""];
 	[statusItem setToolTip:@"CheetahWatch - No modem detected"];
 	[statusItem setMenu:statusItemMenu];		
+	
+	// these two items need to be retained by us because we add/remove them many times while the app is running
+	// if we didnt, the first time they were removed they'd turn to mush, which isn't anywhere near as fun as it sounds.
 	[statusItemConnect retain];
 	[statusItemDisconnect retain];
 
-	[self performSelectorOnMainThread:@selector(changeStatusImageTo:) withObject: @"no-modem-menu.tif" waitUntilDone:NO];	
+	[self changeStatusImageTo:@"no-modem-menu.tif"];
+	
 	if([self storeUsageHistory]) {
 		cwh = [[CWHistorySupport alloc] init];	
 		[cwh setMainController:self];
 		[cwh setupCoreData];	
 	}
+	
 	[NSThread detachNewThreadSelector:@selector(USBFinder:) toTarget:[CWMain class] withObject:self];
+	
 	[self clearAllUI];
 	[self updateHistory];
 	[self makeMenuMatchStorageHistory];
@@ -100,8 +105,10 @@ void calloutProc (SCNetworkConnectionRef connection, SCNetworkConnectionStatus s
 	
 	if(![[NSUserDefaults standardUserDefaults] boolForKey:@"CWShowStatsBox"]) {
 		[self makeTheWindowCompactAnimating:NO];
-		[toggleStatsDisplay setState:0];
+		[toggleStatsDisplay setState:NSOffState];
 	}
+	
+	shouldHideStatusWhenConnected = NO;
 }
 
 -(void)setupDialing
@@ -134,6 +141,7 @@ void calloutProc (SCNetworkConnectionRef connection, SCNetworkConnectionStatus s
 {
 	[NSApp activateIgnoringOtherApps:YES];
 	[theWindow makeKeyAndOrderFront:self];
+	shouldHideStatusWhenConnected = NO;
 }
 
 -(void)showModemInfo:(id)sender
@@ -391,8 +399,20 @@ void calloutProc (SCNetworkConnectionRef connection, SCNetworkConnectionStatus s
 	}	
 }
 
+-(BOOL)showStatusOnConnecting
+{
+	return [[NSUserDefaults standardUserDefaults] boolForKey:@"CWShowStatusWhileConnecting"];
+}
+
+
 -(void)connectNetwork:(id)sender
 {	
+	if([self showStatusOnConnecting]) {
+		[NSApp activateIgnoringOtherApps:YES];
+		[theWindow makeKeyAndOrderFront:self];
+		shouldHideStatusWhenConnected = YES;
+	}
+	
 	SCNetworkConnectionStart(scncRef, userOptions, true);
 	[statusItemConectedFor setTitle:@"Connecting..."];
 	[connectedInStatus setStringValue:@"Connecting..."];
@@ -475,6 +495,11 @@ void calloutProc (SCNetworkConnectionRef connection, SCNetworkConnectionStatus s
 {
 //	[uptime setStringValue:[self prettyTime:[currentUptime intValue]]];
 	
+	if(shouldHideStatusWhenConnected) {
+		[theWindow performClose:self];
+		shouldHideStatusWhenConnected = NO;
+	}
+	
 	[speedReceive setStringValue:[[self prettyDataAmount:[currentSpeedReceive intValue]] stringByAppendingString:@"ps"]];
 	[speedTransmit setStringValue:[[self prettyDataAmount:[currentSpeedTransmit intValue]] stringByAppendingString:@"ps"]];
 	
@@ -501,6 +526,7 @@ void calloutProc (SCNetworkConnectionRef connection, SCNetworkConnectionStatus s
 	}	
 	[statusWindowConnect setHidden:YES];
 	[statusWindowDisonnect setHidden:NO];
+
 	
 //	[statusItemConnect setEnabled:NO];//
 
@@ -575,7 +601,9 @@ void calloutProc (SCNetworkConnectionRef connection, SCNetworkConnectionStatus s
 	NSString *a;
 	a = [mainController GetATResult:@"AT+CGSN\r" forDev:fd];
 	
-	if([a cString][0] >= '0' && [a cString][0] <= '9') {
+	const char *thisResult = [a cStringUsingEncoding:NSStringEncodingConversionExternalRepresentation];
+	
+	if(thisResult[0] >= '0' && thisResult[0] <= '9') {
 		 
 		a = [mainController GetATResult:@"AT+CGSN\r" forDev:fd];
 		 
@@ -704,7 +732,7 @@ void calloutProc (SCNetworkConnectionRef connection, SCNetworkConnectionStatus s
 	if([strength rangeOfString:@","].location < [strength length]) {
 		strength = [strength substringToIndex:([strength rangeOfString:@","].location)];
 		//NSLog(@"Signal Strength From CSQ is: %@", strength);
-		[self doSetSignalStrength:atoi([strength cString])];
+		[self doSetSignalStrength:atoi([strength cStringUsingEncoding:NSStringEncodingConversionExternalRepresentation])];
 	}
 	
 }
@@ -734,7 +762,7 @@ void calloutProc (SCNetworkConnectionRef connection, SCNetworkConnectionStatus s
 
 	NSString *menuMode;
 
-	switch ([newMode cString][0]) {
+	switch ([newMode cStringUsingEncoding:NSStringEncodingConversionExternalRepresentation][0]) {
 		case '0':
 			menuMode = @""; 
 			[mode setStringValue:@"None"];
@@ -807,7 +835,7 @@ void calloutProc (SCNetworkConnectionRef connection, SCNetworkConnectionStatus s
 	
 	returnValue = @"";
 	
-	write(dev, [command cString], [command cStringLength]);
+	write(dev, [command cStringUsingEncoding:NSStringEncodingConversionExternalRepresentation], ([command lengthOfBytesUsingEncoding:NSStringEncodingConversionExternalRepresentation] + 1));
 	read(dev,buf_stream,255);
 	bytes = read(dev,buf_stream,255);
 	buf_lineStart=strchr(buf_stream,'\n');
@@ -829,7 +857,7 @@ void calloutProc (SCNetworkConnectionRef connection, SCNetworkConnectionStatus s
 {		
 	char *buf_stream;
 	buf_stream=(char *)malloc(BUFSIZE*sizeof(char));
-	write(dev, [command cString], [command cStringLength]);
+	write(dev, [command cStringUsingEncoding:NSStringEncodingConversionExternalRepresentation], [command lengthOfBytesUsingEncoding:NSStringEncodingConversionExternalRepresentation]);
 	read(dev,buf_stream,255);
 	free(buf_stream);
 }
