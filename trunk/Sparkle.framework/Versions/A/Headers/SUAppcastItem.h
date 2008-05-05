@@ -6,7 +6,8 @@
 //  Copyright 2006 Andy Matuschak. All rights reserved.
 //
 
-#import <Cocoa/Cocoa.h>
+#ifndef SUAPPCASTITEM_H
+#define SUAPPCASTITEM_H
 
 
 @interface SUAppcastItem : NSObject {
@@ -18,6 +19,8 @@
 	
 	NSString *DSASignature;
 	NSString *MD5Sum;
+	
+	NSString *minimumSystemVersion;
 	
 	NSURL *fileURL;
 	NSString *fileVersion;
@@ -54,4 +57,9 @@
 - (NSString *)versionString;
 - (void)setVersionString:(NSString *)versionString;
 
+- (NSString *)minimumSystemVersion;
+- (void)setMinimumSystemVersion:(NSString *)systemVersionString;
+
 @end
+
+#endif

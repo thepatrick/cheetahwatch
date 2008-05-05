@@ -19,9 +19,9 @@
 	<key>CFBundleSignature</key>
 	<string>PQG0</string>
 	<key>CFBundleVersion</key>
-	<string>30</string>
+	<string>31</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.2.3a1</string>
+	<string>1.2.3a2</string>
 	<key>LSUIElement</key>
 	<true/>
 	<key>NSMainNibFile</key>
@@ -29,7 +29,7 @@
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
 	<key>SUFeedURL</key>
-	<string>http://m.ac.nz/cheetahwatch/cheetahwatch.xml</string>
+	<string>http://m.ac.nz/cheetahwatch/cheetahwatch.xml?version=%@&amp;software=${EXECUTABLE_NAME}</string>
 	<key>SUScheduledCheckInterval</key>
 	<integer>604800</integer>
 </dict>

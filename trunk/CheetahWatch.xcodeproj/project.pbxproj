@@ -33,6 +33,7 @@
 		CD9EE8530DA3EAE900C2230A /* OperatorList.lst in Resources */ = {isa = PBXBuildFile; fileRef = CD9EE8520DA3EAE900C2230A /* OperatorList.lst */; };
 		CDA4AEB70C625BAA00E71C0C /* CWMain.m in Sources */ = {isa = PBXBuildFile; fileRef = CDA4AEB60C625BAA00E71C0C /* CWMain.m */; };
 		CDA4B1FA0C62947300E71C0C /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CDA4B1F90C62947300E71C0C /* Carbon.framework */; };
+		CDAA71770DCFAE4A00C947E0 /* CWUSBFinder.m in Sources */ = {isa = PBXBuildFile; fileRef = CDAA71760DCFAE4A00C947E0 /* CWUSBFinder.m */; };
 		CDAF55580C763E3500E456AC /* CWHistorySupport.m in Sources */ = {isa = PBXBuildFile; fileRef = CDAF55560C763E3500E456AC /* CWHistorySupport.m */; };
 		CDFC9E430C7508D700681B3F /* CWHistory.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = CDFC9E420C7508D700681B3F /* CWHistory.xcdatamodel */; };
 /* End PBXBuildFile section */
@@ -88,6 +89,8 @@
 		CDA4AEB50C625BAA00E71C0C /* CWMain.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CWMain.h; sourceTree = "<group>"; };
 		CDA4AEB60C625BAA00E71C0C /* CWMain.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = CWMain.m; sourceTree = "<group>"; };
 		CDA4B1F90C62947300E71C0C /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
+		CDAA71750DCFAE4A00C947E0 /* CWUSBFinder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWUSBFinder.h; sourceTree = "<group>"; };
+		CDAA71760DCFAE4A00C947E0 /* CWUSBFinder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CWUSBFinder.m; sourceTree = "<group>"; };
 		CDAF55550C763E3500E456AC /* CWHistorySupport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWHistorySupport.h; sourceTree = "<group>"; };
 		CDAF55560C763E3500E456AC /* CWHistorySupport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CWHistorySupport.m; sourceTree = "<group>"; };
 		CDFC9E420C7508D700681B3F /* CWHistory.xcdatamodel */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.xcdatamodel; path = CWHistory.xcdatamodel; sourceTree = "<group>"; };
@@ -121,6 +124,8 @@
 				CDA4AEB60C625BAA00E71C0C /* CWMain.m */,
 				CD3EEC460DA2CC5F00381326 /* CWUsagePrefsController.h */,
 				CD3EEC470DA2CC5F00381326 /* CWUsagePrefsController.m */,
+				CDAA71750DCFAE4A00C947E0 /* CWUSBFinder.h */,
+				CDAA71760DCFAE4A00C947E0 /* CWUSBFinder.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -312,6 +317,7 @@
 				CD0465B10CE11FE600EDA0BD /* PPPLib.c in Sources */,
 				CD45AC720D61A31F000A0A2D /* NBInvocationQueue.m in Sources */,
 				CD3EEC480DA2CC5F00381326 /* CWUsagePrefsController.m in Sources */,
+				CDAA71770DCFAE4A00C947E0 /* CWUSBFinder.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

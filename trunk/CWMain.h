@@ -23,13 +23,6 @@
 
 #import <Cocoa/Cocoa.h>
 #import <WebKit/WebKit.h>
-
-#include <IOKit/IOKitLib.h>
-#include <IOKit/serial/IOSerialKeys.h>
-#include <IOKit/IOBSD.h>
-#include <IOKit/IOMessage.h>
-#include <IOKit/IOCFPlugIn.h>
-#include <IOKit/usb/IOUSBLib.h>
 #import <Sparkle/Sparkle.h>
 
 #include <mach/mach.h>
@@ -41,21 +34,12 @@
 #define BAUDRATE B9600
 #define MODEMUIDEV "/dev/tty.HUAWEIMobile-Pcui"
 #define BUFSIZE 256
-
-#define kMyVendorID		4817
-#define kMyProductID	4099
  
 enum
 {
     kNumRetries = 3
 };
 
-typedef struct MyPrivateData {
-    io_object_t				notification;
-    IOUSBDeviceInterface *	*deviceInterface;
-    CFStringRef				deviceName;
-    UInt32					locationID;
-} MyPrivateData;
 
 
 @class CWHistorySupport;
@@ -81,10 +65,12 @@ typedef struct MyPrivateData {
 	IBOutlet NSBox *statsBox;
 	IBOutlet NSTextField *statsBoxSubstitute; 
 	
+	#pragma mark -
 	#pragma mark First Run window
 	IBOutlet id firstRunWindow;
 	IBOutlet id firstRunWebkit;
 	
+	#pragma mark -
 	#pragma mark StatusItem
 	NSStatusItem *statusItem;
 	IBOutlet id appMenu;
@@ -99,6 +85,7 @@ typedef struct MyPrivateData {
 	IBOutlet id connectedInStatus;
 	IBOutlet id carrierInStatus;
 	
+	#pragma mark -
 	#pragma mark Modem info window (not shown at present)
 	IBOutlet id modemInfoWindow;
 	IBOutlet id modemInfoHWVersion;
@@ -107,6 +94,7 @@ typedef struct MyPrivateData {
 	IBOutlet id modemInfoIMEI;
 	IBOutlet id modemInfoIMSI;
 	
+	#pragma mark -
 	#pragma mark Everything else :)
 
 	IBOutlet SUUpdater *sparkler;
@@ -136,6 +124,7 @@ typedef struct MyPrivateData {
 	BOOL shouldHideStatusWhenConnected;
 }
 
+#pragma mark -
 #pragma mark Methods start here
 
 -(void)setupDialing;
@@ -175,6 +164,7 @@ typedef struct MyPrivateData {
 
 -(void)handleDisclosureTriangleFun:(id)sender;
 
+#pragma mark -
 #pragma mark Things that are called by the modem
 
 -(void)signalStrength:(char*)buff;
@@ -202,26 +192,15 @@ typedef struct MyPrivateData {
 
 -(void)sendCarrierRequest:(NSTimer*)timer;
 
+#pragma mark -
 #pragma mark Modem interface thread
 
 +(void)MyRunner:(id)mainController;
-
 -(void)doSetSignalStrength:(int)z_signal;
 -(void)signalStrengthFromCSQ:(char*)buff;
-
-#pragma mark Modem/USB Probe thread
-
-+(void)USBFinder:(id)mainController;
-
-void DeviceAdded(void *refCon, io_iterator_t iterator);
 
 void calloutProc (SCNetworkConnectionRef connection, SCNetworkConnectionStatus status, void *info );
 
 @end
 
-
-static IONotificationPortRef	gNotifyPort;
-static io_iterator_t	gAddedIter;
-static CFRunLoopRef		gRunLoop;
-static CWMain			*gCWMain;
 static fd; // the connection to the modem

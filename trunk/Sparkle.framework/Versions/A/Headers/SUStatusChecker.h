@@ -5,8 +5,10 @@
 //  Created by Evan Schoenberg on 7/6/06.
 //
 
-#import <Cocoa/Cocoa.h>
-#import <Sparkle/SUUpdater.h>
+#ifndef SUSTATUSCHECKER_H
+#define SUSTATUSCHECKER_H
+
+#import "SUUpdater.h"
 
 @class SUStatusChecker;
 
@@ -24,3 +26,5 @@
 + (SUStatusChecker *)statusCheckerForDelegate:(id<SUStatusCheckerDelegate>)delegate;
 
 @end
+
+#endif

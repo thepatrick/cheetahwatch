@@ -31,6 +31,9 @@ OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMA
 
 */
 
+#ifndef NSSTRING_PLUS_EXTRAS_H
+#define NSSTRING_PLUS_EXTRAS_H
+
 
 /*
 	NSString+extras.h
@@ -43,7 +46,7 @@ OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMA
 
 #import <Foundation/Foundation.h>
 #import <CoreFoundation/CoreFoundation.h>
-
+#import "SUConstants.h"	// for NSInteger
 
 @interface NSString (extras)
 
@@ -53,9 +56,11 @@ OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMA
 
 - (NSString *) stripHTML;
 
-- (NSString *) ellipsizeAfterNWords: (int) n;
+- (NSString *) ellipsizeAfterNWords: (NSInteger) n;
 
 + (BOOL) stringIsEmpty: (NSString *) s;
 
 
 @end
+
+#endif

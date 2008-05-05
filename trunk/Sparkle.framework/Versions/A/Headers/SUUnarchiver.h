@@ -6,15 +6,17 @@
 //  Copyright 2006 Andy Matuschak. All rights reserved.
 //
 
-#import <Cocoa/Cocoa.h>
-
+#ifndef SUUNARCHIVER_H
+#define SUUNARCHIVER_H
 
 @interface SUUnarchiver : NSObject {
 	id delegate;
+	NSString *archivePath;
 }
 
 - (void)unarchivePath:(NSString *)path;
 - (void)setDelegate:delegate;
+- (void)cleanUp;
 
 @end
 
@@ -23,3 +25,5 @@
 - (void)unarchiverDidFinish:(SUUnarchiver *)unarchiver;
 - (void)unarchiverDidFail:(SUUnarchiver *)unarchiver;
 @end
+
+#endif

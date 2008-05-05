@@ -6,16 +6,22 @@
 //  Copyright 2006 Andy Matuschak. All rights reserved.
 //
 
-#import <Cocoa/Cocoa.h>
+#ifndef SUAUTOMATICUPDATEALERT_H
+#define SUAUTOMATICUPDATEALERT_H
+
+#import "SUWindowController.h"
 
 @class SUAppcastItem;
-@interface SUAutomaticUpdateAlert : NSWindowController {
+@interface SUAutomaticUpdateAlert : SUWindowController {
 	SUAppcastItem *updateItem;
+	NSBundle *hostBundle;
 }
 
-- initWithAppcastItem:(SUAppcastItem *)item;
+- (id)initWithAppcastItem:(SUAppcastItem *)item hostBundle:(NSBundle *)hostBundle;
 
 - (IBAction)relaunchNow:sender;
 - (IBAction)relaunchLater:sender;
 
 @end
+
+#endif
