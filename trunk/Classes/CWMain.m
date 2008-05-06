@@ -25,6 +25,7 @@
 #import "CWUsagePrefsController.h"
 #import "CWHistorySupport.h"
 #import "CWMain.h"
+#import "CWNetworks.h"
 #import "CWUSBFinder.h"
 
 @implementation CWMain
@@ -72,7 +73,9 @@ void calloutProc (SCNetworkConnectionRef connection, SCNetworkConnectionStatus s
 {
 	atWorker = [[NBInvocationQueue alloc] init];
 	[NSThread detachNewThreadSelector:@selector(runQueueThread) toTarget:atWorker withObject:nil];
-
+	
+	networks = [[CWNetworks networks] retain];
+	
 	[signal setEnabled:NO]; //disables user interaction, enabled by default
 	
 	statusItem = [[[NSStatusBar systemStatusBar] statusItemWithLength:NSVariableStatusItemLength] retain];
@@ -179,6 +182,7 @@ void calloutProc (SCNetworkConnectionRef connection, SCNetworkConnectionStatus s
 	[statusItemConnect release];
 	[statusItemDisconnect release];
     [statusItem release];
+	[networks release];
 	[super dealloc];
 }
 
@@ -677,8 +681,7 @@ void calloutProc (SCNetworkConnectionRef connection, SCNetworkConnectionStatus s
 -(void)gotHWVersion:(char*)buff
 {
 	NSString *version = [NSString stringWithCString:(buff + 1)];
-	if([version length] > 0) {
-		//NSLog(@"\" location in version: %i", [version rangeOfString:@"\""].location);
+	if([version length] > 0) {		
 		if([version rangeOfString:@"\""].location > [version length]) {
 		} else {
 			version = [version substringWithRange:NSMakeRange(0,[version rangeOfString:@"\""].location)];
@@ -701,13 +704,29 @@ void calloutProc (SCNetworkConnectionRef connection, SCNetworkConnectionStatus s
 -(void)gotCarrier:(char*)buff
 {
 	NSString *carrier = [NSString stringWithCString:buff];	
-	if([carrier rangeOfString:@"\""].location < [carrier length]) {
-		carrier = [carrier substringFromIndex:([carrier rangeOfString:@"\""].location + 1)];
-		if([carrier rangeOfString:@"\""].location < [carrier length]) {
-			carrier = [carrier substringToIndex:([carrier rangeOfString:@"\""].location)];
-			[carrierInMenu performSelectorOnMainThread:@selector(setTitle:) withObject:[@"Carrier: " stringByAppendingString:carrier] waitUntilDone:NO];
-			[carrierInStatus performSelectorOnMainThread:@selector(setStringValue:) withObject:carrier waitUntilDone:NO];
-		}
+	if(!([carrier rangeOfString:@","].location < [carrier length])) {
+		return;
+	}
+	
+	NSArray *carrierComponents = [carrier componentsSeparatedByString:@","];	
+	NSString *newCarrier = @"";
+	
+	if([[carrierComponents objectAtIndex:1] integerValue] == 2) {		
+		NSString *code = [carrierComponents objectAtIndex:2];		
+		NSRange country = NSMakeRange(1, 3);
+		NSRange network = NSMakeRange(4, 2);
+		NSInteger c = [[code substringWithRange:country] integerValue];
+		NSInteger n = [[code substringWithRange:network] integerValue];
+		newCarrier = [networks displayNameForCountry:c andNetwork:n];
+	} else {
+		NSString *name = [carrierComponents objectAtIndex:2];		
+		NSInteger stringLength = [name length];
+		NSRange interior = NSMakeRange(1, stringLength - 2);
+		newCarrier = [name substringWithRange:interior];
+	}
+	if(![carrier isEqualToString:@""]) {
+		[carrierInMenu performSelectorOnMainThread:@selector(setTitle:) withObject:[@"Carrier: " stringByAppendingString:newCarrier] waitUntilDone:NO];
+		[carrierInStatus performSelectorOnMainThread:@selector(setStringValue:) withObject:newCarrier waitUntilDone:NO];
 	}
 }
 

@@ -44,6 +44,7 @@ enum
 
 @class CWHistorySupport;
 @class NBInvocationQueue;
+@class CWNetworks;
 
 @interface CWMain : NSObject
 {
@@ -112,6 +113,8 @@ enum
 	NSTimer *carrierNameTimer;
 	
 	NBInvocationQueue *atWorker;
+	
+	CWNetworks *networks;
 	
 	// Relating to PPP connect/disconnecting	
 	SCNetworkConnectionRef scncRef;

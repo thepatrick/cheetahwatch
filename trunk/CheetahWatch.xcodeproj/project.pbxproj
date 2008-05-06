@@ -34,7 +34,12 @@
 		CDA4AEB70C625BAA00E71C0C /* CWMain.m in Sources */ = {isa = PBXBuildFile; fileRef = CDA4AEB60C625BAA00E71C0C /* CWMain.m */; };
 		CDA4B1FA0C62947300E71C0C /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CDA4B1F90C62947300E71C0C /* Carbon.framework */; };
 		CDAA71770DCFAE4A00C947E0 /* CWUSBFinder.m in Sources */ = {isa = PBXBuildFile; fileRef = CDAA71760DCFAE4A00C947E0 /* CWUSBFinder.m */; };
+		CDAA71E70DCFC2E200C947E0 /* SCCSVParser.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CDAA71E60DCFC2E200C947E0 /* SCCSVParser.framework */; };
+		CDAA71EA0DCFC2ED00C947E0 /* SCCSVParser.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = CDAA71E60DCFC2E200C947E0 /* SCCSVParser.framework */; };
+		CDAA71F40DCFC38100C947E0 /* Spectral Class CSV Parser.txt in Resources */ = {isa = PBXBuildFile; fileRef = CDAA71F30DCFC38100C947E0 /* Spectral Class CSV Parser.txt */; };
+		CDAA72050DCFC3ED00C947E0 /* CWNetworks.m in Sources */ = {isa = PBXBuildFile; fileRef = CDAA72040DCFC3ED00C947E0 /* CWNetworks.m */; };
 		CDAF55580C763E3500E456AC /* CWHistorySupport.m in Sources */ = {isa = PBXBuildFile; fileRef = CDAF55560C763E3500E456AC /* CWHistorySupport.m */; };
+		CDE9AFF70DD1051400CAA997 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8D1107310486CEB800E47090 /* Info.plist */; };
 		CDFC9E430C7508D700681B3F /* CWHistory.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = CDFC9E420C7508D700681B3F /* CWHistory.xcdatamodel */; };
 /* End PBXBuildFile section */
 
@@ -45,6 +50,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				CDAA71EA0DCFC2ED00C947E0 /* SCCSVParser.framework in CopyFiles */,
 				CD5633BE0D742DF500418D48 /* Sparkle.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -60,7 +66,7 @@
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		32CA4F630368D1EE00C91783 /* CheetahWatch_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CheetahWatch_Prefix.pch; sourceTree = "<group>"; };
-		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = ../Info.plist; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* CheetahWatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CheetahWatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CD0465AD0CE11FE600EDA0BD /* ppp_msg.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ppp_msg.h; sourceTree = "<group>"; };
 		CD0465AE0CE11FE600EDA0BD /* PPPLib.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = PPPLib.c; sourceTree = "<group>"; };
@@ -91,6 +97,10 @@
 		CDA4B1F90C62947300E71C0C /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
 		CDAA71750DCFAE4A00C947E0 /* CWUSBFinder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWUSBFinder.h; sourceTree = "<group>"; };
 		CDAA71760DCFAE4A00C947E0 /* CWUSBFinder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CWUSBFinder.m; sourceTree = "<group>"; };
+		CDAA71E60DCFC2E200C947E0 /* SCCSVParser.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SCCSVParser.framework; sourceTree = "<group>"; };
+		CDAA71F30DCFC38100C947E0 /* Spectral Class CSV Parser.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Spectral Class CSV Parser.txt"; sourceTree = "<group>"; };
+		CDAA72030DCFC3ED00C947E0 /* CWNetworks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWNetworks.h; sourceTree = "<group>"; };
+		CDAA72040DCFC3ED00C947E0 /* CWNetworks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CWNetworks.m; sourceTree = "<group>"; };
 		CDAF55550C763E3500E456AC /* CWHistorySupport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWHistorySupport.h; sourceTree = "<group>"; };
 		CDAF55560C763E3500E456AC /* CWHistorySupport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CWHistorySupport.m; sourceTree = "<group>"; };
 		CDFC9E420C7508D700681B3F /* CWHistory.xcdatamodel */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.xcdatamodel; path = CWHistory.xcdatamodel; sourceTree = "<group>"; };
@@ -107,6 +117,7 @@
 				CD0FE26A0C95ADC20071D806 /* IOKit.framework in Frameworks */,
 				CD6F1ABE0CE23B45005CD8D9 /* SystemConfiguration.framework in Frameworks */,
 				CD73FE030D6373DD0043AFDD /* Sparkle.framework in Frameworks */,
+				CDAA71E70DCFC2E200C947E0 /* SCCSVParser.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -126,13 +137,16 @@
 				CD3EEC470DA2CC5F00381326 /* CWUsagePrefsController.m */,
 				CDAA71750DCFAE4A00C947E0 /* CWUSBFinder.h */,
 				CDAA71760DCFAE4A00C947E0 /* CWUSBFinder.m */,
+				CDAA72030DCFC3ED00C947E0 /* CWNetworks.h */,
+				CDAA72040DCFC3ED00C947E0 /* CWNetworks.m */,
 			);
-			name = Classes;
+			path = Classes;
 			sourceTree = "<group>";
 		};
 		1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				CDAA71E60DCFC2E200C947E0 /* SCCSVParser.framework */,
 				CD73FE020D6373DD0043AFDD /* Sparkle.framework */,
 				CD6F1ABB0CE23B45005CD8D9 /* SystemConfiguration.framework */,
 				CD391B5A0C8E07700008BABF /* WebKit.framework */,
@@ -183,23 +197,24 @@
 				32CA4F630368D1EE00C91783 /* CheetahWatch_Prefix.pch */,
 				29B97316FDCFA39411CA2CEA /* main.m */,
 			);
-			name = "Other Sources";
+			path = "Other Sources";
 			sourceTree = "<group>";
 		};
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				CDAA71F30DCFC38100C947E0 /* Spectral Class CSV Parser.txt */,
 				CD9EE8520DA3EAE900C2230A /* OperatorList.lst */,
 				CD04F3FC0D722E7D00AE8411 /* Info Window */,
-				CD04F3FB0D722E6D00AE8411 /* App Icon */,
-				CD04F3F90D722E5600AE8411 /* Menu Icons */,
+				CD04F3FB0D722E6D00AE8411 /* CW Icon */,
+				CD04F3F90D722E5600AE8411 /* MenuSignals */,
 				CD391AD50C8E036C0008BABF /* Credits.html */,
 				CD391ACD0C8E03460008BABF /* Welcome.html */,
 				8D1107310486CEB800E47090 /* Info.plist */,
 				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
 				29B97318FDCFA39411CA2CEA /* MainMenu.nib */,
 			);
-			name = Resources;
+			path = Resources;
 			sourceTree = "<group>";
 		};
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
@@ -211,26 +226,28 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		CD04F3F90D722E5600AE8411 /* Menu Icons */ = {
+		CD04F3F90D722E5600AE8411 /* MenuSignals */ = {
 			isa = PBXGroup;
 			children = (
 				CD27C4330C8CC565009D1D26 /* no-modem-menu.tif */,
 				CD84253F0C8D40F300D08573 /* signal-0.tif */,
-				CD8425400C8D40F300D08573 /* signal-4.tif */,
-				CD8425410C8D40F300D08573 /* signal-3.tif */,
-				CD8425440C8D40F300D08573 /* signal-2.tif */,
 				CD8425450C8D40F300D08573 /* signal-1.tif */,
+				CD8425440C8D40F300D08573 /* signal-2.tif */,
+				CD8425410C8D40F300D08573 /* signal-3.tif */,
+				CD8425400C8D40F300D08573 /* signal-4.tif */,
 			);
-			name = "Menu Icons";
+			name = MenuSignals;
+			path = ../MenuSignals;
 			sourceTree = "<group>";
 		};
-		CD04F3FB0D722E6D00AE8411 /* App Icon */ = {
+		CD04F3FB0D722E6D00AE8411 /* CW Icon */ = {
 			isa = PBXGroup;
 			children = (
 				CD7CAB7D0D33E90C001A37B8 /* CW Icon - 512.icns */,
 				CD8D972B0C63635E00FB394B /* CW Icon.icns */,
 			);
-			name = "App Icon";
+			name = "CW Icon";
+			path = "../CW Icon";
 			sourceTree = "<group>";
 		};
 		CD04F3FC0D722E7D00AE8411 /* Info Window */ = {
@@ -286,8 +303,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8D11072A0486CEB800E47090 /* MainMenu.nib in Resources */,
 				8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */,
+				8D11072A0486CEB800E47090 /* MainMenu.nib in Resources */,
 				CD27C4340C8CC565009D1D26 /* no-modem-menu.tif in Resources */,
 				CD8425490C8D40F300D08573 /* signal-0.tif in Resources */,
 				CD84254A0C8D40F300D08573 /* signal-4.tif in Resources */,
@@ -300,6 +317,8 @@
 				CD391AFB0C8E04EC0008BABF /* no-modem.png in Resources */,
 				CD7CAB7E0D33E90C001A37B8 /* CW Icon - 512.icns in Resources */,
 				CD9EE8530DA3EAE900C2230A /* OperatorList.lst in Resources */,
+				CDAA71F40DCFC38100C947E0 /* Spectral Class CSV Parser.txt in Resources */,
+				CDE9AFF70DD1051400CAA997 /* Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -318,6 +337,7 @@
 				CD45AC720D61A31F000A0A2D /* NBInvocationQueue.m in Sources */,
 				CD3EEC480DA2CC5F00381326 /* CWUsagePrefsController.m in Sources */,
 				CDAA71770DCFAE4A00C947E0 /* CWUSBFinder.m in Sources */,
+				CDAA72050DCFC3ED00C947E0 /* CWNetworks.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -383,9 +403,11 @@
 					"$(inherited)",
 					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_1)",
 					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_2)",
+					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
 				);
 				FRAMEWORK_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)\"";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_2 = "\"$(SRCROOT)\"";
+				FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)\"";
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_MODEL_TUNING = G5;
@@ -410,9 +432,11 @@
 					"$(inherited)",
 					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_1)",
 					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
+					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_2)",
 				);
 				FRAMEWORK_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)\"";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)\"";
+				FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_2 = "\"$(SRCROOT)\"";
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_MODEL_TUNING = G5;
 				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
