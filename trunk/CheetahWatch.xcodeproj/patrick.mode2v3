@@ -197,88 +197,7 @@
 	<key>Notifications</key>
 	<array/>
 	<key>OpenEditors</key>
-	<array>
-		<dict>
-			<key>Content</key>
-			<dict>
-				<key>PBXProjectModuleGUID</key>
-				<string>CDE4DA4A0DDC5D9F00718E0C</string>
-				<key>PBXProjectModuleLabel</key>
-				<string>CWHistorySupport.m</string>
-				<key>PBXSplitModuleInNavigatorKey</key>
-				<dict>
-					<key>Split0</key>
-					<dict>
-						<key>PBXProjectModuleGUID</key>
-						<string>CDE4DA4B0DDC5D9F00718E0C</string>
-						<key>PBXProjectModuleLabel</key>
-						<string>CWHistorySupport.m</string>
-						<key>_historyCapacity</key>
-						<integer>0</integer>
-						<key>bookmark</key>
-						<string>CDE4DAC70DDC754400718E0C</string>
-						<key>history</key>
-						<array>
-							<string>CDE4DA4C0DDC5D9F00718E0C</string>
-						</array>
-					</dict>
-					<key>SplitCount</key>
-					<string>1</string>
-				</dict>
-				<key>StatusBarVisibility</key>
-				<true/>
-			</dict>
-			<key>Geometry</key>
-			<dict>
-				<key>Frame</key>
-				<string>{{0, 20}, {900, 633}}</string>
-				<key>PBXModuleWindowStatusBarHidden2</key>
-				<false/>
-				<key>RubberWindowFrame</key>
-				<string>294 104 900 674 0 0 1280 778 </string>
-			</dict>
-		</dict>
-		<dict>
-			<key>Content</key>
-			<dict>
-				<key>PBXProjectModuleGUID</key>
-				<string>CDE4DA530DDC624F00718E0C</string>
-				<key>PBXProjectModuleLabel</key>
-				<string>NSString.h</string>
-				<key>PBXSplitModuleInNavigatorKey</key>
-				<dict>
-					<key>Split0</key>
-					<dict>
-						<key>PBXProjectModuleGUID</key>
-						<string>CDE4DA540DDC624F00718E0C</string>
-						<key>PBXProjectModuleLabel</key>
-						<string>NSString.h</string>
-						<key>_historyCapacity</key>
-						<integer>0</integer>
-						<key>bookmark</key>
-						<string>CDE4DAC80DDC754400718E0C</string>
-						<key>history</key>
-						<array>
-							<string>CDE4DA550DDC624F00718E0C</string>
-						</array>
-					</dict>
-					<key>SplitCount</key>
-					<string>1</string>
-				</dict>
-				<key>StatusBarVisibility</key>
-				<true/>
-			</dict>
-			<key>Geometry</key>
-			<dict>
-				<key>Frame</key>
-				<string>{{0, 20}, {900, 633}}</string>
-				<key>PBXModuleWindowStatusBarHidden2</key>
-				<false/>
-				<key>RubberWindowFrame</key>
-				<string>399 104 900 674 0 0 1280 778 </string>
-			</dict>
-		</dict>
-	</array>
+	<array/>
 	<key>PerspectiveWidths</key>
 	<array>
 		<integer>-1</integer>
@@ -350,8 +269,8 @@
 									<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 									<array>
 										<array>
-											<integer>4</integer>
-											<integer>1</integer>
+											<integer>24</integer>
+											<integer>15</integer>
 											<integer>0</integer>
 										</array>
 									</array>
@@ -379,7 +298,7 @@
 									<real>43</real>
 								</array>
 								<key>RubberWindowFrame</key>
-								<string>924 100 350 675 0 0 1280 778 </string>
+								<string>924 103 350 675 0 0 1280 778 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXSmartGroupTreeModule</string>
@@ -518,8 +437,8 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>CDE4DA450DDC5D9F00718E0C</string>
-				<string>CDE4DA460DDC5D9F00718E0C</string>
+				<string>CD73C3E30DDC78000001AE37</string>
+				<string>CD73C3E40DDC78000001AE37</string>
 				<string>1C9437FD063B20B00039CFAC</string>
 				<string>1C9437FE063B20B00039CFAC</string>
 				<string>1C9437FF063B20B00039CFAC</string>
@@ -552,17 +471,13 @@
 	<integer>0</integer>
 	<key>WindowOrderList</key>
 	<array>
-		<string>CDE4DA8F0DDC6B5700718E0C</string>
-		<string>CDE4DA900DDC6B5700718E0C</string>
-		<string>1C530D52069F1CE1000CFCEE</string>
-		<string>1C530D54069F1CE1000CFCEE</string>
-		<string>CDE4DA530DDC624F00718E0C</string>
-		<string>/Users/patrick/dev/from-git/cheetahwatch/trunk/CheetahWatch.xcodeproj</string>
 		<string>1C530D5B069F1CE1000CFCEE</string>
-		<string>CDE4DA4A0DDC5D9F00718E0C</string>
+		<string>1C530D54069F1CE1000CFCEE</string>
+		<string>1C530D52069F1CE1000CFCEE</string>
+		<string>/Users/patrick/dev/from-git/cheetahwatch/trunk/CheetahWatch.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
-	<string>924 100 350 675 0 0 1280 778 </string>
+	<string>924 103 350 675 0 0 1280 778 </string>
 	<key>WindowToolsV3</key>
 	<array>
 		<dict>
@@ -720,7 +635,7 @@
 								<key>PBXProjectModuleGUID</key>
 								<string>1CD0528F0623707200166675</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>CWHistorySupport.m</string>
+								<string></string>
 								<key>StatusBarVisibility</key>
 								<true/>
 							</dict>
@@ -737,8 +652,6 @@
 							<string>332pt</string>
 						</dict>
 						<dict>
-							<key>BecomeActive</key>
-							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
@@ -778,7 +691,7 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1C530D52069F1CE1000CFCEE</string>
-				<string>CDE4DA3D0DDC5D9700718E0C</string>
+				<string>CD73C3E50DDC78000001AE37</string>
 				<string>1CD0528F0623707200166675</string>
 				<string>XCMainBuildResultsModuleGUID</string>
 			</array>
@@ -898,13 +811,13 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1C530D54069F1CE1000CFCEE</string>
-				<string>CDE4DA3E0DDC5D9700718E0C</string>
+				<string>CD73C3E60DDC78000001AE37</string>
 				<string>1C162984064C10D400B95A72</string>
-				<string>CDE4DA3F0DDC5D9700718E0C</string>
-				<string>CDE4DA400DDC5D9700718E0C</string>
-				<string>CDE4DA410DDC5D9700718E0C</string>
-				<string>CDE4DA420DDC5D9700718E0C</string>
-				<string>CDE4DA430DDC5D9700718E0C</string>
+				<string>CD73C3E70DDC78000001AE37</string>
+				<string>CD73C3E80DDC78000001AE37</string>
+				<string>CD73C3E90DDC78000001AE37</string>
+				<string>CD73C3EA0DDC78000001AE37</string>
+				<string>CD73C3EB0DDC78000001AE37</string>
 			</array>
 			<key>ToolbarConfiguration</key>
 			<string>xcode.toolbar.config.debugV3</string>
@@ -1031,8 +944,6 @@
 					<key>Dock</key>
 					<array>
 						<dict>
-							<key>BecomeActive</key>
-							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
@@ -1068,7 +979,7 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1C530D5B069F1CE1000CFCEE</string>
-				<string>CDE4DA8E0DDC6B5700718E0C</string>
+				<string>CD73C3EC0DDC78000001AE37</string>
 				<string>1C78EAAC065D492600B07095</string>
 			</array>
 			<key>ToolbarConfiguration</key>
@@ -1078,7 +989,7 @@
 			<key>WindowToolGUID</key>
 			<string>1C530D5B069F1CE1000CFCEE</string>
 			<key>WindowToolIsVisible</key>
-			<true/>
+			<false/>
 		</dict>
 		<dict>
 			<key>Identifier</key>

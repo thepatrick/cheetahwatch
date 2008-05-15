@@ -1,8 +1,8 @@
 // !$*UTF8*$!
 {
 	29B97313FDCFA39411CA2CEA /* Project object */ = {
-		activeArchitecture = i386;
-		activeBuildConfigurationName = Debug64;
+		activeArchitecture = x86_64;
+		activeBuildConfigurationName = Release;
 		activeExecutable = CDD7B6350D4A8443003B3B82 /* CheetahWatch */;
 		activeSDKForArchive = macosx10.5;
 		activeTarget = 8D1107260486CEB800E47090 /* CheetahWatch */;
@@ -84,14 +84,8 @@
 					PBXFileDataSource_Warnings_ColumnID,
 				);
 			};
-			PBXPerProjectTemplateStateSaveDate = 232545091;
-			PBXWorkspaceStateSaveDate = 232545091;
-		};
-		perUserProjectItems = {
-			CDE4DA4C0DDC5D9F00718E0C /* PBXTextBookmark */ = CDE4DA4C0DDC5D9F00718E0C /* PBXTextBookmark */;
-			CDE4DA550DDC624F00718E0C /* PBXTextBookmark */ = CDE4DA550DDC624F00718E0C /* PBXTextBookmark */;
-			CDE4DAC70DDC754400718E0C /* PBXTextBookmark */ = CDE4DAC70DDC754400718E0C /* PBXTextBookmark */;
-			CDE4DAC80DDC754400718E0C /* PBXTextBookmark */ = CDE4DAC80DDC754400718E0C /* PBXTextBookmark */;
+			PBXPerProjectTemplateStateSaveDate = 232552289;
+			PBXWorkspaceStateSaveDate = 232552289;
 		};
 		sourceControlManager = CDD7B6530D4A8450003B3B82 /* Source Control */;
 		userBuildSettings = {
@@ -116,7 +110,7 @@
 			sepNavIntBoundsRect = "{{0, 0}, {1223, 638}}";
 			sepNavSelRange = "{1145, 0}";
 			sepNavVisRange = "{0, 1146}";
-			sepNavWindowFrame = "{{0, 48}, {1282, 730}}";
+			sepNavWindowFrame = "{{547, 37}, {1282, 730}}";
 		};
 	};
 	CD0465AE0CE11FE600EDA0BD /* PPPLib.c */ = {
@@ -237,9 +231,9 @@
 	};
 	CDAF55560C763E3500E456AC /* CWHistorySupport.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1158, 5572}}";
-			sepNavSelRange = "{12421, 0}";
-			sepNavVisRange = "{11991, 1269}";
+			sepNavIntBoundsRect = "{{0, 0}, {1158, 4886}}";
+			sepNavSelRange = "{12753, 0}";
+			sepNavVisRange = "{11991, 1268}";
 			sepNavWindowFrame = "{{294, 48}, {900, 730}}";
 		};
 	};
@@ -280,62 +274,6 @@
 	CDD7B6540D4A8450003B3B82 /* Code sense */ = {
 		isa = PBXCodeSenseManager;
 		indexTemplatePath = "";
-	};
-	CDE4DA4C0DDC5D9F00718E0C /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = CDAF55560C763E3500E456AC /* CWHistorySupport.m */;
-		name = "CWHistorySupport.m: 187";
-		rLen = 0;
-		rLoc = 6152;
-		rType = 0;
-		vrLen = 1279;
-		vrLoc = 5793;
-	};
-	CDE4DA550DDC624F00718E0C /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = CDE4DA560DDC624F00718E0C /* NSString.h */;
-		rLen = 1;
-		rLoc = 144;
-		rType = 1;
-	};
-	CDE4DA560DDC624F00718E0C /* NSString.h */ = {
-		isa = PBXFileReference;
-		lastKnownFileType = sourcecode.c.h;
-		name = NSString.h;
-		path = /Developer/SDKs/MacOSX10.5.sdk/System/Library/Frameworks/Foundation.framework/Versions/C/Headers/NSString.h;
-		sourceTree = "<absolute>";
-	};
-	CDE4DAC70DDC754400718E0C /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = CDAF55560C763E3500E456AC /* CWHistorySupport.m */;
-		name = "CWHistorySupport.m: 353";
-		rLen = 0;
-		rLoc = 12421;
-		rType = 0;
-		vrLen = 1269;
-		vrLoc = 11991;
-	};
-	CDE4DAC80DDC754400718E0C /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = CDE4DAC90DDC754400718E0C /* NSString.h */;
-		name = "NSString.h: 142";
-		rLen = 8;
-		rLoc = 7174;
-		rType = 0;
-		vrLen = 2213;
-		vrLoc = 5770;
-	};
-	CDE4DAC90DDC754400718E0C /* NSString.h */ = {
-		isa = PBXFileReference;
-		name = NSString.h;
-		path = /Developer/SDKs/MacOSX10.5.sdk/System/Library/Frameworks/Foundation.framework/Versions/C/Headers/NSString.h;
-		sourceTree = "<absolute>";
-		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1776, 5446}}";
-			sepNavSelRange = "{7174, 8}";
-			sepNavVisRange = "{5770, 2213}";
-			sepNavWindowFrame = "{{399, 48}, {900, 730}}";
-		};
 	};
 	CDE9B00D0DD10BEE00CAA997 /* CountryList.lst */ = {
 		uiCtxt = {
