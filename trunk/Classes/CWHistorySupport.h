@@ -49,6 +49,7 @@
 -(void)flowReportSeconds:(NSNumber*)connected withTransmitRate:(NSNumber*)transmit receiveRate:(NSNumber*)receive totalSent:(NSNumber*)sent andTotalReceived:(NSNumber*)received;
 -(void)calculateTotalUsage;
 -(void)calculateTotalUsageForCaching;
+-(BOOL)shouldWeAlertForRecieved:(SInt64)totalRecv andSent:(SInt64)totalSent;
 -(SInt64)cachedTotalSent;
 -(SInt64)cachedTotalRecv;
 

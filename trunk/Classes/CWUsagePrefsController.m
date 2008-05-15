@@ -15,6 +15,8 @@
 {
 	[dd setValue:@"daily" forKey:@"CWUsageFrequency"];
 	[dd setValue:@"NO" forKey:@"CWActivateUsageWarning"];
+	[dd setValue:@"NO" forKey:@"CWSuppressUsageWarning"];
+	
 	[dd setValue:[NSNumber numberWithInt:0] forKey:@"CWActivateUsageWarningWhen"];
 	[dd setValue:[NSNumber numberWithInt:0] forKey:@"CWActivateUsageWarningValue"];
 	[dd setValue:[NSNumber numberWithInt:0] forKey:@"CWActivateUsageWarningValueMultiplier"];
@@ -51,7 +53,6 @@
 
 -(void)awakeFromNib
 {
-	NSLog(@"Good morning everybody!");
 	[self changeFrequency:[[NSUserDefaults standardUserDefaults] stringForKey:@"CWUsageFrequency"]];
 	
 	NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
@@ -63,7 +64,6 @@
 	[autoResetWeeklyThursday  setState:[self mixedStateFromBOOL:[ud boolForKey:@"CWAutoResetWeeklyThursday"]]];
 	[autoResetWeeklyFriday    setState:[self mixedStateFromBOOL:[ud boolForKey:@"CWAutoResetWeeklyFriday"]]];
 	[autoResetWeeklySaturday  setState:[self mixedStateFromBOOL:[ud boolForKey:@"CWAutoResetWeeklySaturday"]]];
-	
 	
 	[autoResetMonthlyEach  setState:[self mixedStateFromBOOL:([ud integerForKey:@"CWAutoResetMonthlyOnTheMode"] == 0)]];
 	[autoResetMonthlyOnThe  setState:[self mixedStateFromBOOL:([ud integerForKey:@"CWAutoResetMonthlyOnTheMode"] == 1)]];

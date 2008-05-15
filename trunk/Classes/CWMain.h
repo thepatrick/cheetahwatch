@@ -40,8 +40,6 @@ enum
     kNumRetries = 3
 };
 
-
-
 @class CWHistorySupport;
 @class NBInvocationQueue;
 @class CWNetworks;
@@ -125,6 +123,9 @@ enum
 	BOOL waitingOnCarrierName;
 	
 	BOOL shouldHideStatusWhenConnected;
+	
+	BOOL connected;
+	NSInteger lastSignalStrength;
 }
 
 #pragma mark -
@@ -198,8 +199,8 @@ enum
 #pragma mark -
 #pragma mark Modem interface thread
 
-+(void)MyRunner:(id)mainController;
--(void)doSetSignalStrength:(int)z_signal;
++(void)MyRunner:(CWMain*)mainController;
+-(void)doSetSignalStrength:(NSInteger)z_signal;
 -(void)signalStrengthFromCSQ:(char*)buff;
 
 void calloutProc (SCNetworkConnectionRef connection, SCNetworkConnectionStatus status, void *info );

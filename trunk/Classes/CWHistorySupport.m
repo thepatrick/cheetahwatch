@@ -35,11 +35,49 @@
 	[model release];
 	[super dealloc];
 }
+
+-(void)setupCoreData
+{
+	firstRunSinceStartup = YES;	
+	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
+	NSString *thePath = [[paths objectAtIndex:0] stringByAppendingPathComponent:[[NSBundle mainBundle]  objectForInfoDictionaryKey:@"CFBundleName"]];
+	//	NSLog(@"Application support path is: %@", thePath);
+	
+	NSFileManager *man = [NSFileManager defaultManager];
+	if(![man fileExistsAtPath:thePath]) {
+		//NSLog(@"Path doesn't exist yet, creating it now...");
+		if(![man createDirectoryAtPath:thePath attributes:nil]) {
+			NSLog(@"AppSupport path still doesn't exist. Um. Oh oh?");
+		}
+	}
+	
+	NSURL *url = [NSURL fileURLWithPath:[thePath stringByAppendingPathComponent:@"ConnectionLog.db"]];
+	coreDataError = nil;
+	
+	NSArray *bundles = [NSArray arrayWithObject:[NSBundle mainBundle]];
+	
+	model = [NSManagedObjectModel mergedModelFromBundles:bundles];
+	coordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:model];
+	[coordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:url options:nil error:&coreDataError];
+	
+	if(coreDataError != nil) {
+		NSLog(@"setupCoreData addPersistentStoreWithType:etc... errored: %@", coreDataError);
+		coreDataError = nil;
+	}
+	
+	managedObjectContext = [[NSManagedObjectContext alloc] init];
+	[managedObjectContext setPersistentStoreCoordinator: coordinator];
+	
+	[self calculateTotalUsageForCaching];
+}
+
 -(void)setMainController:(NSObject*)cont
 {
 	mainController = cont;
 }
-//@TODO RENAME!
+
+#pragma mark -
+#pragma mark Timer action
 -(void)iCanHasCheezburger:(NSTimer*)timer
 {
 	if(activeConnection == nil) {
@@ -66,24 +104,21 @@
 		NSLog(@"iCanHasCheezburger: save error: %@", coreDataError);
 	}
 }
+
+#pragma mark -
+#pragma mark Modem actions
+
 -(void)flowReportSeconds:(NSNumber*)connected withTransmitRate:(NSNumber*)transmit receiveRate:(NSNumber*)receive totalSent:(NSNumber*)sent andTotalReceived:(NSNumber*)received
 {
 	BOOL brandNew = NO;
 	
 	if(activeConnection == nil) {
-		// we need a new connection
 		[self doWeHaveAnUnclosedConnection];
 		if(activeConnection == nil) {
-			// but we didn't have one un-resumed
-			//NSLog(@"No connection exists already, so we're going to make one.");
 			[self newConnection:connected];
 			brandNew = YES;
-		} else {
-			//NSLog(@"Retrieved an unterminated connection: %@", activeConnection);
 		}
-	}// else {
-	//	NSLog(@"activeConnection wasn't nil, it was %i", [activeConnection objectID]);
-	//}
+	}
 	
 	if(!brandNew) {
 		NSNumber *lastConnected = [activeConnection valueForKey:@"connectedSeconds"];
@@ -132,40 +167,60 @@
 	return activeConnection;
 }
 
--(void)setupCoreData
+-(NSManagedObject*)doWeHaveAnUnclosedConnection
 {
-	firstRunSinceStartup = YES;	
-	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
-	NSString *thePath = [[paths objectAtIndex:0] stringByAppendingPathComponent:[[NSBundle mainBundle]  objectForInfoDictionaryKey:@"CFBundleName"]];
-//	NSLog(@"Application support path is: %@", thePath);
+	NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"Connection" inManagedObjectContext:managedObjectContext];
+	NSFetchRequest *request = [[[NSFetchRequest alloc] init] autorelease];
+	[request setEntity:entityDescription];
 	
-	NSFileManager *man = [NSFileManager defaultManager];
-	if(![man fileExistsAtPath:thePath]) {
-		//NSLog(@"Path doesn't exist yet, creating it now...");
-		if(![man createDirectoryAtPath:thePath attributes:nil]) {
-			NSLog(@"AppSupport path still doesn't exist. Um. Oh oh?");
-		}
-	}
-		
-	NSURL *url = [NSURL fileURLWithPath:[thePath stringByAppendingPathComponent:@"ConnectionLog.db"]];
-	coreDataError = nil;
-	 
-	NSArray *bundles = [NSArray arrayWithObject:[NSBundle mainBundle]];
+	NSPredicate *predicate = [NSPredicate predicateWithFormat:@"hasTerminated = 0"];
+	[request setPredicate:predicate];
 	
-	model = [NSManagedObjectModel mergedModelFromBundles:bundles];
-	coordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:model];
-	[coordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:url options:nil error:&coreDataError];
-
-	if(coreDataError != nil) {
-		NSLog(@"setupCoreData addPersistentStoreWithType:etc... errored: %@", coreDataError);
+	NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"startTime" ascending:NO];
+	[request setSortDescriptors:[NSArray arrayWithObject:sortDescriptor]];
+	[sortDescriptor release];
+	
+	NSArray *array = [managedObjectContext executeFetchRequest:request error:&coreDataError];
+	if(coreDataError != nil || array == nil) {
+		NSLog(@"doWeHaveAnUnclosedConnection executeFetchRequest errored: %@ (or array was nil)", coreDataError);
 		coreDataError = nil;
 	}
+	if ([array count] == 0) {	
+		return false;
+	}
+	
+	activeConnection = [array objectAtIndex:0];
+	return [array objectAtIndex:0];
+}
 
-	managedObjectContext = [[NSManagedObjectContext alloc] init];
-	[managedObjectContext setPersistentStoreCoordinator: coordinator];
+-(void)markConnectionAsClosed
+{
+	if(activeConnection == nil)
+		return; // no connection.. duh.
+	
+	//	NSLog(@"Marking connection as closed...");
+	
+	[activeConnection setValue:[NSNumber numberWithBool:YES] forKey:@"hasTerminated"];
+	[managedObjectContext save:&coreDataError];
+	if(coreDataError != nil) {
+		NSLog(@"Error in closing last connection: %@", coreDataError);
+		coreDataError = nil;
+	}
+	
+	[activeConnection release];
+	activeConnection = nil;
+	//	NSLog(@"Done.");
+	//	NSLog(@"mOC: %@", managedObjectContext);
+	[managedObjectContext save:&coreDataError];
+	if(coreDataError != nil) {
+		NSLog(@"markConnectionAsClosed save error: %@", coreDataError);
+	}
 	
 	[self calculateTotalUsageForCaching];
 }
+
+#pragma mark -
+#pragma mark Totals
 
 -(void)calculateTotalUsage
 {
@@ -179,18 +234,10 @@
 	cachedTotalSent = (cachedSent + thisSent);
 	cachedTotalRecv = (cachedRecv + thisRecv);
 	
+	[self shouldWeAlertForRecieved:cachedRecv andSent:cachedSent];
+	
 	//NSLog(@"Totals: Sent %i, Received %i", cachedTotalSent, cachedTotalRecv);
 }
-
--(SInt64)cachedTotalSent
-{
-	return cachedTotalSent;
-}
--(SInt64)cachedTotalRecv
-{
-	return cachedTotalRecv;
-}
-
 -(void)calculateTotalUsageForCaching
 {
 	//NSLog(@"calculateTotalUsageForCaching: Begin...");
@@ -227,6 +274,73 @@
 	//NSLog(@"Caching totals: Sent %lld, Received %lld", cachedSent, cachedRecv);
 }
 
+-(BOOL)shouldWeAlertForRecieved:(SInt64)totalRecv andSent:(SInt64)totalSent
+{
+	NSUserDefaults *dd = [NSUserDefaults standardUserDefaults];
+	// do nothing if disabled
+	if (![dd boolForKey:@"CWActivateUsageWarning"]) {
+		NSLog(@"Warnings are disabled.");
+		return NO;
+	}
+	
+	if ([dd boolForKey:@"CWSuppressUsageWarning"]) {
+		NSLog(@"User has acknowledged a warning, and we haven't cleared that yet.");
+		return NO;
+	}
+	
+	// next, when do we do it?
+	NSInteger whenToAlert = [dd integerForKey:@"CWActivateUsageWarningWhen"];
+	int alertAmount = [[dd stringForKey:@"CWActivateUsageWarningAmount"] intValue];
+	NSInteger alertMultiplier = [dd integerForKey:@"CWActivateUsageWarningValueMultiplier"];
+	
+	NSString *multiplierLabel;
+	if(alertMultiplier == 1) {
+		alertMultiplier = (1024 * 1024 * 1024);
+		multiplierLabel = @"GB";
+	} else {
+		alertMultiplier = (1024 * 1024);
+		multiplierLabel = @"MB";
+	}
+	
+	NSString *whenLabel;
+	SInt64 amountToTestFor = 0;
+	switch (whenToAlert) {
+		case 0:
+			amountToTestFor = (totalRecv + totalSent) / alertMultiplier;
+			whenLabel = @"total usage";
+			break;
+		case 1:
+			amountToTestFor = totalRecv / alertMultiplier;
+			whenLabel = @"received data";
+			break;
+		case 2:
+			amountToTestFor = totalSent / alertMultiplier;
+			whenLabel = @"sent data";
+			break;
+		default:
+			break;
+	}
+	
+	if (amountToTestFor < alertAmount) {
+		NSLog(@"current amount is less than alert amount, so do nothing.");
+		return NO; // not worth worrying about yet!
+	}
+	
+	NSLog(@"Warn b'arch! %ld > %d", amountToTestFor, alertAmount);
+	
+	NSAlert *alert = [[NSAlert alloc] init];
+	[alert addButtonWithTitle:@"OK"];
+	[alert setMessageText:[NSString stringWithFormat:@"Your %@ (%ld %@) has exceeded your warning limit (%d %@).", whenLabel, amountToTestFor, multiplierLabel, alertAmount, multiplierLabel]];
+	[alert setInformativeText:@"You will not be warned again until you clear the usage history.\n\nTo change this warning go to Usage History and choose Preferences..."];
+	[alert setAlertStyle:NSWarningAlertStyle];
+	[alert beginSheetModalForWindow:nil modalDelegate:nil didEndSelector:nil contextInfo:nil];
+	
+	[dd setBool:YES forKey:@"CWSuppressUsageWarning"];
+	return YES;
+}
+
+#pragma mark -
+#pragma mark Control the history data
 -(void)clearHistory
 {
 
@@ -236,10 +350,6 @@
 	
 	NSPredicate *predicate = [NSPredicate predicateWithFormat:@"hasTerminated = 1"];
 	[request setPredicate:predicate];
-	
-//	NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"startTime" ascending:NO];
-//	[request setSortDescriptors:[NSArray arrayWithObject:sortDescriptor]];
-//	[sortDescriptor release];
 	
 	NSArray *array = [managedObjectContext executeFetchRequest:request error:&coreDataError];
 	if(coreDataError != nil || array == nil) {
@@ -262,62 +372,26 @@
 	if(coreDataError != nil) {
 		NSLog(@"coreDataError on delete: %@", coreDataError);
 	}
+	
+	[[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"CWSuppressUsageWarning"];
 
 	[self calculateTotalUsageForCaching];
 	[self calculateTotalUsage];
 
 }
 
--(NSManagedObject*)doWeHaveAnUnclosedConnection
-{
-	NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"Connection" inManagedObjectContext:managedObjectContext];
-	NSFetchRequest *request = [[[NSFetchRequest alloc] init] autorelease];
-	[request setEntity:entityDescription];
-	
-	NSPredicate *predicate = [NSPredicate predicateWithFormat:@"hasTerminated = 0"];
-	[request setPredicate:predicate];
-	
-	NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"startTime" ascending:NO];
-	[request setSortDescriptors:[NSArray arrayWithObject:sortDescriptor]];
-	[sortDescriptor release];
-	
-	NSArray *array = [managedObjectContext executeFetchRequest:request error:&coreDataError];
-	if(coreDataError != nil || array == nil) {
-		NSLog(@"doWeHaveAnUnclosedConnection executeFetchRequest errored: %@ (or array was nil)", coreDataError);
-		coreDataError = nil;
-	}
-	if ([array count] == 0) {	
-		return false;
-	}
 
-	activeConnection = [array objectAtIndex:0];
-	return [array objectAtIndex:0];
+#pragma mark -
+#pragma mark Accessors
+
+-(SInt64)cachedTotalSent
+{
+	return cachedTotalSent;
+}
+-(SInt64)cachedTotalRecv
+{
+	return cachedTotalRecv;
 }
 
--(void)markConnectionAsClosed
-{
-	if(activeConnection == nil)
-		return; // no connection.. duh.
-
-//	NSLog(@"Marking connection as closed...");
-	
-	[activeConnection setValue:[NSNumber numberWithBool:YES] forKey:@"hasTerminated"];
-	[managedObjectContext save:&coreDataError];
-	if(coreDataError != nil) {
-		NSLog(@"Error in closing last connection: %@", coreDataError);
-		coreDataError = nil;
-	}
-		
-	[activeConnection release];
-	activeConnection = nil;
-//	NSLog(@"Done.");
-//	NSLog(@"mOC: %@", managedObjectContext);
-	[managedObjectContext save:&coreDataError];
-	if(coreDataError != nil) {
-		NSLog(@"markConnectionAsClosed save error: %@", coreDataError);
-	}
-	
-	[self calculateTotalUsageForCaching];
-}
 
 @end

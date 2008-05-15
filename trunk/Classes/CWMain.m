@@ -195,6 +195,7 @@ void calloutProc (SCNetworkConnectionRef connection, SCNetworkConnectionStatus s
 // clear UI, generally keep things from looking too silly.
 -(void)clearAllUI
 {
+	lastSignalStrength = -1;
 	[signal setIntValue:0];
 	[mode setStringValue:@""];	
 	[statusItem setTitle:@""];
@@ -221,6 +222,9 @@ void calloutProc (SCNetworkConnectionRef connection, SCNetworkConnectionStatus s
 
 -(void)clearConnectionUI
 {
+	connected = NO;
+	[self doSetSignalStrength:lastSignalStrength];
+		
 	[speedReceive setStringValue:@""];
 	[speedTransmit setStringValue:@""];
 	[transferReceive setStringValue:@""];
@@ -261,14 +265,13 @@ void calloutProc (SCNetworkConnectionRef connection, SCNetworkConnectionStatus s
 		[carrierNameTimer invalidate];
 		carrierNameTimer = nil;
 	}
+	lastSignalStrength = -1;
 	[self clearAllUI];
-	//NSImage *imageFromBundle = [NSImage imageNamed:@"no-modem.png"];
-	//[status setImage: imageFromBundle];
 	[statusItem setAttributedTitle:@""];
 	[statusItem setToolTip:@"CheetahWatch - No modem detected"];
 	[statusItemConectedFor setTitle:@"No modem connected"];
 	[connectedInStatus setStringValue:@"No modem connected"];
-	[self performSelectorOnMainThread:@selector(changeStatusImageTo:) withObject: @"no-modem-menu.tif" waitUntilDone:NO];
+//	[self performSelectorOnMainThread:@selector(changeStatusImageTo:) withObject: @"no-modem-menu.tif" waitUntilDone:NO];
 }
 
 -(void)haveModemMain:(id)ignore
@@ -504,6 +507,11 @@ void calloutProc (SCNetworkConnectionRef connection, SCNetworkConnectionStatus s
 		[theWindow performClose:self];
 		shouldHideStatusWhenConnected = NO;
 	}
+	if(!connected) {
+		connected = YES;
+		[self doSetSignalStrength:lastSignalStrength];
+	}
+	connected = YES;
 	
 	[speedReceive setStringValue:[[self prettyDataAmount:[currentSpeedReceive intValue]] stringByAppendingString:@"ps"]];
 	[speedTransmit setStringValue:[[self prettyDataAmount:[currentSpeedTransmit intValue]] stringByAppendingString:@"ps"]];
@@ -589,7 +597,7 @@ void calloutProc (SCNetworkConnectionRef connection, SCNetworkConnectionStatus s
 
 // this is the quasi-runloop (yeah, whatever) that follows the stream from the modem
 // the functions below are all run on the second thread.
-+ (void)MyRunner:(id)mainController
++ (void)MyRunner:(CWMain*)mainController
 {
 	int bytes;
 	char *buf_stream, *buf_lineStart;
@@ -730,19 +738,24 @@ void calloutProc (SCNetworkConnectionRef connection, SCNetworkConnectionStatus s
 	}
 }
 
--(void)doSetSignalStrength:(int)z_signal
+-(void)doSetSignalStrength:(NSInteger)z_signal
 {
 	//NSLog(@"doSetSignalStrength:%i",z_signal);
 	if(z_signal > 31) NSLog(@"Claimed that signal was %i\n", z_signal);
 	if(z_signal > 31) z_signal = 0;
 	[signal setIntValue:z_signal];
 	
+	NSString *suffix = (connected ? @".tif" : @"-off.tif");
+	
 	NSString *which;
-	if(z_signal == 0) which = @"signal-0.tif";
-	else if(z_signal < 10) which = @"signal-1.tif";
-	else if(z_signal < 15) which = @"signal-2.tif";
-	else if(z_signal < 20) which = @"signal-3.tif";
-	else if(z_signal >= 20) which = @"signal-4.tif";
+	if(z_signal == -1) which = @"no-modem-menu.tif";
+	else if(z_signal == 0) which = [@"signal-0" stringByAppendingString:suffix];
+	else if(z_signal < 10) which = [@"signal-1" stringByAppendingString:suffix];
+	else if(z_signal < 15) which = [@"signal-2" stringByAppendingString:suffix];
+	else if(z_signal < 20) which = [@"signal-3" stringByAppendingString:suffix];
+	else if(z_signal >= 20) which = [@"signal-4" stringByAppendingString:suffix];
+	
+	lastSignalStrength = z_signal;
 	
 	[self performSelectorOnMainThread:@selector(changeStatusImageTo:) withObject:which waitUntilDone:YES];		
 }
