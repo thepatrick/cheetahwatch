@@ -16,10 +16,12 @@
 	[dd setValue:@"daily" forKey:@"CWUsageFrequency"];
 	[dd setValue:@"NO" forKey:@"CWActivateUsageWarning"];
 	[dd setValue:@"NO" forKey:@"CWSuppressUsageWarning"];
+	[dd setValue:@"" forKey:@"CWSuppressUsageWarningForAmount"];
 	
 	[dd setValue:[NSNumber numberWithInt:0] forKey:@"CWActivateUsageWarningWhen"];
 	[dd setValue:[NSNumber numberWithInt:0] forKey:@"CWActivateUsageWarningValue"];
 	[dd setValue:[NSNumber numberWithInt:0] forKey:@"CWActivateUsageWarningValueMultiplier"];
+	
 	[dd setValue:@"NO" forKey:@"CWAutoReset"];
 	
 	[dd setValue:[NSNumber numberWithInt:1] forKey:@"CWAutoResetPostAction"];
@@ -96,6 +98,25 @@
 	[[NSUserDefaults standardUserDefaults] setInteger:[sender tag] forKey:@"CWAutoResetMonthlyOnTheMode"];
 }
 
+-(void)determineNextResetDate
+{
+	NSUserDefaults *dd = [NSUserDefaults standardUserDefaults];
+	
+	NSDate *next = nil;
+	if([presentFrequency isEqualToString:@"daily"]) {
+		NSInteger days = [dd integerForKey:@"CWAutoResetDailyDays"];
+		next = [NSDate dateWithTimeIntervalSinceNow:(days * 24 /*hours*/ * 60 /*minutes*/ * 60 /*seconds*/)];
+	} else if([presentFrequency isEqualToString:@"weekly"]) {
+		// each $n weeks, so we need to figure out:
+		// 1: When we last ran
+		// 2: Find out which day that was, and what the next one is
+		// 3: If never ran, assume last run was today, and base off that.
+	} else if([presentFrequency isEqualToString:@"monthly"]) {
+	}
+	
+	[dd setValue:next forKey:@"CWAutoResetNextRun"];
+}
+
 -(void)changeFrequency:(NSString*)newFrequency
 {
 	if(presentFrequency != nil) {
@@ -118,8 +139,7 @@
 	
 	NSRect windowFrame = [prefsWindow frame];
 	
-	//float windowHeight;
-	float viewHeight;
+	CGFloat viewHeight;
 	
 	NSRect innerFrame = NSMakeRect(52, 0, 296, 0);
 	
@@ -141,15 +161,17 @@
 		NSLog(@"Oh feck.");
 		return;
 	}
+	
+	CGFloat scaleFactor = [[NSScreen mainScreen] userSpaceScaleFactor];
 
-	float newViewHeight = (222 + viewHeight);		
-	windowFrame.origin.y += windowFrame.size.height - newViewHeight;
-	windowFrame.size.height = newViewHeight;		
+	CGFloat newViewHeight = (222 + viewHeight);		
+	windowFrame.origin.y += windowFrame.size.height - (newViewHeight * scaleFactor);
+	windowFrame.size.height = (newViewHeight * scaleFactor);		
 	[prefsWindow setFrame:windowFrame display:YES animate:YES];
 		
 	[[prefsWindow contentView] addSubview:view];
 	innerFrame.size.height = viewHeight;		
-	innerFrame.origin.y = windowFrame.size.height - (innerFrame.size.height + 170);
+	innerFrame.origin.y = (windowFrame.size.height / scaleFactor) - (innerFrame.size.height + 170);
 	[view setFrame:innerFrame];
 
 	[[NSUserDefaults standardUserDefaults] setObject:presentFrequency forKey:@"CWUsageFrequency"];

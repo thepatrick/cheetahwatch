@@ -2,7 +2,7 @@
 {
 	29B97313FDCFA39411CA2CEA /* Project object */ = {
 		activeArchitecture = x86_64;
-		activeBuildConfigurationName = Release;
+		activeBuildConfigurationName = Debug64;
 		activeExecutable = CDD7B6350D4A8443003B3B82 /* CheetahWatch */;
 		activeSDKForArchive = macosx10.5;
 		activeTarget = 8D1107260486CEB800E47090 /* CheetahWatch */;
@@ -84,8 +84,12 @@
 					PBXFileDataSource_Warnings_ColumnID,
 				);
 			};
-			PBXPerProjectTemplateStateSaveDate = 232552289;
-			PBXWorkspaceStateSaveDate = 232552289;
+			PBXPerProjectTemplateStateSaveDate = 233041132;
+			PBXWorkspaceStateSaveDate = 233041132;
+		};
+		perUserProjectItems = {
+			CD040F970DE41D3200A13482 /* PBXTextBookmark */ = CD040F970DE41D3200A13482 /* PBXTextBookmark */;
+			CD040FBB0DE423EF00A13482 /* PBXTextBookmark */ = CD040FBB0DE423EF00A13482 /* PBXTextBookmark */;
 		};
 		sourceControlManager = CDD7B6530D4A8450003B3B82 /* Source Control */;
 		userBuildSettings = {
@@ -112,6 +116,26 @@
 			sepNavVisRange = "{0, 1146}";
 			sepNavWindowFrame = "{{547, 37}, {1282, 730}}";
 		};
+	};
+	CD040F970DE41D3200A13482 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = CD3EEC470DA2CC5F00381326 /* CWUsagePrefsController.m */;
+		name = "CWUsagePrefsController.m: 25";
+		rLen = 0;
+		rLoc = 782;
+		rType = 0;
+		vrLen = 1667;
+		vrLoc = 166;
+	};
+	CD040FBB0DE423EF00A13482 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = CD3EEC470DA2CC5F00381326 /* CWUsagePrefsController.m */;
+		name = "CWUsagePrefsController.m: 126";
+		rLen = 0;
+		rLoc = 5135;
+		rType = 0;
+		vrLen = 1475;
+		vrLoc = 3843;
 	};
 	CD0465AE0CE11FE600EDA0BD /* PPPLib.c */ = {
 		uiCtxt = {
@@ -146,10 +170,10 @@
 	};
 	CD3EEC470DA2CC5F00381326 /* CWUsagePrefsController.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1194, 1764}}";
-			sepNavSelRange = "{1933, 0}";
-			sepNavVisRange = "{1476, 2202}";
-			sepNavWindowFrame = "{{379, 48}, {1253, 730}}";
+			sepNavIntBoundsRect = "{{0, 0}, {782, 2436}}";
+			sepNavSelRange = "{5135, 0}";
+			sepNavVisRange = "{3843, 1475}";
+			sepNavWindowFrame = "{{53, 70}, {841, 708}}";
 		};
 	};
 	CD45AC700D61A31F000A0A2D /* NBInvocationQueue.m */ = {
@@ -231,10 +255,10 @@
 	};
 	CDAF55560C763E3500E456AC /* CWHistorySupport.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1158, 4886}}";
-			sepNavSelRange = "{12753, 0}";
-			sepNavVisRange = "{11991, 1268}";
-			sepNavWindowFrame = "{{294, 48}, {900, 730}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1158, 4060}}";
+			sepNavSelRange = "{12734, 2}";
+			sepNavVisRange = "{12149, 603}";
+			sepNavWindowFrame = "{{18, 48}, {900, 730}}";
 		};
 	};
 	CDD7B6350D4A8443003B3B82 /* CheetahWatch */ = {

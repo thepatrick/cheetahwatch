@@ -279,12 +279,12 @@
 	NSUserDefaults *dd = [NSUserDefaults standardUserDefaults];
 	// do nothing if disabled
 	if (![dd boolForKey:@"CWActivateUsageWarning"]) {
-		NSLog(@"Warnings are disabled.");
 		return NO;
 	}
 	
-	if ([dd boolForKey:@"CWSuppressUsageWarning"]) {
-		NSLog(@"User has acknowledged a warning, and we haven't cleared that yet.");
+	if ([dd boolForKey:@"CWSuppressUsageWarning"] && 
+			[[dd stringForKey:@"CWSuppressUsageWarningForAmount"] isEqualToString:[dd stringForKey:@"CWActivateUsageWarningAmount"]]) {
+		//(@"User has acknowledged a warning, and we haven't cleared that yet.");
 		return NO;
 	}
 	
@@ -322,11 +322,8 @@
 	}
 	
 	if (amountToTestFor < alertAmount) {
-		NSLog(@"current amount is less than alert amount, so do nothing.");
 		return NO; // not worth worrying about yet!
 	}
-	
-	NSLog(@"Warn b'arch! %ld > %d", amountToTestFor, alertAmount);
 	
 	NSAlert *alert = [[NSAlert alloc] init];
 	[alert addButtonWithTitle:@"OK"];
@@ -335,8 +332,34 @@
 	[alert setAlertStyle:NSWarningAlertStyle];
 	[alert beginSheetModalForWindow:nil modalDelegate:nil didEndSelector:nil contextInfo:nil];
 	
+	[dd setValue:[dd stringForKey:@"CWActivateUsageWarningAmount"] forKey:[dd stringForKey:@"CWSuppressUsageWarningForAmount"]];
+	
 	[dd setBool:YES forKey:@"CWSuppressUsageWarning"];
 	return YES;
+}
+
+-(BOOL)autoClearUsageHistory
+{
+	NSUserDefaults *dd = [NSUserDefaults standardUserDefaults];
+	// do nothing if disabled
+	if (![dd boolForKey:@"CWAutoReset"]) {
+		return NO;
+	}
+	
+	NSString *mode = [[NSUserDefaults standardUserDefaults] stringForKey:@"CWUsageFrequency"];
+	
+	
+	// calculate when we next need to do this
+	// is it now? NO? return NO;
+	// are we connected? YES? set an ivar so that when we disconnect we know to handle it then
+	// no?
+	// are we archiving? 
+	//	yes?
+	//		get the objects
+	//		write out to ~/Library/Application Support/CheetahWatch/Archive_Y-m-d.log
+	//			with format	"Connection Start", "Duration", "Sent", "Received"
+	// -clearHistory
+	return NO;
 }
 
 #pragma mark -
