@@ -16,7 +16,7 @@
 	[dd setValue:@"daily" forKey:@"CWUsageFrequency"];
 	[dd setValue:@"NO" forKey:@"CWActivateUsageWarning"];
 	[dd setValue:@"NO" forKey:@"CWSuppressUsageWarning"];
-	[dd setValue:@"" forKey:@"CWSuppressUsageWarningForAmount"];
+	[dd setValue:@"-never-set-" forKey:@"CWSuppressUsageWarningForAmount"];
 	
 	[dd setValue:[NSNumber numberWithInt:0] forKey:@"CWActivateUsageWarningWhen"];
 	[dd setValue:[NSNumber numberWithInt:0] forKey:@"CWActivateUsageWarningValue"];

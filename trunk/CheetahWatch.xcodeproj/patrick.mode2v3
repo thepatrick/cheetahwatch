@@ -202,24 +202,24 @@
 			<key>Content</key>
 			<dict>
 				<key>PBXProjectModuleGUID</key>
-				<string>CD040F950DE41D3200A13482</string>
+				<string>CDC4325F0DF2EDC40009C3C4</string>
 				<key>PBXProjectModuleLabel</key>
-				<string>CWUsagePrefsController.m</string>
+				<string>CWHistorySupport.m</string>
 				<key>PBXSplitModuleInNavigatorKey</key>
 				<dict>
 					<key>Split0</key>
 					<dict>
 						<key>PBXProjectModuleGUID</key>
-						<string>CD040F960DE41D3200A13482</string>
+						<string>CDC432600DF2EDC40009C3C4</string>
 						<key>PBXProjectModuleLabel</key>
-						<string>CWUsagePrefsController.m</string>
+						<string>CWHistorySupport.m</string>
 						<key>_historyCapacity</key>
 						<integer>0</integer>
 						<key>bookmark</key>
-						<string>CD040FBB0DE423EF00A13482</string>
+						<string>CDC432680DF2EDF40009C3C4</string>
 						<key>history</key>
 						<array>
-							<string>CD040F970DE41D3200A13482</string>
+							<string>CDC4325A0DF2EC0B0009C3C4</string>
 						</array>
 					</dict>
 					<key>SplitCount</key>
@@ -231,11 +231,11 @@
 			<key>Geometry</key>
 			<dict>
 				<key>Frame</key>
-				<string>{{0, 20}, {841, 611}}</string>
+				<string>{{0, 20}, {900, 633}}</string>
 				<key>PBXModuleWindowStatusBarHidden2</key>
 				<false/>
 				<key>RubberWindowFrame</key>
-				<string>53 126 841 652 0 0 1280 778 </string>
+				<string>18 104 900 674 0 0 1280 778 </string>
 			</dict>
 		</dict>
 	</array>
@@ -478,8 +478,8 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>CD040F930DE41D3200A13482</string>
-				<string>CD040F940DE41D3200A13482</string>
+				<string>CDC432540DF2EBA40009C3C4</string>
+				<string>CDC432550DF2EBA40009C3C4</string>
 				<string>1C9437FD063B20B00039CFAC</string>
 				<string>1C9437FE063B20B00039CFAC</string>
 				<string>1C9437FF063B20B00039CFAC</string>
@@ -512,13 +512,9 @@
 	<integer>0</integer>
 	<key>WindowOrderList</key>
 	<array>
-		<string>CD040FB40DE41F3400A13482</string>
-		<string>CD040FB50DE41F3400A13482</string>
 		<string>1C530D52069F1CE1000CFCEE</string>
-		<string>1C530D54069F1CE1000CFCEE</string>
 		<string>/Users/patrick/dev/from-git/cheetahwatch/trunk/CheetahWatch.xcodeproj</string>
-		<string>1C530D5B069F1CE1000CFCEE</string>
-		<string>CD040F950DE41D3200A13482</string>
+		<string>CDC4325F0DF2EDC40009C3C4</string>
 	</array>
 	<key>WindowString</key>
 	<string>924 125 350 653 0 0 1280 778 </string>
@@ -674,12 +670,14 @@
 					<key>Dock</key>
 					<array>
 						<dict>
+							<key>BecomeActive</key>
+							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
 								<string>1CD0528F0623707200166675</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>&lt;No Editor&gt;</string>
+								<string>CWHistorySupport.m</string>
 								<key>StatusBarVisibility</key>
 								<true/>
 							</dict>
@@ -696,8 +694,6 @@
 							<string>332pt</string>
 						</dict>
 						<dict>
-							<key>BecomeActive</key>
-							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
@@ -737,7 +733,7 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1C530D52069F1CE1000CFCEE</string>
-				<string>CD040F990DE41D3200A13482</string>
+				<string>CDC432660DF2EDEC0009C3C4</string>
 				<string>1CD0528F0623707200166675</string>
 				<string>XCMainBuildResultsModuleGUID</string>
 			</array>
