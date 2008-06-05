@@ -38,6 +38,7 @@
 
 -(void)setupCoreData
 {
+	doAutoResetOnDisconnect = NO;
 	firstRunSinceStartup = YES;	
 	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
 	NSString *thePath = [[paths objectAtIndex:0] stringByAppendingPathComponent:[[NSBundle mainBundle]  objectForInfoDictionaryKey:@"CFBundleName"]];
@@ -69,6 +70,8 @@
 	[managedObjectContext setPersistentStoreCoordinator: coordinator];
 	
 	[self calculateTotalUsageForCaching];
+	
+	[self autoClearUsageHistory];
 }
 
 -(void)setMainController:(NSObject*)cont
@@ -217,6 +220,11 @@
 	}
 	
 	[self calculateTotalUsageForCaching];
+	
+	if(doAutoResetOnDisconnect) {
+		[self actuallyClearUsageHistory];
+		doAutoResetOnDisconnect = NO;
+	}
 }
 
 #pragma mark -
@@ -321,10 +329,15 @@
 			break;
 	}
 	
+	//NSLog(@"amountToTestFor %ld alertAmount %d", amountToTestFor, alertAmount);
+	
 	if (amountToTestFor < alertAmount) {
 		return NO; // not worth worrying about yet!
 	}
-	
+
+	[dd setValue:[dd stringForKey:@"CWActivateUsageWarningAmount"] forKey:@"CWSuppressUsageWarningForAmount"];
+	[dd setBool:YES forKey:@"CWSuppressUsageWarning"];
+
 	NSAlert *alert = [[NSAlert alloc] init];
 	[alert addButtonWithTitle:@"OK"];
 	[alert setMessageText:[NSString stringWithFormat:@"Your %@ (%ld %@) has exceeded your warning limit (%d %@).", whenLabel, amountToTestFor, multiplierLabel, alertAmount, multiplierLabel]];
@@ -332,9 +345,6 @@
 	[alert setAlertStyle:NSWarningAlertStyle];
 	[alert beginSheetModalForWindow:nil modalDelegate:nil didEndSelector:nil contextInfo:nil];
 	
-	[dd setValue:[dd stringForKey:@"CWActivateUsageWarningAmount"] forKey:[dd stringForKey:@"CWSuppressUsageWarningForAmount"]];
-	
-	[dd setBool:YES forKey:@"CWSuppressUsageWarning"];
 	return YES;
 }
 
@@ -345,21 +355,84 @@
 	if (![dd boolForKey:@"CWAutoReset"]) {
 		return NO;
 	}
+		
+	NSString *mode = [dd stringForKey:@"CWUsageFrequency"];
 	
-	NSString *mode = [[NSUserDefaults standardUserDefaults] stringForKey:@"CWUsageFrequency"];
+	NSDate *lastReset = [dd valueForKey:@"CWAutoResetLastReset"];
+	float lastResetTimeSinceNow = [lastReset timeIntervalSinceNow];
+
+	BOOL shouldReset = NO;
 	
+	if([mode isEqualToString:@"daily"]) {
+		//NSLog(@"Mode is Daily");
+			// every days?
+		NSInteger everyDays = [[dd stringForKey:@"CWAutoResetDailyDays"] integerValue];
+		
+		if(lastResetTimeSinceNow < (float)-(everyDays * 60 * 60 * 24)) {
+			shouldReset = YES;
+		}
+		
+	} else if([mode isEqualToString:@"weekly"]) {
+		NSLog(@"Mode is Weekly");
 	
-	// calculate when we next need to do this
-	// is it now? NO? return NO;
-	// are we connected? YES? set an ivar so that when we disconnect we know to handle it then
-	// no?
+		NSInteger everyWeeks = [dd integerForKey:@"CWAutoResetWeeklyWeeks"];
+		if(lastResetTimeSinceNow < (float)-(everyWeeks * 60 * 60 * 24 * 7)) {
+			
+			NSInteger dayOfWeek = [[[NSDate date] descriptionWithCalendarFormat:@"%w" timeZone:[NSTimeZone localTimeZone]
+																		 locale:[NSLocale currentLocale]] integerValue];			
+			NSLog(@"current day of week is %d", dayOfWeek);
+
+			if([dd boolForKey:@"CWAutoResetWeeklySunday"] && dayOfWeek == 0)
+					shouldReset = YES;
+			if([dd boolForKey:@"CWAutoResetWeeklyMonday"] && dayOfWeek == 1) 
+				shouldReset = YES;
+			if([dd boolForKey:@"CWAutoResetWeeklyTuesday"] && dayOfWeek == 2) 
+				shouldReset = YES;
+			if([dd boolForKey:@"CWAutoResetWeeklyWednesday"] && dayOfWeek == 3) 
+				shouldReset = YES;
+			if([dd boolForKey:@"CWAutoResetWeeklyThursday"] && dayOfWeek == 4) 
+				shouldReset = YES;
+			if([dd boolForKey:@"CWAutoResetWeeklyFriday"] && dayOfWeek == 5) 
+				shouldReset = YES;
+			if([dd boolForKey:@"CWAutoResetWeeklySaturday"] && dayOfWeek == 6) 
+				shouldReset = YES;
+			
+		}
+		
+	} else if([mode isEqualToString:@"monthly"]) {
+		NSLog(@"Mode is Monthly");
+	} else {
+		NSLog(@"Mode is... er.... what?");	
+	}
+	
+	if(!shouldReset) 
+		return NO;
+	
+	NSLog(@"We think we should reset, though not if now isn't a good time.");
+	
+	if(activeConnection != nil) {
+		doAutoResetOnDisconnect = YES;
+		NSLog(@"We have an active connection so can't reset right this second, defer.");
+		return YES;
+	}
+	
+	// - calculate when we next need to do this
+	// √ is it now? NO? return NO;
+	// √ are we connected? YES? set an ivar so that when we disconnect we know to handle it then
+	// √ no?
+	[self actuallyClearUsageHistory];
+	return YES;
+}
+
+-(void)actuallyClearUsageHistory
+{
+	
 	// are we archiving? 
 	//	yes?
 	//		get the objects
 	//		write out to ~/Library/Application Support/CheetahWatch/Archive_Y-m-d.log
 	//			with format	"Connection Start", "Duration", "Sent", "Received"
 	// -clearHistory
-	return NO;
 }
 
 #pragma mark -

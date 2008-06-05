@@ -23,6 +23,7 @@
 	[dd setValue:[NSNumber numberWithInt:0] forKey:@"CWActivateUsageWarningValueMultiplier"];
 	
 	[dd setValue:@"NO" forKey:@"CWAutoReset"];
+	[dd setValue:[NSDate dateWithTimeIntervalSinceReferenceDate:0] forKey:@"CWAutoResetLastReset"];
 	
 	[dd setValue:[NSNumber numberWithInt:1] forKey:@"CWAutoResetPostAction"];
 	[dd setValue:[NSNumber numberWithInt:1] forKey:@"CWAutoResetDailyDays"];

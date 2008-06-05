@@ -38,6 +38,8 @@
 	NSString *theUptime;
 	 
 	SInt64 cachedSent, cachedRecv, cachedTotalSent, cachedTotalRecv;
+	
+	BOOL doAutoResetOnDisconnect;
 }
 
 -(void)setMainController:(NSObject*)cont;
@@ -54,5 +56,8 @@
 -(SInt64)cachedTotalRecv;
 
 -(void)clearHistory;
+-(BOOL)autoClearUsageHistory;
+-(void)actuallyClearUsageHistory;\
+
 
 @end

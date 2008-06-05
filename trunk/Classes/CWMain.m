@@ -223,7 +223,7 @@ void calloutProc (SCNetworkConnectionRef connection, SCNetworkConnectionStatus s
 -(void)clearConnectionUI
 {
 	connected = NO;
-	[self doSetSignalStrength:lastSignalStrength];
+	[self setSignalStrength:lastSignalStrength];
 		
 	[speedReceive setStringValue:@""];
 	[speedTransmit setStringValue:@""];
@@ -271,7 +271,6 @@ void calloutProc (SCNetworkConnectionRef connection, SCNetworkConnectionStatus s
 	[statusItem setToolTip:@"CheetahWatch - No modem detected"];
 	[statusItemConectedFor setTitle:@"No modem connected"];
 	[connectedInStatus setStringValue:@"No modem connected"];
-//	[self performSelectorOnMainThread:@selector(changeStatusImageTo:) withObject: @"no-modem-menu.tif" waitUntilDone:NO];
 }
 
 -(void)haveModemMain:(id)ignore
@@ -291,7 +290,7 @@ void calloutProc (SCNetworkConnectionRef connection, SCNetworkConnectionStatus s
 	[statusItem setTitle:@"?"]; 
 	//[status setImage: imageFromBundle];
 	[self clearAllUI];
-	[self performSelectorOnMainThread:@selector(changeStatusImageTo:) withObject: @"signal-0.tif" waitUntilDone:NO];
+	[self setSignalStrength:0];
 	[self performSelectorOnMainThread:@selector(haveModemMain:) withObject:nil waitUntilDone:YES];
 	[statusItemConectedFor setTitle:@"Not connected"];
 	[connectedInStatus setStringValue:@"Not connected"];
@@ -509,7 +508,8 @@ void calloutProc (SCNetworkConnectionRef connection, SCNetworkConnectionStatus s
 	}
 	if(!connected) {
 		connected = YES;
-		[self doSetSignalStrength:lastSignalStrength];
+		NSLog(@"flowReport2 calling setSignalStrength with %i", lastSignalStrength);
+		[self setSignalStrength:lastSignalStrength];
 	}
 	connected = YES;
 	
@@ -738,15 +738,16 @@ void calloutProc (SCNetworkConnectionRef connection, SCNetworkConnectionStatus s
 	}
 }
 
--(void)doSetSignalStrength:(NSInteger)z_signal
+-(void)setSignalStrength:(NSInteger)z_signal
 {
-	//NSLog(@"doSetSignalStrength:%i",z_signal);
 	if(z_signal > 31) NSLog(@"Claimed that signal was %i\n", z_signal);
 	if(z_signal > 31) z_signal = 0;
+	
+	lastSignalStrength = z_signal;
 	[signal setIntValue:z_signal];
 	
 	NSString *suffix = (connected ? @".tif" : @"-off.tif");
-	
+		
 	NSString *which;
 	if(z_signal == -1) which = @"no-modem-menu.tif";
 	else if(z_signal == 0) which = [@"signal-0" stringByAppendingString:suffix];
@@ -755,7 +756,6 @@ void calloutProc (SCNetworkConnectionRef connection, SCNetworkConnectionStatus s
 	else if(z_signal < 20) which = [@"signal-3" stringByAppendingString:suffix];
 	else if(z_signal >= 20) which = [@"signal-4" stringByAppendingString:suffix];
 	
-	lastSignalStrength = z_signal;
 	
 	[self performSelectorOnMainThread:@selector(changeStatusImageTo:) withObject:which waitUntilDone:YES];		
 }
@@ -766,7 +766,7 @@ void calloutProc (SCNetworkConnectionRef connection, SCNetworkConnectionStatus s
 	if([strength rangeOfString:@","].location < [strength length]) {
 		strength = [strength substringToIndex:([strength rangeOfString:@","].location)];
 		//NSLog(@"Signal Strength From CSQ is: %@", strength);
-		[self doSetSignalStrength:atoi([strength cStringUsingEncoding:NSStringEncodingConversionExternalRepresentation])];
+		[self setSignalStrength:atoi([strength cStringUsingEncoding:NSStringEncodingConversionExternalRepresentation])];
 	}
 	
 }
@@ -774,7 +774,7 @@ void calloutProc (SCNetworkConnectionRef connection, SCNetworkConnectionStatus s
 // Update the signal strength display
 -(void)signalStrength:(char*)buff
 {
-	[self doSetSignalStrength:atoi(buff)];
+	[self setSignalStrength:atoi(buff)];
 }
 
 // Update the signal strength meter (on main thread)
@@ -897,7 +897,6 @@ void calloutProc (SCNetworkConnectionRef connection, SCNetworkConnectionStatus s
 }
 
 #pragma mark -
-#pragma mark USB Finder thread
-// has moved to CWUSBFinder.m/.h
+#pragma mark USB Finder thread has moved to CWUSBFinder.m/.h
 
 @end

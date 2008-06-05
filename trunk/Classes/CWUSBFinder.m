@@ -8,8 +8,6 @@
 
 #import "CWUSBFinder.h"
 
-static CWMain			*gCWMain;
-
 @implementation CWUSBFinder
 
 // This function sets up some stuff to detect a USB device being plugged. be prepared for C...
@@ -18,8 +16,6 @@ static CWMain			*gCWMain;
     mach_port_t				masterPort;
     kern_return_t			kr;
 	
-	gCWMain = mainController;
-	
     // first create a master_port for my task
     kr = IOMasterPort(MACH_PORT_NULL, &masterPort);
     if (kr || !masterPort) {
@@ -27,11 +23,11 @@ static CWMain			*gCWMain;
         return;
     }
 	
-	if(![CWUSBFinder addSearchForVendorID:kMyVendorID andProductID:kE220ProductID withMasterPort:masterPort]) {
+	if(![CWUSBFinder addSearchForVendorID:kMyVendorID andProductID:kE220ProductID withMasterPort:masterPort andController:mainController]) {
 		mach_port_deallocate(mach_task_self(), masterPort);
 		return;
 	}
-	if(![CWUSBFinder addSearchForVendorID:kMyVendorID andProductID:kE169ProductID withMasterPort:masterPort]) {
+	if(![CWUSBFinder addSearchForVendorID:kMyVendorID andProductID:kE169ProductID withMasterPort:masterPort andController:mainController]) {
 		mach_port_deallocate(mach_task_self(), masterPort);
 		return;
 	}
@@ -44,7 +40,7 @@ static CWMain			*gCWMain;
     CFRunLoopRun();
 }
 
-+(BOOL)addSearchForVendorID:(long)usbVendor andProductID:(long)usbProduct withMasterPort:(mach_port_t)masterPort
++(BOOL)addSearchForVendorID:(long)usbVendor andProductID:(long)usbProduct withMasterPort:(mach_port_t)masterPort andController:(CWMain*)mainController
 {
     CFMutableDictionaryRef 	matchingDict;
     CFRunLoopSourceRef		runLoopSource;
@@ -82,10 +78,10 @@ static CWMain			*gCWMain;
     // care of those later.
 	// notifyPort, notificationType, matching, callback, refCon, notification
     IOServiceAddMatchingNotification(notifyPort, kIOFirstMatchNotification,
-									 matchingDict, CWUSBFinderDeviceAdded, NULL, &addedIter);		
+									 matchingDict, CWUSBFinderDeviceAdded, mainController, &addedIter);		
     
     // Iterate once to get already-present devices and arm the notification
-    CWUSBFinderDeviceAdded(NULL, addedIter);
+    CWUSBFinderDeviceAdded(mainController, addedIter);
 	return YES;
 }
 
@@ -95,7 +91,7 @@ void CWUSBFinderDeviceAdded(void *refCon, io_iterator_t iterator)
     io_service_t		usbDevice;
     while ( (usbDevice = IOIteratorNext(iterator)) )
     {		
-		[gCWMain performSelectorOnMainThread:@selector(startMonitor:) withObject:nil waitUntilDone:YES];
+		[(CWMain*)refCon performSelectorOnMainThread:@selector(startMonitor:) withObject:nil waitUntilDone:YES];
         IOObjectRelease(usbDevice);
     }
 }

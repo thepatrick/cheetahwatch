@@ -24,8 +24,7 @@
 }
 
 +(void)USBFinder:(CWMain*)mainController;
-+(BOOL)addSearchForVendorID:(long)usbVendor andProductID:(long)usbProduct withMasterPort:(mach_port_t)masterPort;
-
++(BOOL)addSearchForVendorID:(long)usbVendor andProductID:(long)usbProduct withMasterPort:(mach_port_t)masterPort andController:(CWMain*)mainController;
 void CWUSBFinderDeviceAdded(void *refCon, io_iterator_t iterator);
 
 @end

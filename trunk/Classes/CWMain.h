@@ -200,7 +200,7 @@ enum
 #pragma mark Modem interface thread
 
 +(void)MyRunner:(CWMain*)mainController;
--(void)doSetSignalStrength:(NSInteger)z_signal;
+-(void)setSignalStrength:(NSInteger)z_signal;
 -(void)signalStrengthFromCSQ:(char*)buff;
 
 void calloutProc (SCNetworkConnectionRef connection, SCNetworkConnectionStatus status, void *info );
