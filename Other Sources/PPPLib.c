@@ -138,7 +138,9 @@ PPPExec(int		ref,
 	if (serviceid) {
             // serviceid is present, use it
             msg.m_flags = USE_SERVICEID;
-            msg.m_link = strlen(serviceid);
+            
+            // FIXME: why is it u_int8_t if it really is a string? this really OK?
+            msg.m_link = strlen((char*)serviceid);
         }
         else {
             // no service ID, use the default link
