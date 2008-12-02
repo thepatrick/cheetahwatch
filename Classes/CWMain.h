@@ -1,4 +1,4 @@
-/* CheetahWatch, v1.2
+/* 
  * Copyright (c) 2007-2008 Patrick Quinn-Graham
  * 
  * Permission is hereby granted, free of charge, to any person obtaining
