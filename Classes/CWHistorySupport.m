@@ -344,7 +344,7 @@
 
 	NSAlert *alert = [[NSAlert alloc] init];
 	[alert addButtonWithTitle:@"OK"];
-	[alert setMessageText:[NSString stringWithFormat:@"Your %@ (%ld %@) has exceeded your warning limit (%d %@).", whenLabel, amountToTestFor, multiplierLabel, alertAmount, multiplierLabel]];
+	[alert setMessageText:[NSString stringWithFormat:@"Your %@ (%lld %@) has exceeded your warning limit (%d %@).", whenLabel, amountToTestFor, multiplierLabel, alertAmount, multiplierLabel]];
 	[alert setInformativeText:@"You will not be warned again until you clear the usage history.\n\nTo change this warning go to Usage History and choose Preferences..."];
 	[alert setAlertStyle:NSWarningAlertStyle];
 	[alert beginSheetModalForWindow:nil modalDelegate:nil didEndSelector:nil contextInfo:nil];
