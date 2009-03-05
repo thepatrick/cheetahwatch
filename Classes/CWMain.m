@@ -82,7 +82,7 @@ void calloutProc (SCNetworkConnectionRef connection, SCNetworkConnectionStatus s
 	[statusItem setHighlightMode:YES];
 	[statusItem setEnabled:YES];
 	[statusItem setToolTip:@"CheetahWatch"];
-	[statusItem setAttributedTitle:@""];
+	//[statusItem setAttributedTitle:@""];
 	[statusItem setToolTip:@"CheetahWatch - No modem detected"];
 	[statusItem setMenu:statusItemMenu];		
 	
@@ -128,6 +128,10 @@ void calloutProc (SCNetworkConnectionRef connection, SCNetworkConnectionStatus s
 		}
 	} else {
 		NSLog(@"No PPP services configured.");
+		
+		[[NSAlert alertWithMessageText:@"CheetahWatch can't dial your modem as no suitable connections have been configured." 
+						 defaultButton:@"Oky Doky" alternateButton:nil otherButton:nil 
+			 informativeTextWithFormat:@"You need to configure a dial-up connection in the Network pane in System Preferences. Consult your provider (or google) for assistance."] runModal];
 	}
 }
 
@@ -267,7 +271,9 @@ void calloutProc (SCNetworkConnectionRef connection, SCNetworkConnectionStatus s
 	}
 	lastSignalStrength = -1;
 	[self clearAllUI];
-	[statusItem setAttributedTitle:@""];
+	
+	NSAttributedString *emptyAttributedString = [[[NSAttributedString alloc] initWithString:@""] autorelease];
+	[statusItem setAttributedTitle:emptyAttributedString];
 	[statusItem setToolTip:@"CheetahWatch - No modem detected"];
 	[statusItemConectedFor setTitle:@"No modem connected"];
 	[connectedInStatus setStringValue:@"No modem connected"];
@@ -688,7 +694,8 @@ void calloutProc (SCNetworkConnectionRef connection, SCNetworkConnectionStatus s
 
 -(void)gotHWVersion:(char*)buff
 {
-	NSString *version = [NSString stringWithCString:(buff + 1)];
+	
+	NSString *version = [NSString stringWithCString:(buff + 1) encoding:NSStringEncodingConversionExternalRepresentation];
 	if([version length] > 0) {		
 		if([version rangeOfString:@"\""].location > [version length]) {
 		} else {
@@ -701,7 +708,7 @@ void calloutProc (SCNetworkConnectionRef connection, SCNetworkConnectionStatus s
 
 -(void)gotAPN:(char*)buff
 {
-	NSString *apn = [[NSString stringWithCString:buff] substringFromIndex:10];
+	NSString *apn = [[NSString stringWithCString:buff encoding:NSStringEncodingConversionExternalRepresentation] substringFromIndex:10];
 //	NSLog(@"Location of ,: %i", [apn rangeOfString:@","].location);
 	if([apn rangeOfString:@","].location < [apn length]) {
 		apn = [apn substringToIndex:([apn rangeOfString:@","].location - 1)];	
@@ -711,7 +718,7 @@ void calloutProc (SCNetworkConnectionRef connection, SCNetworkConnectionStatus s
 
 -(void)gotCarrier:(char*)buff
 {
-	NSString *carrier = [NSString stringWithCString:buff];	
+	NSString *carrier = [NSString stringWithCString:buff encoding:NSStringEncodingConversionExternalRepresentation];	
 	if(!([carrier rangeOfString:@","].location < [carrier length])) {
 		return;
 	}
@@ -762,7 +769,7 @@ void calloutProc (SCNetworkConnectionRef connection, SCNetworkConnectionStatus s
 
 -(void)signalStrengthFromCSQ:(char*)buff
 {
-	NSString *strength = [NSString stringWithCString:buff];	
+	NSString *strength = [NSString stringWithCString:buff encoding:NSStringEncodingConversionExternalRepresentation];	
 	if([strength rangeOfString:@","].location < [strength length]) {
 		strength = [strength substringToIndex:([strength rangeOfString:@","].location)];
 		//NSLog(@"Signal Strength From CSQ is: %@", strength);
@@ -786,7 +793,9 @@ void calloutProc (SCNetworkConnectionRef connection, SCNetworkConnectionStatus s
 // Process a mode update
 -(void)modeChange:(char*)buff
 {
-	NSString *newMode = [NSString stringWithCString:buff length:1];
+	buff[1] = 0x00;
+	NSString *newMode = [NSString stringWithCString:buff
+										   encoding:NSStringEncodingConversionExternalRepresentation];
 	[self performSelectorOnMainThread:@selector(modeChangeAction:) withObject:newMode waitUntilDone:YES];
 }
 
@@ -878,7 +887,7 @@ void calloutProc (SCNetworkConnectionRef connection, SCNetworkConnectionStatus s
 		strcpy(buf_stream, buf_lineStart); 
 		if (buf_stream[0]=='\n') {
 			sscanf(buf_stream, "\n%[^\r\n]", buf_scanned);
-			returnValue =  [NSString stringWithCString:buf_scanned];
+			returnValue =  [NSString stringWithCString:buf_scanned encoding:NSStringEncodingConversionExternalRepresentation];
 		}
 	}	
 	

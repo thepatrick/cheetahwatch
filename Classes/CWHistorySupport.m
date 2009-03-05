@@ -331,6 +331,10 @@
 	
 	//NSLog(@"amountToTestFor %ld alertAmount %d", amountToTestFor, alertAmount);
 	
+	if(amountToTestFor == 0 || alertAmount == 0) {
+		return NO; // uh... just... don't.
+	}
+	
 	if (amountToTestFor < alertAmount) {
 		return NO; // not worth worrying about yet!
 	}

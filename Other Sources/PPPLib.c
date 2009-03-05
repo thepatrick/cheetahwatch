@@ -175,7 +175,7 @@ PPPExec(int		ref,
 		fprintf(stderr, "PPPExec read() failed: error=%s\n", strerror(errno));
 		return errno;
 	} else if (n != sizeof(msg)) {
-		fprintf(stderr, "PPPExec read() failed: insufficent data, read=%d\n", n);
+		fprintf(stderr, "PPPExec read() failed: insufficent data, read=%d\n", (int)n);
 		return -1;
 	}
 
@@ -189,7 +189,7 @@ PPPExec(int		ref,
 				CFAllocatorDeallocate(NULL, buf);
 				return errno;
 			} else if (n != msg.m_link) {
-				fprintf(stderr, "PPPExec read() failed: insufficent data, read=%d\n", n);
+				fprintf(stderr, "PPPExec read() failed: insufficent data, read=%d\n", (int)n);
 				CFAllocatorDeallocate(NULL, buf);
 				return -1;
 			}
@@ -209,7 +209,7 @@ PPPExec(int		ref,
 				CFAllocatorDeallocate(NULL, buf);
 				return errno;
 			} else if (n != msg.m_len) {
-				fprintf(stderr, "PPPExec read() failed: insufficent data, read=%d\n", n);
+				fprintf(stderr, "PPPExec read() failed: insufficent data, read=%d\n", (int)n);
 				CFAllocatorDeallocate(NULL, buf);
 				return -1;
 			}

@@ -21,9 +21,7 @@
 		CD391B5F0C8E07700008BABF /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD391B5A0C8E07700008BABF /* WebKit.framework */; };
 		CD3EEC480DA2CC5F00381326 /* CWUsagePrefsController.m in Sources */ = {isa = PBXBuildFile; fileRef = CD3EEC470DA2CC5F00381326 /* CWUsagePrefsController.m */; };
 		CD45AC720D61A31F000A0A2D /* NBInvocationQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = CD45AC700D61A31F000A0A2D /* NBInvocationQueue.m */; };
-		CD5633BE0D742DF500418D48 /* Sparkle.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = CD73FE020D6373DD0043AFDD /* Sparkle.framework */; };
 		CD6F1ABE0CE23B45005CD8D9 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD6F1ABB0CE23B45005CD8D9 /* SystemConfiguration.framework */; };
-		CD73FE030D6373DD0043AFDD /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD73FE020D6373DD0043AFDD /* Sparkle.framework */; };
 		CD7CAB7E0D33E90C001A37B8 /* CW Icon - 512.icns in Resources */ = {isa = PBXBuildFile; fileRef = CD7CAB7D0D33E90C001A37B8 /* CW Icon - 512.icns */; };
 		CD8425490C8D40F300D08573 /* signal-0.tif in Resources */ = {isa = PBXBuildFile; fileRef = CD84253F0C8D40F300D08573 /* signal-0.tif */; };
 		CD84254A0C8D40F300D08573 /* signal-4.tif in Resources */ = {isa = PBXBuildFile; fileRef = CD8425400C8D40F300D08573 /* signal-4.tif */; };
@@ -39,6 +37,8 @@
 		CDAA71F40DCFC38100C947E0 /* Spectral Class CSV Parser.txt in Resources */ = {isa = PBXBuildFile; fileRef = CDAA71F30DCFC38100C947E0 /* Spectral Class CSV Parser.txt */; };
 		CDAA72050DCFC3ED00C947E0 /* CWNetworks.m in Sources */ = {isa = PBXBuildFile; fileRef = CDAA72040DCFC3ED00C947E0 /* CWNetworks.m */; };
 		CDAF55580C763E3500E456AC /* CWHistorySupport.m in Sources */ = {isa = PBXBuildFile; fileRef = CDAF55560C763E3500E456AC /* CWHistorySupport.m */; };
+		CDB6F3430F0A0F84007EDF59 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CDB6F3420F0A0F84007EDF59 /* Sparkle.framework */; };
+		CDB6F3600F0A113C007EDF59 /* Sparkle.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = CDB6F3420F0A0F84007EDF59 /* Sparkle.framework */; };
 		CDE9AFF70DD1051400CAA997 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8D1107310486CEB800E47090 /* Info.plist */; };
 		CDE9B0140DD10C3900CAA997 /* signal-4-off.tif in Resources */ = {isa = PBXBuildFile; fileRef = CDE9B00F0DD10C3900CAA997 /* signal-4-off.tif */; };
 		CDE9B0150DD10C3900CAA997 /* signal-0-off.tif in Resources */ = {isa = PBXBuildFile; fileRef = CDE9B0100DD10C3900CAA997 /* signal-0-off.tif */; };
@@ -55,8 +55,8 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				CDB6F3600F0A113C007EDF59 /* Sparkle.framework in CopyFiles */,
 				CDAA71EA0DCFC2ED00C947E0 /* SCCSVParser.framework in CopyFiles */,
-				CD5633BE0D742DF500418D48 /* Sparkle.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -88,7 +88,6 @@
 		CD45AC700D61A31F000A0A2D /* NBInvocationQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NBInvocationQueue.m; sourceTree = "<group>"; };
 		CD45AC710D61A31F000A0A2D /* NBInvocationQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NBInvocationQueue.h; sourceTree = "<group>"; };
 		CD6F1ABB0CE23B45005CD8D9 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = /System/Library/Frameworks/SystemConfiguration.framework; sourceTree = "<absolute>"; };
-		CD73FE020D6373DD0043AFDD /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Sparkle.framework; sourceTree = "<group>"; };
 		CD7CAB7D0D33E90C001A37B8 /* CW Icon - 512.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = "CW Icon - 512.icns"; sourceTree = "<group>"; };
 		CD84253F0C8D40F300D08573 /* signal-0.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = "signal-0.tif"; sourceTree = "<group>"; };
 		CD8425400C8D40F300D08573 /* signal-4.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = "signal-4.tif"; sourceTree = "<group>"; };
@@ -108,6 +107,7 @@
 		CDAA72040DCFC3ED00C947E0 /* CWNetworks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CWNetworks.m; sourceTree = "<group>"; };
 		CDAF55550C763E3500E456AC /* CWHistorySupport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWHistorySupport.h; sourceTree = "<group>"; };
 		CDAF55560C763E3500E456AC /* CWHistorySupport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CWHistorySupport.m; sourceTree = "<group>"; };
+		CDB6F3420F0A0F84007EDF59 /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Sparkle.framework; sourceTree = "<group>"; };
 		CDE9B00D0DD10BEE00CAA997 /* CountryList.lst */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CountryList.lst; sourceTree = "<group>"; };
 		CDE9B00F0DD10C3900CAA997 /* signal-4-off.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = "signal-4-off.tif"; sourceTree = "<group>"; };
 		CDE9B0100DD10C3900CAA997 /* signal-0-off.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = "signal-0-off.tif"; sourceTree = "<group>"; };
@@ -127,8 +127,8 @@
 				CD391B5F0C8E07700008BABF /* WebKit.framework in Frameworks */,
 				CD0FE26A0C95ADC20071D806 /* IOKit.framework in Frameworks */,
 				CD6F1ABE0CE23B45005CD8D9 /* SystemConfiguration.framework in Frameworks */,
-				CD73FE030D6373DD0043AFDD /* Sparkle.framework in Frameworks */,
 				CDAA71E70DCFC2E200C947E0 /* SCCSVParser.framework in Frameworks */,
+				CDB6F3430F0A0F84007EDF59 /* Sparkle.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -157,8 +157,8 @@
 		1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				CDB6F3420F0A0F84007EDF59 /* Sparkle.framework */,
 				CDAA71E60DCFC2E200C947E0 /* SCCSVParser.framework */,
-				CD73FE020D6373DD0043AFDD /* Sparkle.framework */,
 				CD6F1ABB0CE23B45005CD8D9 /* SystemConfiguration.framework */,
 				CD391B5A0C8E07700008BABF /* WebKit.framework */,
 				CD0FE2690C95ADC20071D806 /* IOKit.framework */,
@@ -427,6 +427,8 @@
 					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_1)",
 					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_2)",
 					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
+					"\"$(SRCROOT)/Resources\"",
+					"\"$(SRCROOT)\"",
 				);
 				FRAMEWORK_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)\"";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_2 = "\"$(SRCROOT)\"";
@@ -455,6 +457,8 @@
 					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_1)",
 					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
 					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_2)",
+					"\"$(SRCROOT)/Resources\"",
+					"\"$(SRCROOT)\"",
 				);
 				FRAMEWORK_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)\"";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)\"";
@@ -488,8 +492,8 @@
 		C01FCF5008A954540054247B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT_PRE_XCODE_3_1)";
-				ARCHS_STANDARD_32_64_BIT_PRE_XCODE_3_1 = "ppc i386 ppc64 x86_64";
+				ARCHS = "$(ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1)";
+				ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1 = "ppc i386";
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.4;
@@ -521,6 +525,8 @@
 					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_1)",
 					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_2)",
 					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
+					"\"$(SRCROOT)/Resources\"",
+					"\"$(SRCROOT)\"",
 				);
 				FRAMEWORK_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)\"";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_2 = "\"$(SRCROOT)\"";

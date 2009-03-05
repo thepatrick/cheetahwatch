@@ -135,6 +135,7 @@
 
 -(void)changeFrequency:(NSString*)newFrequency
 {
+	return;
 	if(presentFrequency != nil) {
 		if([presentFrequency isEqualToString:@"daily"]) {
 			[freqDailyView retain];
