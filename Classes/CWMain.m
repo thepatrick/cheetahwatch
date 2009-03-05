@@ -609,7 +609,7 @@ void calloutProc (SCNetworkConnectionRef connection, SCNetworkConnectionStatus s
 	char *buf_stream, *buf_lineStart;
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	buf_stream=(char *)malloc(BUFSIZE*sizeof(char));
-	fd = open(MODEMUIDEV, O_RDWR | O_NOCTTY ); 
+	fd = open(MODEMUIDEV, O_RDWR | O_NOCTTY | O_NDELAY ); 
 	if (fd < 0) {
 		[mainController performSelectorOnMainThread:@selector(noModem:) withObject:nil waitUntilDone:YES];
 		[pool release];
