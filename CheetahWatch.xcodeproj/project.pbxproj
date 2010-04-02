@@ -44,6 +44,7 @@
 		CD84254B0C8D40F300D08573 /* signal-3.tif in Resources */ = {isa = PBXBuildFile; fileRef = CD8425410C8D40F300D08573 /* signal-3.tif */; };
 		CD84254E0C8D40F300D08573 /* signal-2.tif in Resources */ = {isa = PBXBuildFile; fileRef = CD8425440C8D40F300D08573 /* signal-2.tif */; };
 		CD84254F0C8D40F300D08573 /* signal-1.tif in Resources */ = {isa = PBXBuildFile; fileRef = CD8425450C8D40F300D08573 /* signal-1.tif */; };
+		CDA3A2B211656F91006DD0C0 /* CWUsagePrefsController.m in Sources */ = {isa = PBXBuildFile; fileRef = CDA3A2B111656F91006DD0C0 /* CWUsagePrefsController.m */; };
 		CDA4AEB70C625BAA00E71C0C /* CWApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = CDA4AEB60C625BAA00E71C0C /* CWApplication.m */; };
 		CDA4B1FA0C62947300E71C0C /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CDA4B1F90C62947300E71C0C /* Carbon.framework */; };
 		CDAA71770DCFAE4A00C947E0 /* CWUSBFinder.m in Sources */ = {isa = PBXBuildFile; fileRef = CDAA71760DCFAE4A00C947E0 /* CWUSBFinder.m */; };
@@ -128,6 +129,8 @@
 		CD8425440C8D40F300D08573 /* signal-2.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = "signal-2.tif"; sourceTree = "<group>"; };
 		CD8425450C8D40F300D08573 /* signal-1.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = "signal-1.tif"; sourceTree = "<group>"; };
 		CD8D972B0C63635E00FB394B /* CW Icon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = "CW Icon.icns"; sourceTree = "<group>"; };
+		CDA3A2B011656F91006DD0C0 /* CWUsagePrefsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CWUsagePrefsController.h; path = "/Volumes/patrick/dev/from-git/cheetahwatch/Classes/CWUsagePrefsController.h"; sourceTree = "<absolute>"; };
+		CDA3A2B111656F91006DD0C0 /* CWUsagePrefsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CWUsagePrefsController.m; path = "/Volumes/patrick/dev/from-git/cheetahwatch/Classes/CWUsagePrefsController.m"; sourceTree = "<absolute>"; };
 		CDA4AEB50C625BAA00E71C0C /* CWApplication.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CWApplication.h; sourceTree = "<group>"; };
 		CDA4AEB60C625BAA00E71C0C /* CWApplication.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = CWApplication.m; sourceTree = "<group>"; };
 		CDA4B1F90C62947300E71C0C /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
@@ -263,10 +266,12 @@
 		6523815510763E9F000A797C /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				CDA3A2B011656F91006DD0C0 /* CWUsagePrefsController.h */,
+				CDA3A2B111656F91006DD0C0 /* CWUsagePrefsController.m */,
 				CDA4AEB50C625BAA00E71C0C /* CWApplication.h */,
 				CDA4AEB60C625BAA00E71C0C /* CWApplication.m */,
-				659AE58C106D774F00C1D1C7 /* CWDialer.h */,
 				659AE58D106D774F00C1D1C7 /* CWDialer.m */,
+				659AE58C106D774F00C1D1C7 /* CWDialer.h */,
 				65DB3724105F94D200D18BD2 /* CWModem.h */,
 				65DB3725105F94D200D18BD2 /* CWModem.m */,
 				CDAA72030DCFC3ED00C947E0 /* CWNetworks.h */,
@@ -438,6 +443,7 @@
 				6523818F1076498B000A797C /* CWDurationValueTransformer.m in Sources */,
 				659A437010B4227100684E2F /* CWPreferences.m in Sources */,
 				6519AE7910C558BA00D89423 /* CWPrettyPrint.m in Sources */,
+				CDA3A2B211656F91006DD0C0 /* CWUsagePrefsController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
