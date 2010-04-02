@@ -22,8 +22,8 @@
 {
 	BOOL forceDisplay;
 
-	float topBorder;
-	float bottomBorder;
+	CGFloat topBorder;
+	CGFloat bottomBorder;
 	
 	NSColor *borderStartColor;
 	NSColor *borderEndColor;
@@ -32,18 +32,18 @@
 	NSColor *bgColor;
 }
 
-- (id)initWithContentRect:(NSRect)contentRect styleMask:(unsigned int)styleMask backing:(NSBackingStoreType)bufferingType defer:(BOOL)flag;
+- (id)initWithContentRect:(NSRect)contentRect styleMask:(NSUInteger)styleMask backing:(NSBackingStoreType)bufferingType defer:(BOOL)flag;
 
 - (NSColor *)styledBackground;
 
 - (BOOL)forceDisplay;
 - (void)setForceDisplay:(BOOL)flag;
 
-- (float)topBorder;
-- (void)setTopBorder:(float)newTopBorder;
+- (CGFloat)topBorder;
+- (void)setTopBorder:(CGFloat)newTopBorder;
 
-- (float)bottomBorder;
-- (void)setBottomBorder:(float)newBottomBorder;
+- (CGFloat)bottomBorder;
+- (void)setBottomBorder:(CGFloat)newBottomBorder;
 
 - (NSColor *)borderStartColor;
 - (void)setBorderStartColor:(NSColor *)newBorderStartColor;

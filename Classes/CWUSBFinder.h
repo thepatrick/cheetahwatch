@@ -1,5 +1,5 @@
 /* 
- * Copyright (c) 2007-2008 Patrick Quinn-Graham
+ * Copyright (c) 2007-2009 Patrick Quinn-Graham, Christoph Nadig
  * 
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
@@ -22,25 +22,28 @@
  */
 
 #import <Cocoa/Cocoa.h>
-#include <IOKit/IOKitLib.h>
-#include <IOKit/serial/IOSerialKeys.h>
-#include <IOKit/IOBSD.h>
-#include <IOKit/IOMessage.h>
-#include <IOKit/IOCFPlugIn.h>
-#include <IOKit/usb/IOUSBLib.h>
-
-#define kMyVendorID		4817
-#define kE220ProductID	4099
-#define kE169ProductID	4097
  
-@class CWMain;
-
 @interface CWUSBFinder : NSObject {
+
+    // attributes
+    IONotificationPortRef notificationPort;
+    NSArray *devices;
+    
+    // delegate
+    id delegate;
 }
 
-+(void)USBFinder:(CWMain*)mainController;
-+(BOOL)addSearchForVendorID:(long)usbVendor andProductID:(long)usbProduct withMasterPort:(mach_port_t)masterPort andController:(CWMain*)mainController;
-void CWUSBFinderDeviceAdded(void *refCon, io_iterator_t iterator);
+// initializer
+- (id)initWithDelegate:(id)aDelegate;
 
 @end
 
+
+// delegate methods
+@interface NSObject (CWUSBFinderDelegates)
+
+// called when a device is added or removed
+- (void)deviceAdded:(NSString *)devicePath;
+- (void)deviceRemoved:(NSString *)devicePath;
+
+@end

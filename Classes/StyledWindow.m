@@ -23,9 +23,9 @@
 
 @implementation StyledWindow
 
-- (id)initWithContentRect:(NSRect)contentRect styleMask:(unsigned int)styleMask backing:(NSBackingStoreType)bufferingType defer:(BOOL)flag;
+- (id)initWithContentRect:(NSRect)contentRect styleMask:(NSUInteger)styleMask backing:(NSBackingStoreType)bufferingType defer:(BOOL)flag;
 {
-	unsigned int newStyle;
+	NSUInteger newStyle;
 	if (styleMask & NSTexturedBackgroundWindowMask)
 		newStyle = styleMask;
 	else
@@ -90,7 +90,7 @@
 		styledGradient = [CTGradient gradientWithBeginningColor:[self borderStartColor] endingColor:[self borderEndColor]];
 
 	// Set min width of temporary pattern image to prevent flickering at small widths
-	float minWidth = 300.0;
+	CGFloat minWidth = 300.0;
 	
 	// Create temporary image for top gradient
 	NSImage *topImg = [[NSImage alloc] initWithSize:NSMakeSize(MAX(minWidth, [self frame].size.width), [self topBorder]+1.0)];
@@ -151,21 +151,21 @@
 }
 
 
-- (float)topBorder
+- (CGFloat)topBorder
 {
 	return topBorder;
 }
-- (void)setTopBorder:(float)newTopBorder
+- (void)setTopBorder:(CGFloat)newTopBorder
 {
 	topBorder = newTopBorder;
 }
 
 
-- (float)bottomBorder
+- (CGFloat)bottomBorder
 {
 	return bottomBorder;
 }
-- (void)setBottomBorder:(float)newBottomBorder
+- (void)setBottomBorder:(CGFloat)newBottomBorder
 {
 	bottomBorder = newBottomBorder;
 }

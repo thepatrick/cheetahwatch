@@ -1,5 +1,5 @@
 /* 
- * Copyright (c) 2007-2008 Patrick Quinn-Graham
+ * Copyright (c) 2007-2009 Patrick Quinn-Graham, Christoph Nadig
  * 
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
@@ -23,16 +23,9 @@
 
 #import <Cocoa/Cocoa.h>
 
-@protocol SCCSVFieldFactory;
+@interface CWNetworks : NSObject
 
-@interface CWNetworks : NSObject {
-
-	NSMutableArray *_data;
-
-}
-
-+networks;
--(BOOL)setupTheStuff;
--(NSString*)displayNameForCountry:(NSInteger)country andNetwork:(NSInteger)network;
+// return operator name for MCC/MNC pair
++ (NSString *)operatorForMCCMNC:(NSString *)mccmnc;
 
 @end

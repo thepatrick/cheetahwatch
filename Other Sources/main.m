@@ -1,5 +1,5 @@
-/* CheetahWatch, v1.2
- * Copyright (c) 2007-2008 Patrick Quinn-Graham
+/* 
+ * Copyright (c) 2007-2009 Patrick Quinn-Graham, Christoph Nadig
  * 
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
