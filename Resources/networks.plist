@@ -2486,7 +2486,7 @@
 		<key>mnc</key>
 		<string>01</string>
 		<key>operator</key>
-		<string>Vodafone Telecel - Comunicaçôes Pessoais, S.A.</string>
+		<string>Vodafone PT</string>
 	</dict>
 	<key>26803</key>
 	<dict>
@@ -2497,7 +2497,7 @@
 		<key>mnc</key>
 		<string>03</string>
 		<key>operator</key>
-		<string>Optimus - Telecomunicaçôes, S.A.</string>
+		<string>Optimus</string>
 	</dict>
 	<key>26805</key>
 	<dict>
@@ -2508,7 +2508,7 @@
 		<key>mnc</key>
 		<string>05</string>
 		<key>operator</key>
-		<string>Oniway - Inforcomunicaçôes, S.A.</string>
+		<string>Oniway</string>
 	</dict>
 	<key>26806</key>
 	<dict>
@@ -2519,7 +2519,7 @@
 		<key>mnc</key>
 		<string>06</string>
 		<key>operator</key>
-		<string>TMN - Telecomunicaçôes Movéis Nacionais, S.A.</string>
+		<string>TMN</string>
 	</dict>
 	<key>27001</key>
 	<dict>
