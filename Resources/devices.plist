@@ -4,6 +4,32 @@
 <array>
 	<dict>
 		<key>devicePath</key>
+		<string>/dev/cu.ZTEUSBATPort_000010241</string>
+		<key>matchingDictionary</key>
+		<dict>
+			<key>IOProviderClass</key>
+			<string>IOUSBDevice</string>
+			<key>idProduct</key>
+			<integer>49</integer>
+			<key>idVendor</key>
+			<integer>6610</integer>
+		</dict>
+	</dict>
+	<dict>
+		<key>devicePath</key>
+		<string>/dev/cu.ZTEUSBATPort_</string>
+		<key>matchingDictionary</key>
+		<dict>
+			<key>IOProviderClass</key>
+			<string>IOUSBDevice</string>
+			<key>idProduct</key>
+			<integer>8194</integer>
+			<key>idVendor</key>
+			<integer>6610</integer>
+		</dict>
+	</dict>
+	<dict>
+		<key>devicePath</key>
 		<string>/dev/cu.HUAWEIMobile-Pcui</string>
 		<key>matchingDictionary</key>
 		<dict>

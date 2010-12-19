@@ -26,6 +26,12 @@
 #import "CWConnectionRecord.h"
 #import "CWPreferences.h"
 
+typedef enum {
+    CWMode3GPreferred    = 1,
+    CWModeGPRSPreferred  = 2,
+    CWMode3GOnly         = 3,
+    CWModeGPRSOnly       = 4,
+} CWModesPreference;
 
 @interface CWModel : NSObject {
 
@@ -51,6 +57,8 @@
     NSString *hwVersion;
     NSString *manufacturer;
     NSString *model;
+    CWModesPreference modesPreference;
+    BOOL pinLock;
 
     CWConnectionRecord *currentRecord;
 
@@ -58,6 +66,12 @@
     NSMutableArray *connectionRecords;
     CWPreferences *preferences;
     NSCalendarDate *lastPurgeDate;
+    
+    // date when last traffic warning was shown
+    NSDate *lastTrafficWarningDate;
+
+    // delegate
+    id delegate;
 
 }
 
@@ -140,4 +154,20 @@
 - (CWPreferences *)preferences;
 - (void)setPreferences:(CWPreferences *)newPreferences;
 
+- (CWModesPreference)modesPreference;
+- (void)setModesPreference:(CWModesPreference)newPreference;
+
+- (BOOL)pinLock;
+- (void)setPinLock:(BOOL)status;
+
+- (void)checkTrafficLimit;
+
+- (id)delegate;
+- (void)setDelegate:(id)newDelegate;
+
+@end
+
+// delegate methods
+@interface NSObject (CWModelDelegateMethods)
+- (void)trafficLimitExceeded:(unsigned long long)limit traffic:(unsigned long long)traffic;
 @end

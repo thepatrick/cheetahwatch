@@ -36,6 +36,9 @@
     CFStringRef serviceId;
     SInt32 currentStatus;
 
+    NSTimer *pollingTimer;
+    NSNumber *prevRxBytes;
+    NSNumber *prevTxBytes;
 }
 
 // initializer

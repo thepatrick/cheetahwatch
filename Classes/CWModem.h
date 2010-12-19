@@ -22,6 +22,7 @@
  */
 
 #import <Cocoa/Cocoa.h>
+#import "CWModel.h"
 
 @class CWModel, CWUSBFinder;
 
@@ -35,10 +36,7 @@
     NSMutableArray *modemCommands;
     NSTimer *periodicTimer;
     NSTimer *commandTimeoutTimer;
-    
-    // date when last warning was shown
-    NSDate *lastWarningDate;
-    
+        
     // delegate
     id delegate;
 
@@ -49,6 +47,10 @@
 
 // methods
 - (void)sendApn;
+- (void)sendPin: (NSString*)pin;
+- (void)sendPuk:(NSString*)puk withNewPin:(NSString*)newPin;
+- (void)setModesPref: (CWModesPreference)newPref;
+- (void)setPinLock: (BOOL)enabled pin:(NSString*)pin;
 
 // accessors
 - (id)delegate;
@@ -58,5 +60,6 @@
 
 // delegate methods
 @interface NSObject (CWModemDelegateMethods)
-- (void)trafficLimitExceeded:(unsigned long long)limit traffic:(unsigned long long)traffic;
+- (void)needsPin:(NSString*)pinDescription;
+- (void)needsPuk;
 @end

@@ -385,7 +385,7 @@
 		<key>mnc</key>
 		<string>05</string>
 		<key>operator</key>
-		<string>MOBI'S (Mobilina Srpske)</string>
+		<string>MOBI&apos;S (Mobilina Srpske)</string>
 	</dict>
 	<key>21890</key>
 	<dict>
@@ -495,7 +495,7 @@
 		<key>mnc</key>
 		<string>10</string>
 		<key>operator</key>
-		<string>Omnitel Pronto Italia (OPI)</string>
+		<string>Vodafone IT</string>
 	</dict>
 	<key>22277</key>
 	<dict>
@@ -9229,7 +9229,7 @@
 		<key>mnc</key>
 		<string>00</string>
 		<key>operator</key>
-		<string>Reserved for AMPS MIN based IMSI's</string>
+		<string>Reserved for AMPS MIN based IMSI&apos;s</string>
 	</dict>
 	<key>53001</key>
 	<dict>
@@ -9674,7 +9674,7 @@
 	<key>61202</key>
 	<dict>
 		<key>country</key>
-		<string>Côte d'Ivoire</string>
+		<string>Côte d&apos;Ivoire</string>
 		<key>mcc</key>
 		<string>612</string>
 		<key>mnc</key>
@@ -9685,29 +9685,29 @@
 	<key>61203</key>
 	<dict>
 		<key>country</key>
-		<string>Côte d'Ivoire</string>
+		<string>Côte d&apos;Ivoire</string>
 		<key>mcc</key>
 		<string>612</string>
 		<key>mnc</key>
 		<string>03</string>
 		<key>operator</key>
-		<string>Orange Côte d'Ivoire</string>
+		<string>Orange Côte d&apos;Ivoire</string>
 	</dict>
 	<key>61204</key>
 	<dict>
 		<key>country</key>
-		<string>Côte d'Ivoire</string>
+		<string>Côte d&apos;Ivoire</string>
 		<key>mcc</key>
 		<string>612</string>
 		<key>mnc</key>
 		<string>04</string>
 		<key>operator</key>
-		<string>Comium Côte d'Ivoire</string>
+		<string>Comium Côte d&apos;Ivoire</string>
 	</dict>
 	<key>61205</key>
 	<dict>
 		<key>country</key>
-		<string>Côte d'Ivoire</string>
+		<string>Côte d&apos;Ivoire</string>
 		<key>mcc</key>
 		<string>612</string>
 		<key>mnc</key>
@@ -9718,24 +9718,24 @@
 	<key>61206</key>
 	<dict>
 		<key>country</key>
-		<string>Côte d'Ivoire</string>
+		<string>Côte d&apos;Ivoire</string>
 		<key>mcc</key>
 		<string>612</string>
 		<key>mnc</key>
 		<string>06</string>
 		<key>operator</key>
-		<string>Oricel Côte d'Ivoire</string>
+		<string>Oricel Côte d&apos;Ivoire</string>
 	</dict>
 	<key>61207</key>
 	<dict>
 		<key>country</key>
-		<string>Côte d'Ivoire</string>
+		<string>Côte d&apos;Ivoire</string>
 		<key>mcc</key>
 		<string>612</string>
 		<key>mnc</key>
 		<string>07</string>
 		<key>operator</key>
-		<string>Aircomm Côte d'Ivoire</string>
+		<string>Aircomm Côte d&apos;Ivoire</string>
 	</dict>
 	<key>61302</key>
 	<dict>

@@ -22,7 +22,6 @@
  */
 
 #import "CWModem.h"
-#import "CWModel.h"
 #import "CWNetworks.h"
 #import "CWUSBFinder.h"
 
@@ -36,7 +35,6 @@
 @interface CWModem (CWModemPrivateMethods)
 - (void)closeModem;
 @end
-
 
 @implementation CWModem
 
@@ -68,7 +66,6 @@
     [modemData release];
     [modemCommands release];
     [model release];
-    [lastWarningDate release];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [super dealloc];
 }
@@ -115,7 +112,7 @@
     // ignore first argument
     [scanner scanUpToString:@"," intoString:nil];
     [scanner scanString:@"," intoString:nil];
-    // read mode, and the folloing comma
+    // read mode, and the following comma
     if ([scanner scanInteger:&cmode]) {
         if ([scanner scanString:@"," intoString:nil]) {
             NSString *mccmnc;
@@ -160,7 +157,6 @@
         [scanner scanHexInt:&rxSpeed]        && [scanner scanString:@"," intoString:nil] &&
         [scanner scanHexLongLong:&txBytes]   && [scanner scanString:@"," intoString:nil] &&
         [scanner scanHexLongLong:&rxBytes]   && [scanner scanString:@"," intoString:nil]) {
-        CWPreferences *preferences = [model preferences];
         // have a valid traffic log line
         [model setDuration:seconds];
         [model setRxBytes:rxBytes];
@@ -168,52 +164,7 @@
         [model setRxSpeed:rxSpeed];
         [model setTxSpeed:txSpeed];
         // check for traffic limit violation
-        if ([preferences trafficWarning]) {
-#ifdef DEBUG
-            NSLog(@"CWModem: checking traffic limit");
-#endif
-            unsigned long long traffic;
-            unsigned long long limit;
-            switch ([preferences trafficWarningMode]) {
-                case CWTrafficWarningModeReceived:
-                    traffic = [model rxTotalBytes];
-                    break;
-                case CWTrafficWarningModeSent:
-                    traffic = [model txTotalBytes];
-                    break;
-                case CWTrafficWarningModeAll:
-                    traffic = [model rxTotalBytes] + [model txTotalBytes];
-                    break;
-            }
-            switch ([preferences trafficWarningUnit]) {
-                case CWTrafficWarningUnitMB:
-                    limit = [preferences trafficWarningAmount] * 1048576;
-                    break;
-                case CWTrafficWarningUnitGB:
-                    limit = [preferences trafficWarningAmount] * 1073741824;
-                    break;
-            }
-            // warn (if already warned before, wait until traffic exceeds limit by another 20%)
-            if (traffic >= limit) {
-#ifdef DEBUG
-                NSLog(@"CWModem: traffic limit exceeded (limit = %lld, actual = %lld)", limit, traffic);
-#endif
-                // check for last warning date - consider to enter exactly once when set to 'Never'
-                if (lastWarningDate == nil ||
-                    [preferences trafficWarningInterval] != 0 && [lastWarningDate timeIntervalSinceNow] < -[preferences trafficWarningInterval]) {
-#ifdef DEBUG
-                    NSLog(@"CWModem: issuing traffic warning to user");
-#endif
-                    // remember date of last warning
-                    [lastWarningDate release];
-                    lastWarningDate = [[NSDate date] retain];
-                    // call delegate to warn (application controller)
-                    if (delegate && [delegate respondsToSelector:@selector(trafficLimitExceeded:traffic:)]) {
-                        [delegate trafficLimitExceeded:limit traffic:traffic];
-                    }
-                }
-            }            
-        }
+        [model checkTrafficLimit];
     }
     // ignore rest of input
 }
@@ -248,6 +199,46 @@
     // could not parse or didn't find anything feasible, set mode to unknown
     [model setMode:-1];
 }
+
+// parse ZPAS (ZTE mode)
+- (void)processZPAS:(NSScanner *)scanner
+{
+    // example: +ZPAS: "GPRS","CS_PS"
+    NSString *mode_str;
+    if (![scanner scanString:@"\"" intoString:nil]) {
+        [model setMode:-1];
+        return;
+    }
+    if (![scanner scanUpToString:@"\"" intoString:&mode_str]) {
+        [model setMode:-1];
+        return;
+    }
+    
+    if ([mode_str isEqual:@"No Service"]) {
+        [model setMode:0];
+    } else if ([mode_str isEqual:@"Limited Service"]) {
+        [model setMode:-1];
+    } else if ([mode_str isEqual:@"GSM"]) {
+        [model setMode:1];
+    } else if ([mode_str isEqual:@"GPRS"]) {
+        [model setMode:2];
+    } else if ([mode_str isEqual:@"EDGE"]) {
+        [model setMode:3];
+    } else if ([mode_str isEqual:@"UMTS"]) {
+        [model setMode:4];
+    } else if ([mode_str isEqual:@"HSDPA"]) {
+        [model setMode:5];
+    } else if ([mode_str isEqual:@"HSUPA"]) {
+        [model setMode:6];
+    } else {
+        [model setMode:-1];
+    }
+    
+#ifdef DEBUG
+    NSLog(@"CWModem: ZPAS str: %@ ZPAS int: %d", mode_str, [model mode]);
+#endif
+}
+
 
 // parse a CIMI reply (rest of line is IMSI)
 - (void)processCIMI:(NSScanner *)scanner
@@ -286,6 +277,120 @@
     }
 }
 
+// parse a CGMR reply (rest of line is hardware version)
+- (void)processCGMR:(NSScanner *)scanner
+{
+	// example: ^HWVER:"CD96TCPU"
+    NSString *version;
+    // scan version string
+    if ([scanner scanUpToString:@"\n" intoString:&version]) {
+        [model setHwVersion:version];
+    }
+}
+
+// parse a CPIN reply (rest of line is pin state)
+- (void)processCPIN:(NSScanner *)scanner
+{
+    NSString *pinState;
+    if (![scanner scanUpToString:@"\n" intoString:&pinState])
+		return;
+	
+	if ([pinState isEqual:@"READY"]) {
+		return;
+    } else if ([pinState isEqual:@"SIM PIN"]) {
+		if (delegate && [delegate respondsToSelector:@selector(needsPin:)]) {
+			[delegate needsPin:pinState];
+		}
+    } else if ([pinState isEqual:@"SIM PUK"]) {
+		if (delegate && [delegate respondsToSelector:@selector(needsPuk)]) {
+            [delegate needsPuk];
+		}
+	} else {
+		if (delegate && [delegate respondsToSelector:@selector(needsPin:)]) {
+			[delegate needsPin:pinState];
+		}
+	}
+}
+
+
+// parse zte mode preference
+- (void)processZSNT:(NSScanner *)scanner
+{
+    /*
+     ZTE:
+     'GPRSONLY' : 'AT+ZSNT=1,0,0',
+     '3GONLY'   : 'AT+ZSNT=2,0,0',
+     'GPRSPREF' : 'AT+ZSNT=0,0,1',
+     '3GPREF'   : 'AT+ZSNT=0,0,2',
+     */
+    
+    NSString *order;
+    if (![scanner scanUpToString:@"\n" intoString:&order])
+        return;
+    
+    if ([order isEqualTo:@"1,0,0"]) {
+        [model setModesPreference:CWModeGPRSOnly];
+    } else if ([order isEqualTo:@"2,0,0"]) {
+        [model setModesPreference:CWMode3GOnly];
+    } else if ([order isEqualTo:@"0,0,1"]) {
+        [model setModesPreference:CWModeGPRSPreferred];
+    } else if ([order isEqualTo:@"0,0,2"]) {
+        [model setModesPreference:CWMode3GPreferred];
+    }
+
+}
+
+// parse Huawei mode preference
+- (void)processSYSCONFIG:(NSScanner *)scanner
+{
+    /*
+     Huawei:
+     'GPRSONLY' : 'AT^SYSCFG=13,1,3FFFFFFF,2,4',
+     '3GONLY'   : 'AT^SYSCFG=14,2,3FFFFFFF,2,4',
+     'GPRSPREF' : 'AT^SYSCFG=2,1,3FFFFFFF,2,4',
+     '3GPREF'   : 'AT^SYSCFG=2,2,3FFFFFFF,2,4',
+     */
+    
+    NSInteger firstNumber;
+    NSInteger secondNumber;
+
+    if (![scanner scanInteger:&firstNumber])
+        return;
+    if (![scanner scanString:@"," intoString:nil])
+        return;
+    if (![scanner scanInteger:&secondNumber])
+        return;
+    
+    if (firstNumber==13 && secondNumber==1) {
+        [model setModesPreference:CWModeGPRSOnly];
+    } else if (firstNumber==14 && secondNumber==2) {
+        [model setModesPreference:CWMode3GOnly];
+    } else if (firstNumber==2 && secondNumber==1) {
+        [model setModesPreference:CWModeGPRSPreferred];
+    } else if (firstNumber==2 && secondNumber==2) {
+        [model setModesPreference:CWMode3GPreferred];
+    }
+}
+
+// facility lock
+- (void)processCLCK:(NSScanner *)scanner
+{
+    NSString *issuedCommand = [modemCommands objectAtIndex:0];
+    NSInteger mode; // 0 unlock, 1 lock
+    if ([issuedCommand isEqual:@"AT+CLCK=\"SC\",2"]) {
+        // process pin lock status AT+CLCK="SC",2
+        // reply example: +CLCK: 0
+        if ([scanner scanInteger:&mode]) {
+            if (mode) {
+                [model setPinLock:YES];
+            } else {
+                [model setPinLock:NO];
+            }
+
+        }
+    }
+}
+
 // dequeue next command from list and send it to the modem, then start timeout timer
 - (void)dequeueNextModemCommand
 {
@@ -306,9 +411,32 @@
     }
 }
 
+// +CME ERROR
+- (void)processCMEERROR:(NSScanner *)scanner
+{
+    NSString *error;
+    if ([scanner scanUpToString:@"\n" intoString:&error]) {
+        if ([error isEqual:@"SIM busy"]) {
+#ifdef DEBUG
+            NSLog(@"CWModem: SIM busy ERROR");
+#endif
+            // invalidate timeout timer, we need some time...
+            [commandTimeoutTimer invalidate];
+            commandTimeoutTimer = nil;
+            
+            // SIM busy, sleep 1 second, then reissue command
+            sleep(1);
+            [self dequeueNextModemCommand];
+        }
+    }
+}
+
 // command timed out
 - (void)commandTimeout:(NSTimer *)aTimer
 {
+#ifdef DEBUG
+    NSLog(@"CWModem: commandTimeout: %@", [modemCommands objectAtIndex:0]);
+#endif
     commandTimeoutTimer = nil;
     // skip command that timed out and dequeue next one
     [modemCommands removeObjectAtIndex:0];
@@ -333,6 +461,8 @@
         [self processRSSI:scanner];
     } else if ([command isEqual:@"^MODE"]) {
         [self processMODE:scanner];
+    } else if ([command isEqual:@"+ZPAS"]) {
+        [self processZPAS:scanner];
     } else if ([command isEqual:@"+CIMI"]) {
         [self processCIMI:scanner];
     } else if ([command isEqual:@"+CGSN"]) {
@@ -341,6 +471,18 @@
         [self processCGMI:scanner];
     } else if ([command isEqual:@"+CGMM"]) {
         [self processCGMM:scanner];
+    } else if ([command isEqual:@"+CGMR"]) {
+        [self processCGMR:scanner];
+    } else if ([command isEqual:@"+CPIN"]) {
+        [self processCPIN:scanner];
+    } else if ([command isEqual:@"+ZSNT"]) {
+        [self processZSNT:scanner];
+    } else if ([command isEqual:@"^SYSCONFIG"]) {
+        [self processSYSCONFIG:scanner];
+    } else if ([command isEqual:@"+CLCK"]) {
+        [self processCLCK:scanner];
+    } else if ([command isEqual:@"+CME ERROR"]) {
+        [self processCMEERROR:scanner];
     } else {
         // unhandled command
 #ifdef DEBUG
@@ -348,7 +490,6 @@
 #endif
     }
 }
-
 
 // process a line received from the modem and call the processing method for the command, if appropriate
 - (void)processLine:(NSString *)line
@@ -358,8 +499,8 @@
 #ifdef DEBUG
     NSLog(@"CWModem: processing %@", line);
 #endif
-    // look for reply or OK
-    if ([line isEqual:@"OK"]) {
+    // look for reply or OK or ERROR
+    if ([line isEqual:@"OK"] || [line isEqual:@"ERROR"]) {
         // command terminated, send next in queue
         [modemCommands removeObjectAtIndex:0];
         [self dequeueNextModemCommand];
@@ -436,13 +577,46 @@
     [pool release];
 }
 
+- (void)setModesPref:(CWModesPreference)newPref
+{
+    if ([[model manufacturer] isEqualTo:@"Huawei"]) {
+        if (newPref==CWModeGPRSOnly) {
+            [self sendModemCommand:@"AT^SYSCFG=13,1,3FFFFFFF,2,4"];
+        } else if (newPref==CWMode3GOnly) {
+            [self sendModemCommand:@"AT^SYSCFG=14,2,3FFFFFFF,2,4"];
+        } else if (newPref==CWModeGPRSPreferred) {
+            [self sendModemCommand:@"AT^SYSCFG=2,1,3FFFFFFF,2,4"];
+        } else if (newPref==CWMode3GPreferred) {
+            [self sendModemCommand:@"AT^SYSCFG=2,2,3FFFFFFF,2,4"];
+        }
+    } else if ([[model manufacturer] isEqualTo:@"Zte Incorporated"]) {
+        if (newPref==CWModeGPRSOnly) {
+            [self sendModemCommand:@"AT+ZSNT=1,0,0"];
+        } else if (newPref==CWMode3GOnly) {
+            [self sendModemCommand:@"AT+ZSNT=2,0,0"];
+        } else if (newPref==CWModeGPRSPreferred) {
+            [self sendModemCommand:@"AT+ZSNT=0,0,1"];
+        } else if (newPref==CWMode3GPreferred) {
+            [self sendModemCommand:@"AT+ZSNT=0,0,2"];
+        }
+    }
+}
+
 // periodic timer to query some information
 - (void)periodicCommandTimer:(NSTimer *)aTimer
 {
-    [self sendModemCommand:@"AT+CSQ"];
-    [self sendModemCommand:@"AT+CGDCONT?"];
-    [self sendModemCommand:@"AT+COPS?"];
-    [self sendModemCommand:@"AT+CPAS"];
+    [self sendModemCommand:@"AT+CSQ"];             // query signal strength
+    [self sendModemCommand:@"AT+CGDCONT?"];        // query APN
+    [self sendModemCommand:@"AT+COPS?"];           // query carrier
+    [self sendModemCommand:@"AT+CPAS"];            // query module status
+	[self sendModemCommand:@"AT+CIMI"];            // query IMSI
+	if ([[model manufacturer] isEqual:@"Zte Incorporated"]) {
+		[self sendModemCommand:@"AT+ZPAS?"];       // query mode (ZTE)
+        [self sendModemCommand:@"AT+ZSNT?"];       // query mode preferences (ZTE)
+	} else if ([[model manufacturer] isEqual:@"Huawei"]) {
+        [self sendModemCommand:@"AT^SYSCONFIG?"];  // query mode preferences (Huawei)
+    }
+    [self sendModemCommand:@"AT+CLCK=\"SC\",2"];   // query pin lock status
 }
 
 // open modem, allocata a file handle and send initial data
@@ -464,18 +638,22 @@
         [modemHandle waitForDataInBackgroundAndNotify];
 
         // send commands to query some basic information
-        [self sendModemCommand:@"AT+CSQ"];        // query signal strength
-        [self sendModemCommand:@"AT+CGSN"];       // query IMEI
-        [self sendModemCommand:@"AT^HWVER"];      // query hardware version
-        [self sendModemCommand:@"AT+COPS?"];      // query carrier
-        [self sendModemCommand:@"AT+CIMI"];       // query IMSI
         [self sendModemCommand:@"AT+CGMI"];       // query manufacterer
         [self sendModemCommand:@"AT+CGMM"];       // query model
+        [self sendModemCommand:@"AT+CGSN"];       // query IMEI
+		if ([[model manufacturer] isEqual:@"Huawei"]) {
+			[self sendModemCommand:@"AT^HWVER"];  // query hardware version (Huawei)
+		} else {
+			[self sendModemCommand:@"AT+CGMR"];   // query hardware version (generic)
+		}
+		[self sendModemCommand:@"AT+CPIN?"];      // query pin status
         [self sendApn];                           // send APN to modem if set
 
         // setup a timer to periodically query some information
         periodicTimer = [NSTimer scheduledTimerWithTimeInterval:CWPeriodicCommandInterval target:self selector:@selector(periodicCommandTimer:)
                                  userInfo:nil repeats:YES];
+        // call timer action immediately
+        [self periodicCommandTimer:periodicTimer];
         // modem is available now
         [model setModemAvailable:YES];
     }
@@ -507,6 +685,30 @@
         [self sendModemCommand:[NSString stringWithFormat:@"AT+CGDCONT=1,\"IP\",\"%@\",\"\",0,0", presetApn]];
         // query new APN
         [self sendModemCommand:@"AT+CGDCONT?"];
+    }
+}
+
+- (void)sendPin: (NSString*) pin
+{
+    [self sendModemCommand:[NSString stringWithFormat:@"AT+CPIN=%@", pin]];
+	[self sendModemCommand:@"AT+CPIN?"];
+}
+
+- (void)sendPuk:(NSString*)puk withNewPin:(NSString*)newPin
+{
+    [self sendModemCommand:[NSString stringWithFormat:@"AT+CPIN=%@,%@", puk, newPin]];
+	[self sendModemCommand:@"AT+CPIN?"];
+}
+
+- (void)setPinLock:(BOOL)enabled pin:(NSString*)pin
+{
+#ifdef DEBUG
+    NSLog(@"CWModem: setPinLock: %@ pin: %@", enabled?@"YES":@"NO", pin);
+#endif
+    if (enabled) {
+        [self sendModemCommand:[NSString stringWithFormat:@"AT+CLCK=\"SC\",1,\"%@\"", pin]];
+    } else {
+        [self sendModemCommand:[NSString stringWithFormat:@"AT+CLCK=\"SC\",0,\"%@\"", pin]];
     }
 }
 

@@ -27,9 +27,12 @@
 // key for model in user defaults
 #define CWModelKey      @"CWModel"
 
-
 @implementation CWModel
 
+/*+ (NSSet *)keyPathsForValuesAffectingValueForKey:(NSString *)key
+{
+    
+}*/
 
 + (void)initialize
 {
@@ -38,9 +41,11 @@
         // make derived attributes binding capable
         [self setKeys:[NSArray arrayWithObjects:@"mode", @"signalStrength", @"connected", @"modemAvailable", @"duration", nil]
               triggerChangeNotificationsForDependentKey:@"modelForIcon"];
+        
         [self setKeys:[NSArray arrayWithObjects:@"connectionState", @"duration", nil] triggerChangeNotificationsForDependentKey:@"modelForConnectionState"];
         [self setKeys:[NSArray arrayWithObject:@"connectionState"] triggerChangeNotificationsForDependentKey:@"connected"];
         [self setKeys:[NSArray arrayWithObject:@"connectionState"] triggerChangeNotificationsForDependentKey:@"disconnected"];
+        
         beenHere = YES;
     }
 }
@@ -77,6 +82,7 @@
     [connectionRecords release];
     [preferences release];
     [lastPurgeDate release];
+    [lastTrafficWarningDate release];
     [super dealloc];
 }
 
@@ -113,6 +119,8 @@
     [self setHwVersion:nil];
     [self setManufacturer:nil];
     [self setModel:nil];
+    [self setModesPreference:0];
+    [self setPinLock:NO];
 }
 
 // write model to disk
@@ -552,5 +560,90 @@
 	[preferences release];
 	preferences = newPreferences;
 }
+
+- (CWModesPreference)modesPreference
+{
+    return modesPreference;
+}
+
+- (void)setModesPreference:(CWModesPreference)newPreference
+{
+    modesPreference = newPreference;
+}
+
+- (BOOL)pinLock
+{return pinLock;}
+- (void)setPinLock:(BOOL)status
+{
+#ifdef DEBUG
+    NSLog(@"CWModel: setting pin lock: %@", status?@"YES":@"NO");
+#endif
+    pinLock = status;
+}
+
+- (void)checkTrafficLimit
+{
+    if ([preferences trafficWarning]) {
+#ifdef DEBUG
+        NSLog(@"CWModel: checking traffic limit");
+#endif
+        unsigned long long traffic;
+        unsigned long long limit;
+        switch ([preferences trafficWarningMode]) {
+            case CWTrafficWarningModeReceived:
+                traffic = [self rxTotalBytes];
+                break;
+            case CWTrafficWarningModeSent:
+                traffic = [self txTotalBytes];
+                break;
+            case CWTrafficWarningModeAll:
+                traffic = [self rxTotalBytes] + [self txTotalBytes];
+                break;
+        }
+        switch ([preferences trafficWarningUnit]) {
+            case CWTrafficWarningUnitMB:
+                limit = [preferences trafficWarningAmount] * 1048576;
+                break;
+            case CWTrafficWarningUnitGB:
+                limit = [preferences trafficWarningAmount] * 1073741824;
+                break;
+        }
+        // warn (if already warned before, wait until traffic exceeds limit by another 20%)
+        if (traffic >= limit) {
+#ifdef DEBUG
+            NSLog(@"CWModel: traffic limit exceeded (limit = %lld, actual = %lld)", limit, traffic);
+#endif
+            // check for last warning date - consider to enter exactly once when set to 'Never'
+            if (lastTrafficWarningDate == nil ||
+                [preferences trafficWarningInterval] != 0 && [lastTrafficWarningDate timeIntervalSinceNow] < -[preferences trafficWarningInterval]) {
+#ifdef DEBUG
+                NSLog(@"CWModel: issuing traffic warning to user");
+#endif
+                // remember date of last warning
+                [lastTrafficWarningDate release];
+                lastTrafficWarningDate = [[NSDate date] retain];
+                // call delegate to warn (application controller)
+                if (delegate && [delegate respondsToSelector:@selector(trafficLimitExceeded:traffic:)]) {
+                    [delegate trafficLimitExceeded:limit traffic:traffic];
+                }
+            }
+        }            
+    }
+}
+
+- (id)delegate
+{
+	return delegate;
+}
+
+- (void)setDelegate:(id)newDelegate
+{
+	delegate = newDelegate;
+}
+
+/*- (void) setValue: (id)anObject forUndefinedKey: (NSString*)aKey
+{
+    return;
+}*/
 
 @end

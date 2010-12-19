@@ -132,7 +132,7 @@
 		CDA3A2B011656F91006DD0C0 /* CWUsagePrefsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWUsagePrefsController.h; sourceTree = "<group>"; };
 		CDA3A2B111656F91006DD0C0 /* CWUsagePrefsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CWUsagePrefsController.m; sourceTree = "<group>"; };
 		CDA4AEB50C625BAA00E71C0C /* CWApplication.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CWApplication.h; sourceTree = "<group>"; };
-		CDA4AEB60C625BAA00E71C0C /* CWApplication.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = CWApplication.m; sourceTree = "<group>"; };
+		CDA4AEB60C625BAA00E71C0C /* CWApplication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CWApplication.m; sourceTree = "<group>"; };
 		CDA4B1F90C62947300E71C0C /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
 		CDAA71750DCFAE4A00C947E0 /* CWUSBFinder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWUSBFinder.h; sourceTree = "<group>"; };
 		CDAA71760DCFAE4A00C947E0 /* CWUSBFinder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CWUSBFinder.m; sourceTree = "<group>"; };
@@ -376,7 +376,14 @@
 			isa = PBXProject;
 			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "CheetahWatch" */;
 			compatibilityVersion = "Xcode 3.0";
+			developmentRegion = English;
 			hasScannedForEncodings = 1;
+			knownRegions = (
+				English,
+				Japanese,
+				French,
+				German,
+			);
 			mainGroup = 29B97314FDCFA39411CA2CEA /* CheetahWatch */;
 			projectDirPath = "";
 			projectRoot = "";

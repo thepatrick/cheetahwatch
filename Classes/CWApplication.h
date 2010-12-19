@@ -40,6 +40,13 @@
     IBOutlet NSWindow *firstRunWindow;
     IBOutlet NSWindow *apnWindow;
     IBOutlet NSTextField *apnField;
+	IBOutlet NSWindow *pinWindow;
+    NSString *pinRequestDesc;
+    IBOutlet NSSecureTextField *pinField;
+    IBOutlet NSWindow *pukWindow;
+    IBOutlet NSSecureTextField *pukField;
+    IBOutlet NSSecureTextField *newPinField;
+    IBOutlet NSMenu *modesPrefMenu;
 
 }
 
@@ -48,6 +55,8 @@
 - (IBAction)showAboutPanelAction:(id)sender;
 - (IBAction)setApnMenuAction:(id)sender;
 - (IBAction)clearHistoryMenuAction:(id)sender;
+- (IBAction)setModesPref:(id)sender;
+- (IBAction)setPinLock:(id)sender;
 
 // accessors
 - (CWModel *)model;

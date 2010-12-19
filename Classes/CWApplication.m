@@ -59,6 +59,7 @@
     [dialer release];
     [model release];
     [statusItem release];
+    [pinRequestDesc release];
     [super dealloc];
 }
 
@@ -102,11 +103,12 @@
 #endif
     // load model
     [self setModel:[CWModel persistentModel]];
+    [model setDelegate:self];
 
     // allocate a modem object handling all input/output - use setter to notify bindings
-     [self setModem:[[[CWModem alloc] initWithModel:model] autorelease]];
-     [modem setDelegate:self];
-
+    [self setModem:[[[CWModem alloc] initWithModel:model] autorelease]];
+    [modem setDelegate:self];
+    
     // allocate a dialer
     [self setDialer:[[[CWDialer alloc] initWithModel:model] autorelease]];
 
@@ -120,20 +122,40 @@
 
     // manually set up a KVO since the status item does not know anything about bindings (yet)
     [self addObserver:self forKeyPath:@"model.modelForIcon" options:NSKeyValueObservingOptionNew context:NULL];
+    
+    // KVO for mode preference menu items
+    [self addObserver:self forKeyPath:@"model.modesPreference" options:NSKeyValueObservingOptionNew context:NULL];
 
     // show welcome window on first run
     [self showFirstRun];
 
     // run cleanup once, then let the timer run it once an hour
     [self cleanupTimer:nil];
+    
 }
 
 // update status icon - called by binding observer
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
-    // still uses a value transformer for this - maybe one day status items know about bindings and we can remove this code
-    CWIconValueTransformer *valueTransformer = [CWIconValueTransformer valueTransformer];
-    [statusItem setImage:[valueTransformer transformedValue:model]];
+    if ([keyPath isEqual:@"model.modelForIcon"]) {
+        // still uses a value transformer for this - maybe one day status items know about bindings and we can remove this code
+        CWIconValueTransformer *valueTransformer = [CWIconValueTransformer valueTransformer];
+        [statusItem setImage:[valueTransformer transformedValue:model]];
+    } else if ([keyPath isEqual:@"model.modesPreference"]) {
+        CWModesPreference modesPreference = [model modesPreference];
+        if ([[modesPrefMenu itemWithTag:modesPreference] state] != NSOnState) {
+            // need to refresh menu items enable state
+            int ic;
+            for(ic = 0; ic < [modesPrefMenu numberOfItems]; ic++) {
+                NSMenuItem *menuItem = [modesPrefMenu itemAtIndex:ic];
+                if ([menuItem tag] == modesPreference) {
+                    [menuItem setState:NSOnState];
+                } else {
+                    [menuItem setState:NSOffState];
+                }
+            }
+        }
+    }
 }
 
 // IB Actions
@@ -164,6 +186,11 @@
 	[NSApp activateIgnoringOtherApps:YES];
     [NSApp beginSheet:apnWindow modalForWindow:nil modalDelegate:self
            didEndSelector:@selector(apnSheetDidEnd:returnCode:context:) contextInfo:nil];
+}
+
+- (IBAction)setModesPref:(id)sender
+{
+    [modem setModesPref:[sender tag]];
 }
 
 // APN setter dialog ended
@@ -199,7 +226,7 @@
     }
 }
 
-// CWModem delegates
+// CWModel delegates
 - (void)trafficLimitExceeded:(unsigned long long)limit traffic:(unsigned long long)traffic
 {
     // only display a dialog unless another one is still open
@@ -215,6 +242,77 @@
 - (void)trafficWarningSheetDidEnd:(NSWindow *)sheet returnCode:(NSInteger)returnCode context:(void *)context
 {
     trafficWarningDialogOpen = NO;
+}
+
+- (void)setPinRequestDesc:(NSString*)newDesc
+{
+    [pinRequestDesc release];
+    NSMutableString *desc = [[NSMutableString alloc] initWithString:newDesc];
+    [desc appendString:@":"];
+    pinRequestDesc = desc;
+}
+- (NSString*)pinRequestDesc
+{
+    return pinRequestDesc;
+}
+
+// CWModem delegates
+- (void)needsPin:(NSString*)pinDescription
+{
+    [self setPinRequestDesc:pinDescription];
+    [pinField setStringValue:@""];
+    [pinWindow center];
+	[NSApp activateIgnoringOtherApps:YES];
+    [NSApp beginSheet:pinWindow modalForWindow:nil modalDelegate:self
+	   didEndSelector:@selector(pinSheetDidEnd:returnCode:context:) contextInfo:nil];
+}
+
+- (void)needsPuk
+{
+    [pukField setStringValue:@""];
+    [newPinField setStringValue:@""];
+    [pukWindow center];
+	[NSApp activateIgnoringOtherApps:YES];
+    [NSApp beginSheet:pukWindow modalForWindow:nil modalDelegate:self
+	   didEndSelector:@selector(pukSheetDidEnd:returnCode:context:) contextInfo:nil];
+}
+
+
+// PIN sheet ended
+- (void)pinSheetDidEnd:(NSWindow *)sheet returnCode:(NSInteger)returnCode context:(void *)context
+{
+    if (returnCode == NSOKButton) {
+        [modem sendPin:[pinField stringValue]];
+    }
+}
+
+// PUK sheet ended
+- (void)pukSheetDidEnd:(NSWindow *)sheet returnCode:(NSInteger)returnCode context:(void *)context
+{
+    if (returnCode == NSOKButton) {
+        [modem sendPuk:[pukField stringValue] withNewPin:[newPinField stringValue]];
+    }
+}
+
+- (IBAction)setPinLock:(id)sender
+{
+    [self setPinRequestDesc:@"SIM PIN"];
+    [pinField setStringValue:@""];
+    [pinWindow center];
+	[NSApp activateIgnoringOtherApps:YES];
+    [NSApp beginSheet:pinWindow modalForWindow:nil modalDelegate:self
+	   didEndSelector:@selector(pinLockSheetDidEnd:returnCode:context:) contextInfo:sender];
+}
+
+- (void)pinLockSheetDidEnd:(NSWindow *)sheet returnCode:(NSInteger)returnCode context:(void *)context
+{
+    if (returnCode == NSOKButton) {
+        if ([(NSMenuItem*)context tag]==1) {
+            [modem setPinLock:YES pin:[pinField stringValue]];
+        } else if ([(NSMenuItem*)context tag]==0) {
+            [modem setPinLock:NO pin:[pinField stringValue]];
+        }
+    }
 }
 
 // NSApplication delegates
