@@ -2,10 +2,10 @@
 <archive type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="7.10">
 	<data>
 		<int key="IBDocument.SystemTarget">1050</int>
-		<string key="IBDocument.SystemVersion">10H574</string>
-		<string key="IBDocument.InterfaceBuilderVersion">804</string>
+		<string key="IBDocument.SystemVersion">10J567</string>
+		<string key="IBDocument.InterfaceBuilderVersion">823</string>
 		<string key="IBDocument.AppKitVersion">1038.35</string>
-		<string key="IBDocument.HIToolboxVersion">461.00</string>
+		<string key="IBDocument.HIToolboxVersion">462.00</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginVersions">
 			<bool key="EncodedWithXMLCoder">YES</bool>
 			<object class="NSArray" key="dict.sortedKeys">
@@ -15,24 +15,24 @@
 			</object>
 			<object class="NSMutableArray" key="dict.values">
 				<bool key="EncodedWithXMLCoder">YES</bool>
-				<string>804</string>
-				<string>804</string>
+				<string>823</string>
+				<string>823</string>
 			</object>
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="2527"/>
-			<integer value="1995"/>
 			<integer value="2298"/>
 			<integer value="395"/>
 			<integer value="2043"/>
-			<integer value="2470"/>
-			<integer value="379"/>
+			<integer value="356"/>
 			<integer value="433"/>
-			<integer value="2486"/>
-			<integer value="2"/>
 			<integer value="1951"/>
+			<integer value="379"/>
+			<integer value="1995"/>
 			<integer value="338"/>
+			<integer value="2470"/>
+			<integer value="2527"/>
+			<integer value="2"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -91,12 +91,8 @@
 					<string>preferences.resetDayPeriod</string>
 					<string>preferences.resetWeekPeriod</string>
 					<string>preferences.resetMonthPeriod</string>
-					<object class="NSMutableString">
-						<characters key="NS.bytes">CWAutoReset</characters>
-					</object>
-					<object class="NSMutableString">
-						<characters key="NS.bytes">CWAutoResetDailyDays</characters>
-					</object>
+					<string>CWAutoReset</string>
+					<string>CWAutoResetDailyDays</string>
 					<string>preferences.dayPeriod</string>
 					<string>preferences.weekPeriod</string>
 					<string>preferences.monthPeriod</string>
@@ -104,14 +100,10 @@
 					<string>preferences.dayOfMonth</string>
 					<string>preferences.dayOfWeekIndex</string>
 					<string>preferences.dayOfMonthIndex</string>
-					<object class="NSMutableString">
-						<characters key="NS.bytes">CWActivateUsageWarning</characters>
-					</object>
+					<string>CWActivateUsageWarning</string>
 					<string>preferences.trafficWarning</string>
 					<string>preferences.trafficUnit</string>
-					<object class="NSMutableString">
-						<characters key="NS.bytes">CWActivateUsageWarningAmount</characters>
-					</object>
+					<string>CWActivateUsageWarningAmount</string>
 					<string>preferences.trafficAmount</string>
 					<string>preferences.resetMode</string>
 					<string>preferences.trafficWarningMode</string>
@@ -128,6 +120,7 @@
 					<string>isModes3GOnly</string>
 					<string>isModesGPRSOnly</string>
 					<string>pinLock</string>
+					<string>alwaysDisabled</string>
 				</object>
 				<string key="NSObjectClassName">NSModemInfo</string>
 				<bool key="NSEditable">YES</bool>
@@ -312,6 +305,7 @@
 									<string key="NSTitle">3G Preferred</string>
 									<string key="NSKeyEquiv"/>
 									<int key="NSMnemonicLoc">2147483647</int>
+									<int key="NSState">1</int>
 									<reference key="NSOnImage" ref="953961945"/>
 									<reference key="NSMixedImage" ref="192033426"/>
 									<int key="NSTag">1</int>
@@ -1199,7 +1193,7 @@
 																	<integer value="1"/>
 																</object>
 															</object>
-															<string key="NS.format">dd/MMM/yyyy HH.mm</string>
+															<string key="NS.format">dd/MM/yyyy h:mm a</string>
 															<bool key="NS.natural">NO</bool>
 														</object>
 														<reference key="NSControlView" ref="552769342"/>
@@ -3690,22 +3684,6 @@
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
 						<string key="label">enabled: selection.serviceAvailable</string>
-						<reference key="source" ref="628617923"/>
-						<reference key="destination" ref="687365369"/>
-						<object class="NSNibBindingConnector" key="connector">
-							<reference key="NSSource" ref="628617923"/>
-							<reference key="NSDestination" ref="687365369"/>
-							<string key="NSLabel">enabled: selection.serviceAvailable</string>
-							<string key="NSBinding">enabled</string>
-							<string key="NSKeyPath">selection.serviceAvailable</string>
-							<int key="NSNibBindingConnectorVersion">2</int>
-						</object>
-					</object>
-					<int key="connectionID">1927</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBBindingConnection" key="connection">
-						<string key="label">enabled: selection.serviceAvailable</string>
 						<reference key="source" ref="63270334"/>
 						<reference key="destination" ref="687365369"/>
 						<object class="NSNibBindingConnector" key="connector">
@@ -4913,42 +4891,6 @@
 					<int key="connectionID">2516</int>
 				</object>
 				<object class="IBConnectionRecord">
-					<object class="IBBindingConnection" key="connection">
-						<string key="label">hidden: selection.pinLock</string>
-						<reference key="source" ref="176737907"/>
-						<reference key="destination" ref="687365369"/>
-						<object class="NSNibBindingConnector" key="connector">
-							<reference key="NSSource" ref="176737907"/>
-							<reference key="NSDestination" ref="687365369"/>
-							<string key="NSLabel">hidden: selection.pinLock</string>
-							<string key="NSBinding">hidden</string>
-							<string key="NSKeyPath">selection.pinLock</string>
-							<int key="NSNibBindingConnectorVersion">2</int>
-						</object>
-					</object>
-					<int key="connectionID">2521</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBBindingConnection" key="connection">
-						<string key="label">hidden: selection.pinLock</string>
-						<reference key="source" ref="799075165"/>
-						<reference key="destination" ref="687365369"/>
-						<object class="NSNibBindingConnector" key="connector">
-							<reference key="NSSource" ref="799075165"/>
-							<reference key="NSDestination" ref="687365369"/>
-							<string key="NSLabel">hidden: selection.pinLock</string>
-							<string key="NSBinding">hidden</string>
-							<string key="NSKeyPath">selection.pinLock</string>
-							<object class="NSDictionary" key="NSOptions">
-								<string key="NS.key.0">NSValueTransformerName</string>
-								<string key="NS.object.0">NSNegateBoolean</string>
-							</object>
-							<int key="NSNibBindingConnectorVersion">2</int>
-						</object>
-					</object>
-					<int key="connectionID">2523</int>
-				</object>
-				<object class="IBConnectionRecord">
 					<object class="IBActionConnection" key="connection">
 						<string key="label">setPinLock:</string>
 						<reference key="source" ref="17704324"/>
@@ -5011,6 +4953,270 @@
 						<reference key="destination" ref="840130422"/>
 					</object>
 					<int key="connectionID">2549</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">enabled: selection.alwaysDisabled</string>
+						<reference key="source" ref="138921"/>
+						<reference key="destination" ref="687365369"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="138921"/>
+							<reference key="NSDestination" ref="687365369"/>
+							<string key="NSLabel">enabled: selection.alwaysDisabled</string>
+							<string key="NSBinding">enabled</string>
+							<string key="NSKeyPath">selection.alwaysDisabled</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">2551</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">enabled: selection.alwaysDisabled</string>
+						<reference key="source" ref="447400060"/>
+						<reference key="destination" ref="687365369"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="447400060"/>
+							<reference key="NSDestination" ref="687365369"/>
+							<string key="NSLabel">enabled: selection.alwaysDisabled</string>
+							<string key="NSBinding">enabled</string>
+							<string key="NSKeyPath">selection.alwaysDisabled</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">2552</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">enabled: selection.modemAvailable</string>
+						<reference key="source" ref="441584687"/>
+						<reference key="destination" ref="687365369"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="441584687"/>
+							<reference key="NSDestination" ref="687365369"/>
+							<string key="NSLabel">enabled: selection.modemAvailable</string>
+							<string key="NSBinding">enabled</string>
+							<string key="NSKeyPath">selection.modemAvailable</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">2553</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">enabled: selection.modemAvailable</string>
+						<reference key="source" ref="403410636"/>
+						<reference key="destination" ref="687365369"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="403410636"/>
+							<reference key="NSDestination" ref="687365369"/>
+							<string key="NSLabel">enabled: selection.modemAvailable</string>
+							<string key="NSBinding">enabled</string>
+							<string key="NSKeyPath">selection.modemAvailable</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">2554</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">enabled: selection.modemAvailable</string>
+						<reference key="source" ref="176737907"/>
+						<reference key="destination" ref="687365369"/>
+						<object class="NSNibBindingConnector" key="connector" id="197855701">
+							<reference key="NSSource" ref="176737907"/>
+							<reference key="NSDestination" ref="687365369"/>
+							<string key="NSLabel">enabled: selection.modemAvailable</string>
+							<string key="NSBinding">enabled</string>
+							<string key="NSKeyPath">selection.modemAvailable</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">2555</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">hidden: selection.pinLock</string>
+						<reference key="source" ref="176737907"/>
+						<reference key="destination" ref="687365369"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="176737907"/>
+							<reference key="NSDestination" ref="687365369"/>
+							<string key="NSLabel">hidden: selection.pinLock</string>
+							<string key="NSBinding">hidden</string>
+							<string key="NSKeyPath">selection.pinLock</string>
+							<reference key="NSPreviousConnector" ref="197855701"/>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">2556</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">enabled: selection.modemAvailable</string>
+						<reference key="source" ref="799075165"/>
+						<reference key="destination" ref="687365369"/>
+						<object class="NSNibBindingConnector" key="connector" id="764654600">
+							<reference key="NSSource" ref="799075165"/>
+							<reference key="NSDestination" ref="687365369"/>
+							<string key="NSLabel">enabled: selection.modemAvailable</string>
+							<string key="NSBinding">enabled</string>
+							<string key="NSKeyPath">selection.modemAvailable</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">2557</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">hidden: selection.pinLock</string>
+						<reference key="source" ref="799075165"/>
+						<reference key="destination" ref="687365369"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="799075165"/>
+							<reference key="NSDestination" ref="687365369"/>
+							<string key="NSLabel">hidden: selection.pinLock</string>
+							<string key="NSBinding">hidden</string>
+							<string key="NSKeyPath">selection.pinLock</string>
+							<object class="NSDictionary" key="NSOptions">
+								<string key="NS.key.0">NSValueTransformerName</string>
+								<string key="NS.object.0">NSNegateBoolean</string>
+							</object>
+							<reference key="NSPreviousConnector" ref="764654600"/>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">2558</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">enabled: selection.modemAvailable</string>
+						<reference key="source" ref="703315586"/>
+						<reference key="destination" ref="687365369"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="703315586"/>
+							<reference key="NSDestination" ref="687365369"/>
+							<string key="NSLabel">enabled: selection.modemAvailable</string>
+							<string key="NSBinding">enabled</string>
+							<string key="NSKeyPath">selection.modemAvailable</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">2559</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">enabled: selection.modemAvailable</string>
+						<reference key="source" ref="1058611317"/>
+						<reference key="destination" ref="687365369"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="1058611317"/>
+							<reference key="NSDestination" ref="687365369"/>
+							<string key="NSLabel">enabled: selection.modemAvailable</string>
+							<string key="NSBinding">enabled</string>
+							<string key="NSKeyPath">selection.modemAvailable</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">2560</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">enabled: selection.modemAvailable</string>
+						<reference key="source" ref="514936866"/>
+						<reference key="destination" ref="687365369"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="514936866"/>
+							<reference key="NSDestination" ref="687365369"/>
+							<string key="NSLabel">enabled: selection.modemAvailable</string>
+							<string key="NSBinding">enabled</string>
+							<string key="NSKeyPath">selection.modemAvailable</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">2561</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">enabled: selection.modemAvailable</string>
+						<reference key="source" ref="671311854"/>
+						<reference key="destination" ref="687365369"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="671311854"/>
+							<reference key="NSDestination" ref="687365369"/>
+							<string key="NSLabel">enabled: selection.modemAvailable</string>
+							<string key="NSBinding">enabled</string>
+							<string key="NSKeyPath">selection.modemAvailable</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">2562</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">enabled: selection.modemAvailable</string>
+						<reference key="source" ref="279642115"/>
+						<reference key="destination" ref="687365369"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="279642115"/>
+							<reference key="NSDestination" ref="687365369"/>
+							<string key="NSLabel">enabled: selection.modemAvailable</string>
+							<string key="NSBinding">enabled</string>
+							<string key="NSKeyPath">selection.modemAvailable</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">2563</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">enabled: selection.modemAvailable</string>
+						<reference key="source" ref="628617923"/>
+						<reference key="destination" ref="687365369"/>
+						<object class="NSNibBindingConnector" key="connector" id="595771240">
+							<reference key="NSSource" ref="628617923"/>
+							<reference key="NSDestination" ref="687365369"/>
+							<string key="NSLabel">enabled: selection.modemAvailable</string>
+							<string key="NSBinding">enabled</string>
+							<string key="NSKeyPath">selection.modemAvailable</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">2566</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">enabled2: selection.serviceAvailable</string>
+						<reference key="source" ref="628617923"/>
+						<reference key="destination" ref="687365369"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="628617923"/>
+							<reference key="NSDestination" ref="687365369"/>
+							<string key="NSLabel">enabled2: selection.serviceAvailable</string>
+							<string key="NSBinding">enabled2</string>
+							<string key="NSKeyPath">selection.serviceAvailable</string>
+							<object class="NSDictionary" key="NSOptions">
+								<bool key="EncodedWithXMLCoder">YES</bool>
+								<object class="NSArray" key="dict.sortedKeys">
+									<bool key="EncodedWithXMLCoder">YES</bool>
+									<string>NSMultipleValuesPlaceholder</string>
+									<string>NSNoSelectionPlaceholder</string>
+									<string>NSNotApplicablePlaceholder</string>
+									<string>NSNullPlaceholder</string>
+								</object>
+								<object class="NSMutableArray" key="dict.values">
+									<bool key="EncodedWithXMLCoder">YES</bool>
+									<integer value="-1"/>
+									<integer value="-1"/>
+									<integer value="-1"/>
+									<integer value="-1"/>
+								</object>
+							</object>
+							<reference key="NSPreviousConnector" ref="595771240"/>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">2567</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -7789,7 +7995,7 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{256, 438}, {153, 83}}</string>
+					<string>{{721, 481}, {153, 83}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -7856,7 +8062,7 @@
 					<boolean value="YES"/>
 					<string>com.apple.WebKitIBPlugin</string>
 					<boolean value="YES"/>
-					<string>{{57, 388}, {199, 293}}</string>
+					<string>{{522, 431}, {199, 293}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -7922,9 +8128,9 @@
 					<boolean value="YES"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
-					<string>{{280, 436}, {375, 309}}</string>
+					<string>{{280, 415}, {375, 309}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{280, 436}, {375, 309}}</string>
+					<string>{{280, 415}, {375, 309}}</string>
 					<boolean value="YES"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
@@ -7970,7 +8176,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">2549</int>
+			<int key="maxID">2567</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">

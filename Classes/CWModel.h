@@ -59,6 +59,7 @@ typedef enum {
     NSString *model;
     CWModesPreference modesPreference;
     BOOL pinLock;
+	BOOL alwaysDisabled;
 
     CWConnectionRecord *currentRecord;
 
@@ -159,6 +160,8 @@ typedef enum {
 
 - (BOOL)pinLock;
 - (void)setPinLock:(BOOL)status;
+
+- (BOOL)alwaysDisabled;
 
 - (void)checkTrafficLimit;
 

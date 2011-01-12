@@ -17,11 +17,11 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.4b4</string>
+	<string>1.4</string>
 	<key>CFBundleSignature</key>
 	<string>PQG0</string>
 	<key>CFBundleVersion</key>
-	<string>66</string>
+	<string>70</string>
 	<key>LSUIElement</key>
 	<true/>
 	<key>NSMainNibFile</key>

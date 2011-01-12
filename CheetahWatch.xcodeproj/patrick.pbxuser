@@ -9,7 +9,7 @@
 		};
 	};
 	29B97313FDCFA39411CA2CEA /* Project object */ = {
-		activeBuildConfigurationName = Debug;
+		activeBuildConfigurationName = Release;
 		activeExecutable = CD1452F210F1CCA1006BC378 /* CheetahWatch */;
 		activeTarget = 8D1107260486CEB800E47090 /* CheetahWatch */;
 		codeSenseManager = CD1452FB10F1CCBF006BC378 /* Code sense */;
@@ -17,14 +17,14 @@
 			CD1452F210F1CCA1006BC378 /* CheetahWatch */,
 		);
 		perUserDictionary = {
-			PBXPerProjectTemplateStateSaveDate = 314430228;
-			PBXWorkspaceStateSaveDate = 314430228;
+			PBXPerProjectTemplateStateSaveDate = 316522779;
+			PBXWorkspaceStateSaveDate = 316522779;
 		};
 		perUserProjectItems = {
-			CDD3C95112BDD49100298049 /* PBXBookmark */ = CDD3C95112BDD49100298049 /* PBXBookmark */;
-			CDD3C95412BDD50000298049 /* PBXBookmark */ = CDD3C95412BDD50000298049 /* PBXBookmark */;
-			CDD3C95B12BDD76E00298049 /* PlistBookmark */ = CDD3C95B12BDD76E00298049 /* PlistBookmark */;
-			CDD3C95E12BDD76E00298049 /* PBXTextBookmark */ = CDD3C95E12BDD76E00298049 /* PBXTextBookmark */;
+			CDD3C95112BDD49100298049 = CDD3C95112BDD49100298049 /* PBXBookmark */;
+			CDD3C95412BDD50000298049 = CDD3C95412BDD50000298049 /* PBXBookmark */;
+			CDD3C95B12BDD76E00298049 = CDD3C95B12BDD76E00298049 /* PlistBookmark */;
+			CDD3C95E12BDD76E00298049 = CDD3C95E12BDD76E00298049 /* PBXTextBookmark */;
 		};
 		sourceControlManager = CD1452FA10F1CCBF006BC378 /* Source Control */;
 		userBuildSettings = {
@@ -111,17 +111,18 @@
 	};
 	65F849E1105EECA4003778F9 /* CWModel.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1237, 2262}}";
-			sepNavSelRange = "{0, 0}";
-			sepNavVisRange = "{4779, 953}";
+			sepNavIntBoundsRect = "{{0, 0}, {1412, 2655}}";
+			sepNavSelRange = "{3561, 16}";
+			sepNavVisRange = "{3113, 1511}";
 			sepNavWindowFrame = "{{222, 103}, {750, 558}}";
 		};
 	};
 	65F849E2105EECA4003778F9 /* CWModel.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1104, 7476}}";
-			sepNavSelRange = "{1571, 0}";
-			sepNavVisRange = "{1393, 533}";
+			sepNavIntBoundsRect = "{{0, 0}, {1260, 9315}}";
+			sepNavSelRange = "{11596, 0}";
+			sepNavVisRange = "{11391, 593}";
+			sepNavWindowFrame = "{{365, 76}, {1222, 670}}";
 		};
 	};
 	8D1107260486CEB800E47090 /* CheetahWatch */ = {
@@ -189,12 +190,20 @@
 			sepNavWindowFrame = "{{61, 141}, {750, 558}}";
 		};
 	};
+	CDA4AEB50C625BAA00E71C0C /* CWApplication.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1163, 1005}}";
+			sepNavSelRange = "{1444, 37}";
+			sepNavVisRange = "{805, 1152}";
+			sepNavWindowFrame = "{{15, 71}, {1222, 670}}";
+		};
+	};
 	CDA4AEB60C625BAA00E71C0C /* CWApplication.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1132, 3696}}";
-			sepNavSelRange = "{0, 0}";
-			sepNavVisRange = "{9224, 502}";
-			sepNavWindowFrame = "{{15, 72}, {984, 701}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1292, 4980}}";
+			sepNavSelRange = "{5193, 14}";
+			sepNavVisRange = "{4433, 1379}";
+			sepNavWindowFrame = "{{315, 64}, {984, 682}}";
 		};
 	};
 	CDAA71760DCFAE4A00C947E0 /* CWUSBFinder.m */ = {
@@ -223,7 +232,7 @@
 		);
 		name = /Users/patrick/SourceCache/merging/cheetahwatch/Resources/devices.plist;
 		rLen = 0;
-		rLoc = 9223372036854775807;
+		rLoc = 9223372036854775808;
 	};
 	CDD3C95E12BDD76E00298049 /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;
