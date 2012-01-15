@@ -161,7 +161,7 @@ typedef enum {
 - (BOOL)pinLock;
 - (void)setPinLock:(BOOL)status;
 
-- (BOOL)alwaysDisabled;
+//- (BOOL)alwaysDisabled;
 
 - (void)checkTrafficLimit;
 

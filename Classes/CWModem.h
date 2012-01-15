@@ -36,6 +36,7 @@
     NSMutableArray *modemCommands;
     NSTimer *periodicTimer;
     NSTimer *commandTimeoutTimer;
+    BOOL ongoingPIN;
         
     // delegate
     id delegate;

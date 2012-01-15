@@ -118,7 +118,7 @@
 	[statusItem setEnabled:YES];
 	[statusItem setToolTip:NSLocalizedString(@"L120", @"")];
 	[statusItem setMenu:statusItemMenu];
-    [statusItem setImage:[NSImage imageNamed:@"no-modem-menu"]];
+    [statusItem setImage:[NSImage imageNamed:@"airplane"]];
 
     // manually set up a KVO since the status item does not know anything about bindings (yet)
     [self addObserver:self forKeyPath:@"model.modelForIcon" options:NSKeyValueObservingOptionNew context:NULL];
@@ -259,22 +259,26 @@
 // CWModem delegates
 - (void)needsPin:(NSString*)pinDescription
 {
-    [self setPinRequestDesc:pinDescription];
-    [pinField setStringValue:@""];
-    [pinWindow center];
-	[NSApp activateIgnoringOtherApps:YES];
-    [NSApp beginSheet:pinWindow modalForWindow:nil modalDelegate:self
-	   didEndSelector:@selector(pinSheetDidEnd:returnCode:context:) contextInfo:nil];
+    if (![pinWindow isVisible]) {    
+        [self setPinRequestDesc:pinDescription];
+        [pinField setStringValue:@""];
+        [pinWindow center];
+        [NSApp activateIgnoringOtherApps:YES];
+        [NSApp beginSheet:pinWindow modalForWindow:nil modalDelegate:self
+           didEndSelector:@selector(pinSheetDidEnd:returnCode:context:) contextInfo:nil];
+    }
 }
 
 - (void)needsPuk
 {
-    [pukField setStringValue:@""];
-    [newPinField setStringValue:@""];
-    [pukWindow center];
-	[NSApp activateIgnoringOtherApps:YES];
-    [NSApp beginSheet:pukWindow modalForWindow:nil modalDelegate:self
-	   didEndSelector:@selector(pukSheetDidEnd:returnCode:context:) contextInfo:nil];
+    if (![pukWindow isVisible]) {    
+        [pukField setStringValue:@""];
+        [newPinField setStringValue:@""];
+        [pukWindow center];
+        [NSApp activateIgnoringOtherApps:YES];
+        [NSApp beginSheet:pukWindow modalForWindow:nil modalDelegate:self
+           didEndSelector:@selector(pukSheetDidEnd:returnCode:context:) contextInfo:nil];
+    }
 }
 
 

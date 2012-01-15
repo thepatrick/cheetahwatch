@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 44;
+	objectVersion = 46;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -26,12 +26,27 @@
 		65D0F844105C219300D13A0D /* networks.plist in Resources */ = {isa = PBXBuildFile; fileRef = 65D0F843105C219300D13A0D /* networks.plist */; };
 		65DB3726105F94D200D18BD2 /* CWModem.m in Sources */ = {isa = PBXBuildFile; fileRef = 65DB3725105F94D200D18BD2 /* CWModem.m */; };
 		65F849E3105EECA4003778F9 /* CWModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 65F849E2105EECA4003778F9 /* CWModel.m */; };
+		6E9EFC3C14C2DBD400DC3C3B /* airplane.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E9EFC2C14C2DBD400DC3C3B /* airplane.png */; };
+		6E9EFC3D14C2DBD400DC3C3B /* edge.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E9EFC2D14C2DBD400DC3C3B /* edge.png */; };
+		6E9EFC3E14C2DBD400DC3C3B /* gprs.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E9EFC2E14C2DBD400DC3C3B /* gprs.png */; };
+		6E9EFC3F14C2DBD400DC3C3B /* gsm.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E9EFC2F14C2DBD400DC3C3B /* gsm.png */; };
+		6E9EFC4014C2DBD400DC3C3B /* lock-off.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E9EFC3014C2DBD400DC3C3B /* lock-off.png */; };
+		6E9EFC4114C2DBD400DC3C3B /* signal-0-off.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E9EFC3114C2DBD400DC3C3B /* signal-0-off.png */; };
+		6E9EFC4214C2DBD400DC3C3B /* signal-0.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E9EFC3214C2DBD400DC3C3B /* signal-0.png */; };
+		6E9EFC4314C2DBD400DC3C3B /* signal-1-off.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E9EFC3314C2DBD400DC3C3B /* signal-1-off.png */; };
+		6E9EFC4414C2DBD400DC3C3B /* signal-1.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E9EFC3414C2DBD400DC3C3B /* signal-1.png */; };
+		6E9EFC4514C2DBD400DC3C3B /* signal-2-off.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E9EFC3514C2DBD400DC3C3B /* signal-2-off.png */; };
+		6E9EFC4614C2DBD400DC3C3B /* signal-2.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E9EFC3614C2DBD400DC3C3B /* signal-2.png */; };
+		6E9EFC4714C2DBD400DC3C3B /* signal-3-off.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E9EFC3714C2DBD400DC3C3B /* signal-3-off.png */; };
+		6E9EFC4814C2DBD400DC3C3B /* signal-3.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E9EFC3814C2DBD400DC3C3B /* signal-3.png */; };
+		6E9EFC4914C2DBD400DC3C3B /* signal-4-off.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E9EFC3914C2DBD400DC3C3B /* signal-4-off.png */; };
+		6E9EFC4A14C2DBD400DC3C3B /* signal-4.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E9EFC3A14C2DBD400DC3C3B /* signal-4.png */; };
+		6E9EFC4B14C2DBD400DC3C3B /* umts.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E9EFC3B14C2DBD400DC3C3B /* umts.png */; };
 		8D11072A0486CEB800E47090 /* MainMenu.nib in Resources */ = {isa = PBXBuildFile; fileRef = 29B97318FDCFA39411CA2CEA /* MainMenu.nib */; };
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 		CD0FE26A0C95ADC20071D806 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD0FE2690C95ADC20071D806 /* IOKit.framework */; };
-		CD27C4340C8CC565009D1D26 /* no-modem-menu.tif in Resources */ = {isa = PBXBuildFile; fileRef = CD27C4330C8CC565009D1D26 /* no-modem-menu.tif */; };
 		CD391ACF0C8E03460008BABF /* Welcome.html in Resources */ = {isa = PBXBuildFile; fileRef = CD391ACD0C8E03460008BABF /* Welcome.html */; };
 		CD391AD70C8E036C0008BABF /* Credits.html in Resources */ = {isa = PBXBuildFile; fileRef = CD391AD50C8E036C0008BABF /* Credits.html */; };
 		CD391AFA0C8E04EC0008BABF /* have-modem.png in Resources */ = {isa = PBXBuildFile; fileRef = CD391AF60C8E04EC0008BABF /* have-modem.png */; };
@@ -39,11 +54,6 @@
 		CD391B5F0C8E07700008BABF /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD391B5A0C8E07700008BABF /* WebKit.framework */; };
 		CD6F1ABE0CE23B45005CD8D9 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD6F1ABB0CE23B45005CD8D9 /* SystemConfiguration.framework */; };
 		CD7CAB7E0D33E90C001A37B8 /* CW Icon - 512.icns in Resources */ = {isa = PBXBuildFile; fileRef = CD7CAB7D0D33E90C001A37B8 /* CW Icon - 512.icns */; };
-		CD8425490C8D40F300D08573 /* signal-0.tif in Resources */ = {isa = PBXBuildFile; fileRef = CD84253F0C8D40F300D08573 /* signal-0.tif */; };
-		CD84254A0C8D40F300D08573 /* signal-4.tif in Resources */ = {isa = PBXBuildFile; fileRef = CD8425400C8D40F300D08573 /* signal-4.tif */; };
-		CD84254B0C8D40F300D08573 /* signal-3.tif in Resources */ = {isa = PBXBuildFile; fileRef = CD8425410C8D40F300D08573 /* signal-3.tif */; };
-		CD84254E0C8D40F300D08573 /* signal-2.tif in Resources */ = {isa = PBXBuildFile; fileRef = CD8425440C8D40F300D08573 /* signal-2.tif */; };
-		CD84254F0C8D40F300D08573 /* signal-1.tif in Resources */ = {isa = PBXBuildFile; fileRef = CD8425450C8D40F300D08573 /* signal-1.tif */; };
 		CDA3A2B211656F91006DD0C0 /* CWUsagePrefsController.m in Sources */ = {isa = PBXBuildFile; fileRef = CDA3A2B111656F91006DD0C0 /* CWUsagePrefsController.m */; };
 		CDA4AEB70C625BAA00E71C0C /* CWApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = CDA4AEB60C625BAA00E71C0C /* CWApplication.m */; };
 		CDA4B1FA0C62947300E71C0C /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CDA4B1F90C62947300E71C0C /* Carbon.framework */; };
@@ -51,12 +61,6 @@
 		CDAA72050DCFC3ED00C947E0 /* CWNetworks.m in Sources */ = {isa = PBXBuildFile; fileRef = CDAA72040DCFC3ED00C947E0 /* CWNetworks.m */; };
 		CDB6F3430F0A0F84007EDF59 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CDB6F3420F0A0F84007EDF59 /* Sparkle.framework */; };
 		CDB6F3600F0A113C007EDF59 /* Sparkle.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = CDB6F3420F0A0F84007EDF59 /* Sparkle.framework */; };
-		CDE9AFF70DD1051400CAA997 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8D1107310486CEB800E47090 /* Info.plist */; };
-		CDE9B0140DD10C3900CAA997 /* signal-4-off.tif in Resources */ = {isa = PBXBuildFile; fileRef = CDE9B00F0DD10C3900CAA997 /* signal-4-off.tif */; };
-		CDE9B0150DD10C3900CAA997 /* signal-0-off.tif in Resources */ = {isa = PBXBuildFile; fileRef = CDE9B0100DD10C3900CAA997 /* signal-0-off.tif */; };
-		CDE9B0160DD10C3900CAA997 /* signal-1-off.tif in Resources */ = {isa = PBXBuildFile; fileRef = CDE9B0110DD10C3900CAA997 /* signal-1-off.tif */; };
-		CDE9B0170DD10C3900CAA997 /* signal-2-off.tif in Resources */ = {isa = PBXBuildFile; fileRef = CDE9B0120DD10C3900CAA997 /* signal-2-off.tif */; };
-		CDE9B0180DD10C3900CAA997 /* signal-3-off.tif in Resources */ = {isa = PBXBuildFile; fileRef = CDE9B0130DD10C3900CAA997 /* signal-3-off.tif */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -112,10 +116,25 @@
 		65DB372B105FA7C900D18BD2 /* CWStatusWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CWStatusWindow.m; sourceTree = "<group>"; };
 		65F849E1105EECA4003778F9 /* CWModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWModel.h; sourceTree = "<group>"; };
 		65F849E2105EECA4003778F9 /* CWModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CWModel.m; sourceTree = "<group>"; };
+		6E9EFC2C14C2DBD400DC3C3B /* airplane.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = airplane.png; sourceTree = "<group>"; };
+		6E9EFC2D14C2DBD400DC3C3B /* edge.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = edge.png; sourceTree = "<group>"; };
+		6E9EFC2E14C2DBD400DC3C3B /* gprs.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gprs.png; sourceTree = "<group>"; };
+		6E9EFC2F14C2DBD400DC3C3B /* gsm.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gsm.png; sourceTree = "<group>"; };
+		6E9EFC3014C2DBD400DC3C3B /* lock-off.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "lock-off.png"; sourceTree = "<group>"; };
+		6E9EFC3114C2DBD400DC3C3B /* signal-0-off.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "signal-0-off.png"; sourceTree = "<group>"; };
+		6E9EFC3214C2DBD400DC3C3B /* signal-0.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "signal-0.png"; sourceTree = "<group>"; };
+		6E9EFC3314C2DBD400DC3C3B /* signal-1-off.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "signal-1-off.png"; sourceTree = "<group>"; };
+		6E9EFC3414C2DBD400DC3C3B /* signal-1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "signal-1.png"; sourceTree = "<group>"; };
+		6E9EFC3514C2DBD400DC3C3B /* signal-2-off.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "signal-2-off.png"; sourceTree = "<group>"; };
+		6E9EFC3614C2DBD400DC3C3B /* signal-2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "signal-2.png"; sourceTree = "<group>"; };
+		6E9EFC3714C2DBD400DC3C3B /* signal-3-off.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "signal-3-off.png"; sourceTree = "<group>"; };
+		6E9EFC3814C2DBD400DC3C3B /* signal-3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "signal-3.png"; sourceTree = "<group>"; };
+		6E9EFC3914C2DBD400DC3C3B /* signal-4-off.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "signal-4-off.png"; sourceTree = "<group>"; };
+		6E9EFC3A14C2DBD400DC3C3B /* signal-4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "signal-4.png"; sourceTree = "<group>"; };
+		6E9EFC3B14C2DBD400DC3C3B /* umts.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = umts.png; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = ../Info.plist; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* CheetahWatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CheetahWatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CD0FE2690C95ADC20071D806 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = /System/Library/Frameworks/IOKit.framework; sourceTree = "<absolute>"; };
-		CD27C4330C8CC565009D1D26 /* no-modem-menu.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = "no-modem-menu.tif"; sourceTree = "<group>"; };
 		CD391ACE0C8E03460008BABF /* English */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.html; name = English; path = English.lproj/Welcome.html; sourceTree = "<group>"; };
 		CD391AD60C8E036C0008BABF /* English */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.html; name = English; path = English.lproj/Credits.html; sourceTree = "<group>"; };
 		CD391AF70C8E04EC0008BABF /* English */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = English; path = "English.lproj/have-modem.png"; sourceTree = "<group>"; };
@@ -123,11 +142,6 @@
 		CD391B5A0C8E07700008BABF /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = /System/Library/Frameworks/WebKit.framework; sourceTree = "<absolute>"; };
 		CD6F1ABB0CE23B45005CD8D9 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = /System/Library/Frameworks/SystemConfiguration.framework; sourceTree = "<absolute>"; };
 		CD7CAB7D0D33E90C001A37B8 /* CW Icon - 512.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = "CW Icon - 512.icns"; sourceTree = "<group>"; };
-		CD84253F0C8D40F300D08573 /* signal-0.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = "signal-0.tif"; sourceTree = "<group>"; };
-		CD8425400C8D40F300D08573 /* signal-4.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = "signal-4.tif"; sourceTree = "<group>"; };
-		CD8425410C8D40F300D08573 /* signal-3.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = "signal-3.tif"; sourceTree = "<group>"; };
-		CD8425440C8D40F300D08573 /* signal-2.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = "signal-2.tif"; sourceTree = "<group>"; };
-		CD8425450C8D40F300D08573 /* signal-1.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = "signal-1.tif"; sourceTree = "<group>"; };
 		CD8D972B0C63635E00FB394B /* CW Icon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = "CW Icon.icns"; sourceTree = "<group>"; };
 		CDA3A2B011656F91006DD0C0 /* CWUsagePrefsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWUsagePrefsController.h; sourceTree = "<group>"; };
 		CDA3A2B111656F91006DD0C0 /* CWUsagePrefsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CWUsagePrefsController.m; sourceTree = "<group>"; };
@@ -139,11 +153,6 @@
 		CDAA72030DCFC3ED00C947E0 /* CWNetworks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWNetworks.h; sourceTree = "<group>"; };
 		CDAA72040DCFC3ED00C947E0 /* CWNetworks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CWNetworks.m; sourceTree = "<group>"; };
 		CDB6F3420F0A0F84007EDF59 /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Sparkle.framework; sourceTree = "<group>"; };
-		CDE9B00F0DD10C3900CAA997 /* signal-4-off.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = "signal-4-off.tif"; sourceTree = "<group>"; };
-		CDE9B0100DD10C3900CAA997 /* signal-0-off.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = "signal-0-off.tif"; sourceTree = "<group>"; };
-		CDE9B0110DD10C3900CAA997 /* signal-1-off.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = "signal-1-off.tif"; sourceTree = "<group>"; };
-		CDE9B0120DD10C3900CAA997 /* signal-2-off.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = "signal-2-off.tif"; sourceTree = "<group>"; };
-		CDE9B0130DD10C3900CAA997 /* signal-3-off.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = "signal-3-off.tif"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -209,6 +218,7 @@
 				29B97317FDCFA39411CA2CEA /* Resources */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
+				6E9EFC2B14C2DBD400DC3C3B /* MenuSignals */,
 			);
 			name = CheetahWatch;
 			sourceTree = "<group>";
@@ -234,7 +244,6 @@
 				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
 				CD04F3FC0D722E7D00AE8411 /* Info Window */,
 				CD04F3FB0D722E6D00AE8411 /* CW Icon */,
-				CD04F3F90D722E5600AE8411 /* MenuSignals */,
 				CD391AD50C8E036C0008BABF /* Credits.html */,
 				CD391ACD0C8E03460008BABF /* Welcome.html */,
 			);
@@ -309,23 +318,27 @@
 			name = View;
 			sourceTree = "<group>";
 		};
-		CD04F3F90D722E5600AE8411 /* MenuSignals */ = {
+		6E9EFC2B14C2DBD400DC3C3B /* MenuSignals */ = {
 			isa = PBXGroup;
 			children = (
-				CDE9B00F0DD10C3900CAA997 /* signal-4-off.tif */,
-				CDE9B0100DD10C3900CAA997 /* signal-0-off.tif */,
-				CDE9B0110DD10C3900CAA997 /* signal-1-off.tif */,
-				CDE9B0120DD10C3900CAA997 /* signal-2-off.tif */,
-				CDE9B0130DD10C3900CAA997 /* signal-3-off.tif */,
-				CD27C4330C8CC565009D1D26 /* no-modem-menu.tif */,
-				CD84253F0C8D40F300D08573 /* signal-0.tif */,
-				CD8425450C8D40F300D08573 /* signal-1.tif */,
-				CD8425440C8D40F300D08573 /* signal-2.tif */,
-				CD8425410C8D40F300D08573 /* signal-3.tif */,
-				CD8425400C8D40F300D08573 /* signal-4.tif */,
+				6E9EFC2C14C2DBD400DC3C3B /* airplane.png */,
+				6E9EFC2D14C2DBD400DC3C3B /* edge.png */,
+				6E9EFC2E14C2DBD400DC3C3B /* gprs.png */,
+				6E9EFC2F14C2DBD400DC3C3B /* gsm.png */,
+				6E9EFC3014C2DBD400DC3C3B /* lock-off.png */,
+				6E9EFC3114C2DBD400DC3C3B /* signal-0-off.png */,
+				6E9EFC3214C2DBD400DC3C3B /* signal-0.png */,
+				6E9EFC3314C2DBD400DC3C3B /* signal-1-off.png */,
+				6E9EFC3414C2DBD400DC3C3B /* signal-1.png */,
+				6E9EFC3514C2DBD400DC3C3B /* signal-2-off.png */,
+				6E9EFC3614C2DBD400DC3C3B /* signal-2.png */,
+				6E9EFC3714C2DBD400DC3C3B /* signal-3-off.png */,
+				6E9EFC3814C2DBD400DC3C3B /* signal-3.png */,
+				6E9EFC3914C2DBD400DC3C3B /* signal-4-off.png */,
+				6E9EFC3A14C2DBD400DC3C3B /* signal-4.png */,
+				6E9EFC3B14C2DBD400DC3C3B /* umts.png */,
 			);
-			name = MenuSignals;
-			path = ../MenuSignals;
+			path = MenuSignals;
 			sourceTree = "<group>";
 		};
 		CD04F3FB0D722E6D00AE8411 /* CW Icon */ = {
@@ -374,8 +387,11 @@
 /* Begin PBXProject section */
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0420;
+			};
 			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "CheetahWatch" */;
-			compatibilityVersion = "Xcode 3.0";
+			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 1;
 			knownRegions = (
@@ -400,27 +416,31 @@
 			files = (
 				8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */,
 				8D11072A0486CEB800E47090 /* MainMenu.nib in Resources */,
-				CD27C4340C8CC565009D1D26 /* no-modem-menu.tif in Resources */,
-				CD8425490C8D40F300D08573 /* signal-0.tif in Resources */,
-				CD84254A0C8D40F300D08573 /* signal-4.tif in Resources */,
-				CD84254B0C8D40F300D08573 /* signal-3.tif in Resources */,
-				CD84254E0C8D40F300D08573 /* signal-2.tif in Resources */,
-				CD84254F0C8D40F300D08573 /* signal-1.tif in Resources */,
-				CDE9B0140DD10C3900CAA997 /* signal-4-off.tif in Resources */,
-				CDE9B0150DD10C3900CAA997 /* signal-0-off.tif in Resources */,
-				CDE9B0160DD10C3900CAA997 /* signal-1-off.tif in Resources */,
-				CDE9B0170DD10C3900CAA997 /* signal-2-off.tif in Resources */,
-				CDE9B0180DD10C3900CAA997 /* signal-3-off.tif in Resources */,
 				CD391ACF0C8E03460008BABF /* Welcome.html in Resources */,
 				CD391AD70C8E036C0008BABF /* Credits.html in Resources */,
 				CD391AFA0C8E04EC0008BABF /* have-modem.png in Resources */,
 				CD391AFB0C8E04EC0008BABF /* no-modem.png in Resources */,
 				CD7CAB7E0D33E90C001A37B8 /* CW Icon - 512.icns in Resources */,
-				CDE9AFF70DD1051400CAA997 /* Info.plist in Resources */,
 				65D0F844105C219300D13A0D /* networks.plist in Resources */,
 				65577631106296890030417C /* devices.plist in Resources */,
 				65571C071063D533005E5929 /* Localizable.strings in Resources */,
 				65BC7DEA1074AB09000C3BBD /* modems.plist in Resources */,
+				6E9EFC3C14C2DBD400DC3C3B /* airplane.png in Resources */,
+				6E9EFC3D14C2DBD400DC3C3B /* edge.png in Resources */,
+				6E9EFC3E14C2DBD400DC3C3B /* gprs.png in Resources */,
+				6E9EFC3F14C2DBD400DC3C3B /* gsm.png in Resources */,
+				6E9EFC4014C2DBD400DC3C3B /* lock-off.png in Resources */,
+				6E9EFC4114C2DBD400DC3C3B /* signal-0-off.png in Resources */,
+				6E9EFC4214C2DBD400DC3C3B /* signal-0.png in Resources */,
+				6E9EFC4314C2DBD400DC3C3B /* signal-1-off.png in Resources */,
+				6E9EFC4414C2DBD400DC3C3B /* signal-1.png in Resources */,
+				6E9EFC4514C2DBD400DC3C3B /* signal-2-off.png in Resources */,
+				6E9EFC4614C2DBD400DC3C3B /* signal-2.png in Resources */,
+				6E9EFC4714C2DBD400DC3C3B /* signal-3-off.png in Resources */,
+				6E9EFC4814C2DBD400DC3C3B /* signal-3.png in Resources */,
+				6E9EFC4914C2DBD400DC3C3B /* signal-4-off.png in Resources */,
+				6E9EFC4A14C2DBD400DC3C3B /* signal-4.png in Resources */,
+				6E9EFC4B14C2DBD400DC3C3B /* umts.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -533,10 +553,10 @@
 				FRAMEWORK_SEARCH_PATHS_QUOTED_2 = "\"$(SRCROOT)\"";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)\"";
 				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
 				MACOSX_DEPLOYMENT_TARGET = 10.4;
@@ -565,6 +585,7 @@
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_MODEL_TUNING = G5;
 				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
 				MACOSX_DEPLOYMENT_TARGET = 10.4;
@@ -578,8 +599,7 @@
 		C01FCF4F08A954540054247B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT_PRE_XCODE_3_1)";
-				ARCHS_STANDARD_32_64_BIT_PRE_XCODE_3_1 = "x86_64 i386 ppc";
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET_i386 = 10.4;
@@ -587,7 +607,6 @@
 				MACOSX_DEPLOYMENT_TARGET_x86_64 = 10.5;
 				OTHER_CFLAGS = "-DDEBUG";
 				OTHER_LDFLAGS = "-flat_namespace";
-				PREBINDING = NO;
 				PRODUCT_NAME = CheetahWatch;
 				VALID_ARCHS = "i386 ppc ppc7400 x86_64";
 			};
@@ -596,15 +615,13 @@
 		C01FCF5008A954540054247B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT_PRE_XCODE_3_1)";
-				ARCHS_STANDARD_32_64_BIT_PRE_XCODE_3_1 = "x86_64 i386 ppc";
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET_i386 = 10.4;
 				MACOSX_DEPLOYMENT_TARGET_ppc = 10.4;
 				MACOSX_DEPLOYMENT_TARGET_x86_64 = 10.5;
 				OTHER_LDFLAGS = "-flat_namespace";
-				PREBINDING = NO;
 				PRODUCT_NAME = CheetahWatch;
 				VALID_ARCHS = "i386 ppc ppc7400 x86_64";
 			};
@@ -613,8 +630,7 @@
 		CDE4DA740DDC64B800718E0C /* Debug64 */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT_PRE_XCODE_3_1)";
-				ARCHS_STANDARD_32_64_BIT_PRE_XCODE_3_1 = "x86_64 i386 ppc";
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET_i386 = 10.4;
@@ -622,7 +638,6 @@
 				MACOSX_DEPLOYMENT_TARGET_x86_64 = 10.5;
 				OTHER_CFLAGS = "-DDEBUG";
 				OTHER_LDFLAGS = "-flat_namespace";
-				PREBINDING = NO;
 				PRODUCT_NAME = CheetahWatch;
 				VALID_ARCHS = "i386 ppc ppc7400 x86_64";
 			};
@@ -644,10 +659,10 @@
 				FRAMEWORK_SEARCH_PATHS_QUOTED_2 = "\"$(SRCROOT)\"";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)\"";
 				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
 				PRODUCT_NAME = CheetahWatch;

@@ -49,7 +49,7 @@ static void CWUSBFinderDeviceAdded(void *refCon, io_iterator_t iterator)
 {
     CWUSBFinder *usbFinder = (CWUSBFinder *)refCon;
     io_service_t device;
-    while (device = IOIteratorNext(iterator)) {
+    while ((device = IOIteratorNext(iterator))) {
         [usbFinder deviceAddedNotification:device];
         IOObjectRelease(device);
     }
@@ -59,7 +59,7 @@ static void CWUSBFinderDeviceRemoved(void *refCon, io_iterator_t iterator)
 {
     CWUSBFinder *usbFinder = (CWUSBFinder *)refCon;
     io_service_t device;
-    while (device = IOIteratorNext(iterator)) {
+    while ((device = IOIteratorNext(iterator))) {
         [usbFinder deviceRemovedNotification:device];
         IOObjectRelease(device);
     }

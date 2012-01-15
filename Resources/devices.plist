@@ -54,5 +54,18 @@
 			<integer>4817</integer>
 		</dict>
 	</dict>
+	<dict>
+		<key>devicePath</key>
+		<string>/dev/cu.HUAWEIMobile-Pcui</string>
+		<key>matchingDictionary</key>
+		<dict>
+			<key>IOProviderClass</key>
+			<string>IOUSBDevice</string>
+			<key>idProduct</key>
+			<integer>5382</integer>
+			<key>idVendor</key>
+			<integer>4817</integer>
+		</dict>
+	</dict>
 </array>
 </plist>

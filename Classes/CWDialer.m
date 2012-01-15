@@ -96,9 +96,9 @@ static void CWConnectionStatusChangeCallback(SCNetworkConnectionRef connection, 
         context.retain = NULL;
         context.release = NULL;
         context.copyDescription = NULL;
-        if (store = SCDynamicStoreCreate(NULL, (CFStringRef)bundleIdentifier, CWSystemConfigurationNotificationCallback, &context)) {
+        if ((store = SCDynamicStoreCreate(NULL, (CFStringRef)bundleIdentifier, CWSystemConfigurationNotificationCallback, &context))) {
             // create runloop source and add it to the current run loop to receive notifications
-            if (runLoopSource = SCDynamicStoreCreateRunLoopSource(NULL, store, 0)) {
+            if ((runLoopSource = SCDynamicStoreCreateRunLoopSource(NULL, store, 0))) {
                 CFRunLoopAddSource(CFRunLoopGetCurrent(), runLoopSource, kCFRunLoopDefaultMode);
                 CFMutableArrayRef patterns = CFArrayCreateMutable(NULL, 1, &kCFTypeArrayCallBacks);
                 if (patterns) {
@@ -238,7 +238,7 @@ static void CWConnectionStatusChangeCallback(SCNetworkConnectionRef connection, 
         context.retain = NULL;
         context.release = NULL;
         context.copyDescription = NULL;
-        if (connection = SCNetworkConnectionCreateWithServiceID(NULL, newServiceId, CWConnectionStatusChangeCallback, &context)) {
+        if ((connection = SCNetworkConnectionCreateWithServiceID(NULL, newServiceId, CWConnectionStatusChangeCallback, &context))) {
             // add connection to current runloop
             if (SCNetworkConnectionScheduleWithRunLoop(connection, CFRunLoopGetCurrent(), kCFRunLoopDefaultMode)) {
                 // call callback initially to determine current connection status - pass 0 for status since we don't rely on it in the callback anyway
