@@ -67,6 +67,35 @@
     }    
 }
 
+- (NSString *)modeIndicatorIconname:(NSInteger)mode
+{
+    // mode values taken from https://forge.betavine.net/pipermail/vodafonemobilec-devel/2007-November/000043.html
+    switch (mode) {
+        case 0:     // None
+            return @"gsm";
+        case 1:     // GSM
+            return @"gsm";
+        case 2:     // GPRS
+            return @"gprs";
+        case 3:     // EDGE
+            return @"edge";
+        case 4:     // WCDMA/UMTS
+            return @"umts";
+        case 5:     // HSDPA
+            return @"umts";
+        case 6:     // HSUPA
+            return @"umts";
+        case 7:     // HSDPA + HSUPA
+            return @"umts";
+        case 8:     // TD_SCDMA
+            return @"umts";
+        case 9:     //
+            return @"umts";
+        default:    // Unknown
+            return @"gsm";
+    }    
+}
+
 - (id)transformedValue:(id)value
 {
     // translate signal level and connection state into an icon
@@ -81,7 +110,7 @@
         NSString *modeRawString;
         NSColor *color;        
         NSString *iconName;
-        NSImage *rawIcon;
+        NSImage *rawIcon, *rawIcon2;
         
         // determine icon for given signal strength
         if (signalStrength == 0) {
@@ -101,27 +130,34 @@
         stringAttributes = [NSDictionary dictionaryWithObjectsAndKeys:menuFont, NSFontAttributeName, color, NSForegroundColorAttributeName, nil];
         // show mode and connection state or only mode, depending on connection state and preference setting
         if (connected && [[model preferences] showConnectionTime]) {
-            modeRawString = [NSString stringWithFormat:@"%@ %@", [self modeIndicatorString:[model mode]], CWPrettyTime([model duration])];
+            modeRawString = [NSString stringWithFormat:@"%@", CWPrettyTime([model duration])];
         } else {
-            modeRawString = [self modeIndicatorString:[model mode]];
+            modeRawString = @"";
         }
         modeString = [[NSAttributedString alloc] initWithString:modeRawString attributes:stringAttributes];
         // create status icon
-        statusIcon = [[[NSImage alloc] initWithSize:NSMakeSize(28 + [modeString size].width, 22)] autorelease]; 
+        statusIcon = [[[NSImage alloc] initWithSize:NSMakeSize(41 + [modeString size].width, 22)] autorelease]; 
         // load raw icon with bars - append -off suffix if not connected
         rawIcon = [NSImage imageNamed:[iconName stringByAppendingString:connected ? @"" : @"-off"]];
         // draw raw icon into status icon
         [statusIcon lockFocus];
         [rawIcon drawAtPoint:NSZeroPoint fromRect:NSZeroRect operation:NSCompositeCopy fraction:1.0];
+        // load second raw icon which shows connection state
+        if ( connected ) {
+            rawIcon2 = [NSImage imageNamed: [self modeIndicatorIconname:[model mode]]];
+        } else {
+            rawIcon2 = [NSImage imageNamed: @"lock-off"];            
+        }
+        [rawIcon2 drawAtPoint:NSMakePoint(22, 0) fromRect:NSZeroRect operation:NSCompositeCopy fraction:1.0];
         // draw mode indicator
-        [modeString drawAtPoint:NSMakePoint(28, 3)];
+        [modeString drawAtPoint:NSMakePoint(41, 3)];
         [modeString release];
         // unlock drawing focus again
         [statusIcon unlockFocus];
         return statusIcon;
     } else {
         // no modem available
-        return [NSImage imageNamed:@"no-modem-menu"];
+        return [NSImage imageNamed:@"airplane"];
     }
 }
 

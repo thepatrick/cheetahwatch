@@ -57,11 +57,17 @@
         case 4:     // WCDMA/UMTS
             return NSLocalizedString(@"L254", @"");
         case 5:     // HSDPA
-        case 6:     // HSUPA
-        case 7:     // HSDPA + HSUPA
             return NSLocalizedString(@"L255", @"");
-        default:    // Unknown
+        case 6:     // HSUPA
+            return NSLocalizedString(@"L256", @"");
+        case 7:     // HSDPA + HSUPA
+            return NSLocalizedString(@"L257", @"");
+        case 8:     // HSDPA + HSUPA
+            return NSLocalizedString(@"L258", @"");
+        case 9:     // HSDPA + HSUPA
             return NSLocalizedString(@"L259", @"");
+        default:    // Unknown
+            return NSLocalizedString(@"L260", @"");
     }
 }
 

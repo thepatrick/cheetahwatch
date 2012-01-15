@@ -297,16 +297,19 @@
 	
 	if ([pinState isEqual:@"READY"]) {
 		return;
-    } else if ([pinState isEqual:@"SIM PIN"]) {
+    } else if (([pinState isEqual:@"SIM PIN"]) && (!ongoingPIN)) {
 		if (delegate && [delegate respondsToSelector:@selector(needsPin:)]) {
+            ongoingPIN = true;
 			[delegate needsPin:pinState];
 		}
-    } else if ([pinState isEqual:@"SIM PUK"]) {
+    } else if (([pinState isEqual:@"SIM PUK"]) && (!ongoingPIN)) {
 		if (delegate && [delegate respondsToSelector:@selector(needsPuk)]) {
+            ongoingPIN = true;
             [delegate needsPuk];
 		}
 	} else {
-		if (delegate && [delegate respondsToSelector:@selector(needsPin:)]) {
+		if ((delegate && [delegate respondsToSelector:@selector(needsPin:)]) && (!ongoingPIN)) {
+            ongoingPIN = true;
 			[delegate needsPin:pinState];
 		}
 	}
@@ -341,7 +344,7 @@
 }
 
 // parse Huawei mode preference
-- (void)processSYSCONFIG:(NSScanner *)scanner
+- (void)processSYSCFG:(NSScanner *)scanner
 {
     /*
      Huawei:
@@ -408,6 +411,9 @@
         // start timout timer
         commandTimeoutTimer = [NSTimer scheduledTimerWithTimeInterval:CWCommandTimeout target:self selector:@selector(commandTimeout:)
                                        userInfo:nil repeats:NO];
+        if (([command isEqual:@"AT+CPIN?\r"]) && (ongoingPIN)) {
+            ongoingPIN = false; // PIN status query is done after sending PIN/PUK
+        }
     }
 }
 
@@ -427,6 +433,21 @@
             // SIM busy, sleep 1 second, then reissue command
             sleep(1);
             [self dequeueNextModemCommand];
+        } else if (([error isEqual:@"SIM PIN required"]) && (!ongoingPIN)) {
+            if (delegate && [delegate respondsToSelector:@selector(needsPin:)]) {
+                ongoingPIN = true;
+                [delegate needsPin:error];
+            }
+        } else if (([error isEqual:@"SIM PUK required"]) && (!ongoingPIN)) {
+            if (delegate && [delegate respondsToSelector:@selector(needsPuk)]) {
+                ongoingPIN = true;
+                [delegate needsPuk];
+            }
+        } else if (([error isEqual:@"incorrect password"]) && (!ongoingPIN)) { // Incorrect PIN code
+            if (delegate && [delegate respondsToSelector:@selector(needsPin:)]) {
+                ongoingPIN = true;
+                [delegate needsPin:error];
+            }
         }
     }
 }
@@ -477,8 +498,8 @@
         [self processCPIN:scanner];
     } else if ([command isEqual:@"+ZSNT"]) {
         [self processZSNT:scanner];
-    } else if ([command isEqual:@"^SYSCONFIG"]) {
-        [self processSYSCONFIG:scanner];
+    } else if ([command isEqual:@"^SYSCFG"]) {
+        [self processSYSCFG:scanner];
     } else if ([command isEqual:@"+CLCK"]) {
         [self processCLCK:scanner];
     } else if ([command isEqual:@"+CME ERROR"]) {
@@ -614,7 +635,7 @@
 		[self sendModemCommand:@"AT+ZPAS?"];       // query mode (ZTE)
         [self sendModemCommand:@"AT+ZSNT?"];       // query mode preferences (ZTE)
 	} else if ([[model manufacturer] isEqual:@"Huawei"]) {
-        [self sendModemCommand:@"AT^SYSCONFIG?"];  // query mode preferences (Huawei)
+        [self sendModemCommand:@"AT^SYSCFG?"];  // query mode preferences (Huawei)
     }
     [self sendModemCommand:@"AT+CLCK=\"SC\",2"];   // query pin lock status
 }
@@ -637,6 +658,9 @@
         modemHandle = [[NSFileHandle alloc] initWithFileDescriptor:fd closeOnDealloc:YES];
         [modemHandle waitForDataInBackgroundAndNotify];
 
+        // Initialization queries pin status which sets this to false
+        ongoingPIN = true;
+        
         // send commands to query some basic information
         [self sendModemCommand:@"AT+CGMI"];       // query manufacterer
         [self sendModemCommand:@"AT+CGMM"];       // query model
@@ -691,13 +715,13 @@
 - (void)sendPin: (NSString*) pin
 {
     [self sendModemCommand:[NSString stringWithFormat:@"AT+CPIN=%@", pin]];
-	[self sendModemCommand:@"AT+CPIN?"];
+    [self sendModemCommand:@"AT+CPIN?"];        
 }
 
 - (void)sendPuk:(NSString*)puk withNewPin:(NSString*)newPin
 {
     [self sendModemCommand:[NSString stringWithFormat:@"AT+CPIN=%@,%@", puk, newPin]];
-	[self sendModemCommand:@"AT+CPIN?"];
+    [self sendModemCommand:@"AT+CPIN?"];        
 }
 
 - (void)setPinLock:(BOOL)enabled pin:(NSString*)pin
