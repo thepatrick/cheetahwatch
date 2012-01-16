@@ -29,23 +29,18 @@
 /* Carrier prefix, %@ gets replaced by carrier name - used by CWCarrierValueTransformer */
 "L220" = "Carrier: %@";
 
-/* mode indications, short version (must be one character) - used by CWIconValueTransformer */
-"L240" = "";
-"L241" = "G";
-"L242" = "G";
-"L243" = "E";
-"L244" = "U";
-"L245" = "H";
-"L249" = "?";
-
 /* mode indications, long version - used by CWModeValueTransformer */
 "L250" = "";
 "L251" = "GSM";
 "L252" = "GPRS";
 "L253" = "EDGE";
-"L254" = "UMTS";
+"L254" = "WCDMA";
 "L255" = "HSDPA";
-"L259" = "Unknown";
+"L256" = "HSUPA";
+"L257" = "HSDPA+HSUPA";
+"L258" = "TD-SCDMA";
+"L259" = "HSPA+";
+"L260" = "Unknown";
 
 /* connect/diconnect button label - used by CWConnectButtonValueTransformer */
 "L270" = "Connect";

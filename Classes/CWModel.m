@@ -614,8 +614,8 @@
             NSLog(@"CWModel: traffic limit exceeded (limit = %lld, actual = %lld)", limit, traffic);
 #endif
             // check for last warning date - consider to enter exactly once when set to 'Never'
-            if (lastTrafficWarningDate == nil ||
-                [preferences trafficWarningInterval] != 0 && [lastTrafficWarningDate timeIntervalSinceNow] < -[preferences trafficWarningInterval]) {
+            if ((lastTrafficWarningDate == nil ||
+                [preferences trafficWarningInterval] != 0) && [lastTrafficWarningDate timeIntervalSinceNow] < -[preferences trafficWarningInterval]) {
 #ifdef DEBUG
                 NSLog(@"CWModel: issuing traffic warning to user");
 #endif
