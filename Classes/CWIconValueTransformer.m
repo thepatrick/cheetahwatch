@@ -142,9 +142,11 @@
         if ( connected ) {
             rawIcon2 = [NSImage imageNamed: [self modeIndicatorIconname:[model mode]]];
             [rawIcon2 drawAtPoint:NSMakePoint(22, 0) fromRect:NSZeroRect operation:NSCompositeCopy fraction:1.0];                
-            // show connection time
-            [modeString drawAtPoint:NSMakePoint(41, 3)];
-            [modeString release];
+            if ([[model preferences] showConnectionTime]) {
+                // show connection time
+                [modeString drawAtPoint:NSMakePoint(41, 3)];
+                [modeString release];
+            }                
         } else {
             if ([model carrier] == NULL) {
                 rawIcon2 = [NSImage imageNamed: @"lock-off"];            
