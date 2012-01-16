@@ -60,6 +60,7 @@ typedef enum {
     CWModesPreference modesPreference;
     BOOL pinLock;
 	BOOL alwaysDisabled;
+    BOOL ongoingPIN;
 
     CWConnectionRecord *currentRecord;
 
@@ -162,6 +163,9 @@ typedef enum {
 - (void)setPinLock:(BOOL)status;
 
 //- (BOOL)alwaysDisabled;
+
+- (BOOL)ongoingPIN;
+- (void)setOngoingPIN:(BOOL)PINstatus;
 
 - (void)checkTrafficLimit;
 
