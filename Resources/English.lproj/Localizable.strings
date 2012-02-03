@@ -53,6 +53,7 @@
 "L283" = "Authenticating";
 "L284" = "Connected (%@)";
 "L285" = "Disconnecting";
+"L286" = "Validating PIN";
 "L299" = "Unknown";
 
 /* time formatter with days and without days - args come in order [days:]hours:minutes:seconds - used by CWDurationValueTransformer */
