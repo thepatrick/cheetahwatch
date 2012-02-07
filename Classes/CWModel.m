@@ -121,6 +121,7 @@
     [self setModel:nil];
     [self setModesPreference:0];
     [self setPinLock:NO];
+    [self setOngoingPIN:NO];
 }
 
 // write model to disk
@@ -580,6 +581,14 @@
 #endif
     pinLock = status;
 }
+
+- (BOOL)ongoingPIN
+{return ongoingPIN;}
+- (void)setOngoingPIN:(BOOL)PINstatus
+{
+    ongoingPIN = PINstatus;
+}
+
 
 - (void)checkTrafficLimit
 {

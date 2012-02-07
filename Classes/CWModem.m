@@ -297,19 +297,19 @@
 	
 	if ([pinState isEqual:@"READY"]) {
 		return;
-    } else if (([pinState isEqual:@"SIM PIN"]) && (!ongoingPIN)) {
+    } else if (([pinState isEqual:@"SIM PIN"]) && (![model ongoingPIN])) {
 		if (delegate && [delegate respondsToSelector:@selector(needsPin:)]) {
-            ongoingPIN = true;
+            [model setOngoingPIN:YES];
 			[delegate needsPin:pinState];
 		}
-    } else if (([pinState isEqual:@"SIM PUK"]) && (!ongoingPIN)) {
+    } else if (([pinState isEqual:@"SIM PUK"]) && (![model ongoingPIN])) {
 		if (delegate && [delegate respondsToSelector:@selector(needsPuk)]) {
-            ongoingPIN = true;
+            [model setOngoingPIN:YES];
             [delegate needsPuk];
 		}
 	} else {
-		if ((delegate && [delegate respondsToSelector:@selector(needsPin:)]) && (!ongoingPIN)) {
-            ongoingPIN = true;
+		if ((delegate && [delegate respondsToSelector:@selector(needsPin:)]) && (![model ongoingPIN])) {
+            [model setOngoingPIN:YES];
 			[delegate needsPin:pinState];
 		}
 	}
@@ -411,8 +411,8 @@
         // start timout timer
         commandTimeoutTimer = [NSTimer scheduledTimerWithTimeInterval:CWCommandTimeout target:self selector:@selector(commandTimeout:)
                                        userInfo:nil repeats:NO];
-        if (([command isEqual:@"AT+CPIN?\r"]) && (ongoingPIN)) {
-            ongoingPIN = false; // PIN status query is done after sending PIN/PUK
+        if (([command isEqual:@"AT+CPIN?\r"]) && ([model ongoingPIN])) {
+            [model setOngoingPIN:NO]; // PIN status query is done after sending PIN/PUK
         }
     }
 }
@@ -433,19 +433,19 @@
             // SIM busy, sleep 1 second, then reissue command
             sleep(1);
             [self dequeueNextModemCommand];
-        } else if (([error isEqual:@"SIM PIN required"]) && (!ongoingPIN)) {
+        } else if (([error isEqual:@"SIM PIN required"]) && (![model ongoingPIN])) {
             if (delegate && [delegate respondsToSelector:@selector(needsPin:)]) {
-                ongoingPIN = true;
+                [model setOngoingPIN:YES];
                 [delegate needsPin:error];
             }
-        } else if (([error isEqual:@"SIM PUK required"]) && (!ongoingPIN)) {
+        } else if (([error isEqual:@"SIM PUK required"]) && (![model ongoingPIN])) {
             if (delegate && [delegate respondsToSelector:@selector(needsPuk)]) {
-                ongoingPIN = true;
+                [model setOngoingPIN:YES];
                 [delegate needsPuk];
             }
-        } else if (([error isEqual:@"incorrect password"]) && (!ongoingPIN)) { // Incorrect PIN code
+        } else if (([error isEqual:@"incorrect password"]) && (![model ongoingPIN])) { // Incorrect PIN code
             if (delegate && [delegate respondsToSelector:@selector(needsPin:)]) {
-                ongoingPIN = true;
+                [model setOngoingPIN:YES];
                 [delegate needsPin:error];
             }
         }
@@ -659,7 +659,7 @@
         [modemHandle waitForDataInBackgroundAndNotify];
 
         // Initialization queries pin status which sets this to false
-        ongoingPIN = true;
+        [model setOngoingPIN:YES];
         
         // send commands to query some basic information
         [self sendModemCommand:@"AT+CGMI"];       // query manufacterer

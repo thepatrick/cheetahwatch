@@ -48,7 +48,13 @@
 {
     CWModel *model = (CWModel *)value;
     CWDurationValueTransformer *valueTransformer;
-    
+
+    /*
+    if ([model ongoingPIN]) {
+        return NSLocalizedString(@"L286", @"");
+    }
+    */
+
     switch ([model connectionState]) {
         // for possible values see table 4-3 in 
         // http://developer.apple.com/mac/library/documentation/Networking/Conceptual/SystemConfigFrameworks/SC_ReachConnect/SC_ReachConnect.html

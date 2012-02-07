@@ -108,7 +108,6 @@
         NSDictionary *stringAttributes;
         NSAttributedString *modeString;
         NSString *modeRawString;
-        NSColor *color;        
         NSString *iconName;
         NSImage *rawIcon, *rawIcon2;
         
@@ -125,18 +124,15 @@
             iconName = @"signal-4";
         }
         // construct mode and duration string
-        color = connected ? [NSColor colorWithCalibratedRed:0.05 green:0.37 blue:0.80 alpha:1] :
-                            [NSColor colorWithCalibratedRed:0.40 green:0.40 blue:0.40 alpha:1];
-        stringAttributes = [NSDictionary dictionaryWithObjectsAndKeys:menuFont, NSFontAttributeName, color, NSForegroundColorAttributeName, nil];
-        // show mode and connection state or only mode, depending on connection state and preference setting
+        stringAttributes = [NSDictionary dictionaryWithObjectsAndKeys:menuFont, NSFontAttributeName, [NSColor colorWithCalibratedRed:0.32 green:0.32 blue:0.32 alpha:1], NSForegroundColorAttributeName, nil];
+        // show mode and connection state or only mode, depending on connection state and preference setting & create status icon
         if (connected && [[model preferences] showConnectionTime]) {
             modeRawString = [NSString stringWithFormat:@"%@", CWPrettyTime([model duration])];
+            modeString = [[NSAttributedString alloc] initWithString:modeRawString attributes:stringAttributes];
+            statusIcon = [[[NSImage alloc] initWithSize:NSMakeSize(41 + [modeString size].width, 22)] autorelease]; 
         } else {
-            modeRawString = @"";
+            statusIcon = [[[NSImage alloc] initWithSize:NSMakeSize(41, 22)] autorelease]; 
         }
-        modeString = [[NSAttributedString alloc] initWithString:modeRawString attributes:stringAttributes];
-        // create status icon
-        statusIcon = [[[NSImage alloc] initWithSize:NSMakeSize(41 + [modeString size].width, 22)] autorelease]; 
         // load raw icon with bars - append -off suffix if not connected
         rawIcon = [NSImage imageNamed:[iconName stringByAppendingString:connected ? @"" : @"-off"]];
         // draw raw icon into status icon
@@ -145,13 +141,18 @@
         // load second raw icon which shows connection state
         if ( connected ) {
             rawIcon2 = [NSImage imageNamed: [self modeIndicatorIconname:[model mode]]];
+            [rawIcon2 drawAtPoint:NSMakePoint(22, 0) fromRect:NSZeroRect operation:NSCompositeCopy fraction:1.0];                
+            if ([[model preferences] showConnectionTime]) {
+                // show connection time
+                [modeString drawAtPoint:NSMakePoint(41, 3)];
+                [modeString release];
+            }                
         } else {
-            rawIcon2 = [NSImage imageNamed: @"lock-off"];            
+            if ([model carrier] == NULL) {
+                rawIcon2 = [NSImage imageNamed: @"lock-off"];            
+                [rawIcon2 drawAtPoint:NSMakePoint(22, 0) fromRect:NSZeroRect operation:NSCompositeCopy fraction:1.0];                
+            }
         }
-        [rawIcon2 drawAtPoint:NSMakePoint(22, 0) fromRect:NSZeroRect operation:NSCompositeCopy fraction:1.0];
-        // draw mode indicator
-        [modeString drawAtPoint:NSMakePoint(41, 3)];
-        [modeString release];
         // unlock drawing focus again
         [statusIcon unlockFocus];
         return statusIcon;

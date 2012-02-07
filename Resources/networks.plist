@@ -12311,14 +12311,14 @@
 		<key>operator</key>
 		<string>Telecommunications for Disaster Relief (TDR) (OCHA)</string>
 	</dict>
-	<key>Company40002</key>
+	<key>40002</key>
 	<dict>
 		<key>country</key>
 		<string>Azerbaijan</string>
 		<key>mcc</key>
-		<string>Company</string>
+		<string>400</string>
 		<key>mnc</key>
-		<string>40002</string>
+		<string>02</string>
 		<key>operator</key>
 		<string>Bakcell Limited Liabil ity</string>
 	</dict>
