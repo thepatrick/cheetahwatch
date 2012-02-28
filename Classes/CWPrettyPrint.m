@@ -31,11 +31,26 @@ static NSString *ISByteUnits[] = { @"L200", @"L201", @"L202", @"L203", @"L204", 
 NSString *CWPrettyTime(NSUInteger time)
 {
     if (time >= 86400) {
-        // an hour or more
+        // a day or more
         return [NSString stringWithFormat:NSLocalizedString(@"L300", @""), time / 86400, (time % 86400) / 3600, (time % 3600) / 60, time % 60];
     }
-    // less than an hour
+    // less than a day
     return [NSString stringWithFormat:NSLocalizedString(@"L301", @""), time / 3600, (time % 3600) / 60, time % 60];
+}
+
+// return a nicely formatted time duration
+NSString *CWPrettyTimeShort(NSUInteger time)
+{
+    if (time >= 86400) {
+        // a day or more
+        return [NSString stringWithFormat:NSLocalizedString(@"L302", @""), time / 86400, (time % 86400) / 3600];
+    }
+	if (time >= 3600) {
+		// an hour or more
+		return [NSString stringWithFormat:NSLocalizedString(@"L303", @""), time / 3600, (time % 3600) / 60];
+	}
+	// less than hour
+    return [NSString stringWithFormat:NSLocalizedString(@"L304", @""), (time % 3600) / 60, time % 60];
 }
 
 // return a nicely formatted bytes amount

@@ -23,7 +23,7 @@
 
 #import <Cocoa/Cocoa.h>
 
-@class CWModel, CWModem, CWDialer;
+@class CWModel, CWModem, CWDialer, CWCustomView, MAAttachedWindow;
 
 @interface CWApplication : NSApplication {
 
@@ -33,7 +33,9 @@
     CWDialer *dialer;
     NSTimer *timer;
     NSStatusItem *statusItem;
+	CWCustomView *statusItemView;
     BOOL trafficWarningDialogOpen;
+	BOOL wasConnected;
     
     // IBOutlets
     IBOutlet NSMenu *statusItemMenu;
@@ -41,13 +43,13 @@
     IBOutlet NSWindow *apnWindow;
     IBOutlet NSTextField *apnField;
 	IBOutlet NSWindow *pinWindow;
-    NSString *pinRequestDesc;
+	NSString *pinRequestDesc;
+	NSString *pukRequestDesc;
     IBOutlet NSSecureTextField *pinField;
     IBOutlet NSWindow *pukWindow;
     IBOutlet NSSecureTextField *pukField;
     IBOutlet NSSecureTextField *newPinField;
     IBOutlet NSMenu *modesPrefMenu;
-
 }
 
 // IB Actions
@@ -65,5 +67,6 @@
 - (void)setModem:(CWModem *)newModem;
 - (CWDialer *)dialer;
 - (void)setDialer:(CWDialer *)newDialer;
+
 
 @end

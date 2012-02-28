@@ -32,6 +32,8 @@
 #import "CWConnectButtonValueTransformer.h"
 #import "CWConnectionStateValueTransformer.h"
 #import "CWPrettyPrint.h"
+#import "CWCustomView.h"
+#import "MAAttachedWindow.h"
 #import <WebKit/WebKit.h>
 
 
@@ -60,6 +62,8 @@
     [model release];
     [statusItem release];
     [pinRequestDesc release];
+	[pukRequestDesc release];
+    [[[NSWorkspace sharedWorkspace] notificationCenter] removeObserver:self];
     [super dealloc];
 }
 
@@ -96,11 +100,49 @@
 #endif
 }
 
+- (void) receiveSleepNote: (NSNotification*) note
+{
+#ifdef DEBUG
+    NSLog(@"CWApplication: Received a sleep notification. Saving connection state and disconnecting if connected.");
+#endif
+    if ([model connected]) {
+		wasConnected = YES;
+		// connected/connecting - disconnect now
+        [dialer disconnect];
+    }
+	[modem deviceSleep];
+}
+
+- (void) receiveWakeNote: (NSNotification*) note
+{
+#ifdef DEBUG
+    NSLog(@"CWApplication: Received a wakeup notification. Restoring connection state.");
+#endif
+	[modem deviceWakeUp];
+	if ( wasConnected && [model modemAvailable])
+        [dialer connect];
+}
+
+- (void) fileNotifications
+{
+    //These notifications are filed on NSWorkspace's notification center, not the default 
+    // notification center. You will not receive sleep/wake notifications if you file 
+    //with the default notification center.
+    [[[NSWorkspace sharedWorkspace] notificationCenter] addObserver: self 
+														   selector: @selector(receiveSleepNote:) 
+															   name: NSWorkspaceWillSleepNotification object: NULL];
+	
+    [[[NSWorkspace sharedWorkspace] notificationCenter] addObserver: self 
+														   selector: @selector(receiveWakeNote:) 
+															   name: NSWorkspaceDidWakeNotification object: NULL];
+}
+
 - (void)awakeFromNib
 {
 #ifdef DEBUG
     NSLog(@"CWApplication: awakeFromNib called");
 #endif
+	
     // load model
     [self setModel:[CWModel persistentModel]];
     [model setDelegate:self];
@@ -114,15 +156,18 @@
 
     // setup menu item
 	statusItem = [[[NSStatusBar systemStatusBar] statusItemWithLength:NSVariableStatusItemLength] retain];
+	statusItemView = [[[CWCustomView alloc] initWithFrame:NSMakeRect(0, 0, 41, 22) controller:self] autorelease];
+	[statusItem setView: statusItemView];
 	[statusItem setHighlightMode:YES];
 	[statusItem setEnabled:YES];
 	[statusItem setToolTip:NSLocalizedString(@"L120", @"")];
-	[statusItem setMenu:statusItemMenu];
-    [statusItem setImage:[NSImage imageNamed:@"airplane"]];
+	[statusItemView setMenu:statusItemMenu];
+	[statusItemView setPreferredEdge:NSMaxYEdge];
+    [statusItemView setImage:[NSImage imageNamed:@"airplane"]];
 
     // manually set up a KVO since the status item does not know anything about bindings (yet)
     [self addObserver:self forKeyPath:@"model.modelForIcon" options:NSKeyValueObservingOptionNew context:NULL];
-    
+
     // KVO for mode preference menu items
     [self addObserver:self forKeyPath:@"model.modesPreference" options:NSKeyValueObservingOptionNew context:NULL];
 
@@ -131,16 +176,19 @@
 
     // run cleanup once, then let the timer run it once an hour
     [self cleanupTimer:nil];
-    
+
+	[self fileNotifications];
+
+	wasConnected = NO;
 }
 
-// update status icon - called by binding observer
+// update status icon and connect automaticly - called by binding observer
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
-    if ([keyPath isEqual:@"model.modelForIcon"]) {
+	if ([keyPath isEqual:@"model.modelForIcon"]) {
         // still uses a value transformer for this - maybe one day status items know about bindings and we can remove this code
         CWIconValueTransformer *valueTransformer = [CWIconValueTransformer valueTransformer];
-        [statusItem setImage:[valueTransformer transformedValue:model]];
+        [statusItemView setImage:[valueTransformer transformedValue:model]];
     } else if ([keyPath isEqual:@"model.modesPreference"]) {
         CWModesPreference modesPreference = [model modesPreference];
         if ([[modesPrefMenu itemWithTag:modesPreference] state] != NSOnState) {
@@ -157,6 +205,12 @@
         }
     }
 }
+
+- (NSPoint) onscreen
+{
+	return NSMakePoint(NSMidX([[[statusItem view] window] frame]), NSMinY([[[statusItem view] window] frame]));	
+}
+
 
 // IB Actions
 - (IBAction)connectButtonAction:(id)sender
@@ -247,40 +301,78 @@
 - (void)setPinRequestDesc:(NSString*)newDesc
 {
     [pinRequestDesc release];
-    NSMutableString *desc = [[NSMutableString alloc] initWithString:newDesc];
-    [desc appendString:@":"];
-    pinRequestDesc = desc;
+    pinRequestDesc = [[NSString alloc] initWithString:newDesc];
 }
 - (NSString*)pinRequestDesc
 {
     return pinRequestDesc;
 }
 
+- (void)setPukRequestDesc:(NSString*)newDesc
+{
+    [pukRequestDesc release];
+    pukRequestDesc = [[NSString alloc] initWithString:newDesc];
+}
+- (NSString*)pukRequestDesc
+{
+    return pukRequestDesc;
+}
+
 // CWModem delegates
 - (void)needsPin:(NSString*)pinDescription
 {
-    if (![pinWindow isVisible]) {    
-        [self setPinRequestDesc:pinDescription];
-        [pinField setStringValue:@""];
-        [pinWindow center];
-        [NSApp activateIgnoringOtherApps:YES];
-        [NSApp beginSheet:pinWindow modalForWindow:nil modalDelegate:self
-           didEndSelector:@selector(pinSheetDidEnd:returnCode:context:) contextInfo:nil];
-    }
+	MAAttachedWindow *attachedWindow = [[MAAttachedWindow alloc]	initWithView:[pinWindow contentView]
+																	attachedToPoint:[self onscreen]
+																	inWindow:nil 
+																	onSide:MAPositionBottom 
+																	atDistance:5.0];	
+		
+	[attachedWindow setBorderColor: [NSColor colorWithCalibratedWhite:0.1 alpha:0.75]];
+	[attachedWindow setBackgroundColor: [NSColor windowBackgroundColor]];
+	[attachedWindow setBorderWidth: 0.5];
+	[attachedWindow makeKeyAndOrderFront:self];
+		
+	[self setPinRequestDesc:pinDescription];
+	[pinField setStringValue:@""];
+	[NSApp activateIgnoringOtherApps:YES];
+		
+	[NSApp beginSheet:attachedWindow modalForWindow:nil modalDelegate:self
+		   didEndSelector:@selector(pinSheetDidEnd:returnCode:context:) contextInfo:nil];
+		
+	[statusItemView setNeedsDisplay:YES];
 }
 
-- (void)needsPuk
+- (void)needsPuk:(NSString*)pukDescription
 {
-    if (![pukWindow isVisible]) {    
-        [pukField setStringValue:@""];
-        [newPinField setStringValue:@""];
-        [pukWindow center];
-        [NSApp activateIgnoringOtherApps:YES];
-        [NSApp beginSheet:pukWindow modalForWindow:nil modalDelegate:self
-           didEndSelector:@selector(pukSheetDidEnd:returnCode:context:) contextInfo:nil];
-    }
+	MAAttachedWindow *attachedWindow = [[MAAttachedWindow alloc]	initWithView:[pukWindow contentView]
+																	attachedToPoint:[self onscreen]
+																	inWindow:nil 
+																	onSide:MAPositionBottom 
+																	atDistance:5.0];	
+		
+	[attachedWindow setBorderColor: [NSColor colorWithCalibratedWhite:0.1 alpha:0.75]];
+	[attachedWindow setBackgroundColor: [NSColor windowBackgroundColor]];
+	[attachedWindow setBorderWidth: 0.5];
+	[attachedWindow makeKeyAndOrderFront:self];
+		
+	[self setPukRequestDesc:pukDescription];
+	[pukField setStringValue:@""];
+	[newPinField setStringValue:@""];
+	[NSApp activateIgnoringOtherApps:YES];
+		
+	[NSApp beginSheet:attachedWindow modalForWindow:nil modalDelegate:self
+		   didEndSelector:@selector(pukSheetDidEnd:returnCode:context:) contextInfo:nil];
+		
+	[statusItemView setNeedsDisplay:YES];
 }
 
+- (void)needsAutoconnect
+{
+#ifdef DEBUG
+    NSLog(@"CWApplication: Connecting automaticly");
+#endif
+	[dialer connect];
+}
 
 // PIN sheet ended
 - (void)pinSheetDidEnd:(NSWindow *)sheet returnCode:(NSInteger)returnCode context:(void *)context
@@ -300,19 +392,34 @@
 
 - (IBAction)setPinLock:(id)sender
 {
-    [self setPinRequestDesc:@"SIM PIN"];
-    [pinField setStringValue:@""];
-    [pinWindow center];
+	MAAttachedWindow *attachedWindow = [[MAAttachedWindow alloc]	initWithView:[pinWindow contentView]
+																	attachedToPoint:[self onscreen]
+																	inWindow:nil 
+																	onSide:MAPositionBottom 
+																	atDistance:5.0];	
+	
+	[attachedWindow setBorderColor: [NSColor colorWithCalibratedWhite:0.1 alpha:0.75]];
+	[attachedWindow setBackgroundColor: [NSColor windowBackgroundColor]];
+	[attachedWindow setBorderWidth: 0.5];
+	[attachedWindow makeKeyAndOrderFront:self];
+	
+	[self setPinRequestDesc:NSLocalizedString(@"L131", @"")];
+	[pinField setStringValue:@""];
 	[NSApp activateIgnoringOtherApps:YES];
-    [NSApp beginSheet:pinWindow modalForWindow:nil modalDelegate:self
-	   didEndSelector:@selector(pinLockSheetDidEnd:returnCode:context:) contextInfo:sender];
+
+		[NSApp beginSheet:attachedWindow modalForWindow:nil modalDelegate:self
+		   didEndSelector:@selector(pinLockSheetDidEnd:returnCode:context:) contextInfo:sender];
+	
+	[statusItemView setNeedsDisplay:YES];
+
 }
+
 
 - (void)pinLockSheetDidEnd:(NSWindow *)sheet returnCode:(NSInteger)returnCode context:(void *)context
 {
     if (returnCode == NSOKButton) {
         if ([(NSMenuItem*)context tag]==1) {
-            [modem setPinLock:YES pin:[pinField stringValue]];
+			[modem setPinLock:YES pin:[pinField stringValue]];
         } else if ([(NSMenuItem*)context tag]==0) {
             [modem setPinLock:NO pin:[pinField stringValue]];
         }

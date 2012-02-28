@@ -39,9 +39,8 @@
     static BOOL beenHere;
     if (!beenHere) {
         // make derived attributes binding capable
-        [self setKeys:[NSArray arrayWithObjects:@"mode", @"signalStrength", @"connected", @"modemAvailable", @"duration", nil]
-              triggerChangeNotificationsForDependentKey:@"modelForIcon"];
-        
+        [self setKeys:[NSArray arrayWithObjects:@"mode", @"signalStrength", @"connected", @"modemAvailable", @"serviceAvailable", @"carrierAvailable", @"duration", nil] triggerChangeNotificationsForDependentKey:@"modelForIcon"];
+		
         [self setKeys:[NSArray arrayWithObjects:@"connectionState", @"duration", nil] triggerChangeNotificationsForDependentKey:@"modelForConnectionState"];
         [self setKeys:[NSArray arrayWithObject:@"connectionState"] triggerChangeNotificationsForDependentKey:@"connected"];
         [self setKeys:[NSArray arrayWithObject:@"connectionState"] triggerChangeNotificationsForDependentKey:@"disconnected"];
@@ -429,6 +428,11 @@
 	txSpeed = newTxSpeed;
 }
 
+- (NSUInteger)signalLevel
+{
+	return signalLevel;
+}
+
 - (NSUInteger)signalStrength
 {
 	return signalStrength;
@@ -437,6 +441,12 @@
 - (void)setSignalStrength:(NSUInteger)newSignalStrength
 {
 	signalStrength = newSignalStrength;
+	signalLevel = ( newSignalStrength == 99 ) ? signalLevel : 
+	( newSignalStrength < 3 ) ? 0 :
+	( newSignalStrength < 6 ) ? 1 :
+	( newSignalStrength < 10 ) ? 2 :
+	( newSignalStrength < 15 ) ? 3 :
+	( newSignalStrength < 20 ) ? 4 : 5;
 }
 
 - (NSUInteger)mode
@@ -459,6 +469,13 @@
 	[newCarrier retain];
 	[carrier release];
 	carrier = newCarrier;
+}
+
+- (BOOL)carrierAvailable
+{
+	if ( [self carrier] == NULL )
+		return FALSE;
+	return TRUE;
 }
 
 - (NSString *)apn

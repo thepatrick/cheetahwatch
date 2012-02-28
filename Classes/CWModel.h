@@ -48,6 +48,7 @@ typedef enum {
     unsigned long long cumulatedTxTotalBytes;
     NSUInteger rxSpeed;
     NSUInteger txSpeed;
+	NSUInteger signalLevel;
     NSUInteger signalStrength;
     NSUInteger mode;
     NSString *carrier;
@@ -132,10 +133,12 @@ typedef enum {
 - (void)setRxSpeed:(NSUInteger)newRxSpeed;
 - (NSUInteger)txSpeed;
 - (void)setTxSpeed:(NSUInteger)newTxSpeed;
+- (NSUInteger)signalLevel;
 - (NSUInteger)signalStrength;
 - (void)setSignalStrength:(NSUInteger)newSignalStrength;
 - (NSUInteger)mode;
 - (void)setMode:(NSUInteger)newMode;
+- (BOOL)carrierAvailable;
 - (NSString *)carrier;
 - (void)setCarrier:(NSString *)newCarrier;
 - (NSString *)apn;
