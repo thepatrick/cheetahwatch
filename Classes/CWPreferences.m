@@ -54,6 +54,7 @@
         trafficWarningUnit = CWTrafficWarningUnitGB;
         trafficWarningInterval = 300;
         showConnectionTime = YES;
+		autoconnect = NO;
         presetApn = @"";
     }
     return self;
@@ -77,6 +78,7 @@
 		trafficWarningUnit = [decoder decodeIntegerForKey:@"trafficWarningUnit"];
 		trafficWarningInterval = [decoder decodeIntegerForKey:@"trafficWarningInterval"];
 		showConnectionTime = [decoder decodeBoolForKey:@"showConnectionTime"];
+		autoconnect = [decoder decodeBoolForKey:@"autoconnect"];
 		presetApn = [[decoder decodeObjectForKey:@"presetApn"] retain];
 	}
 	return self;
@@ -98,6 +100,7 @@
 	[encoder encodeInteger:trafficWarningUnit forKey:@"trafficWarningUnit"];
 	[encoder encodeInteger:trafficWarningInterval forKey:@"trafficWarningInterval"];
 	[encoder encodeBool:showConnectionTime forKey:@"showConnectionTime"];
+	[encoder encodeBool:autoconnect forKey:@"autoconnect"];
 	[encoder encodeObject:presetApn forKey:@"presetApn"];
 }
 
@@ -246,6 +249,16 @@
 - (void)setTrafficWarningInterval:(NSInteger)newTrafficWarningInterval
 {
 	trafficWarningInterval = newTrafficWarningInterval;
+}
+
+- (BOOL)autoconnect
+{
+	return autoconnect;
+}
+
+- (void)setAutoconnect:(BOOL)newAutoconnect
+{
+	autoconnect = newAutoconnect;
 }
 
 - (BOOL)showConnectionTime

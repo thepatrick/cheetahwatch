@@ -26,6 +26,9 @@
 // return a nicely formatted time duration
 NSString *CWPrettyTime(NSUInteger time);
 
+// return a nicely formatted time duration
+NSString *CWPrettyTimeShort(NSUInteger time);
+
 // return a nicely formatted bytes amount
 NSString *CWPrettyBytes(unsigned long long bytes);
 

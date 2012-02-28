@@ -61,6 +61,9 @@
 
     // show connection time in status bar if true
     BOOL showConnectionTime;
+	
+	// Connect automaticly
+	BOOL autoconnect;
 
     // APN settings
     NSString *presetApn;
@@ -96,7 +99,10 @@
 - (void)setTrafficWarningInterval:(NSInteger)newTrafficWarningInterval;
 - (BOOL)showConnectionTime;
 - (void)setShowConnectionTime:(BOOL)newShowConnectionTime;
+- (BOOL)autoconnect;
+- (void)setAutoconnect:(BOOL)newAutoconnect;
 - (NSString *)presetApn;
 - (void)setPresetApn:(NSString *)newPresetApn;
+
 
 @end

@@ -11,6 +11,13 @@
 "L113" = "MB";
 "L114" = "GB";
 
+/* New translations */
+"L131" = "Change PIN Lock state";
+"L132" = "Disable PIN Lock";
+"L133" = "PIN code needed!";
+"L134" = "Warning! WRONG PIN!";
+"L135" = "Warning PUK NEEDED";
+
 /* status item tooltip - used by CWApplication */
 "L120" = "CheetahWatch";
 
@@ -56,7 +63,13 @@
 "L286" = "Validating PIN";
 "L299" = "Unknown";
 
-/* time formatter with days and without days - args come in order [days:]hours:minutes:seconds - used by CWDurationValueTransformer */
+/* time formatter with days and without days - args come in order [days:]hours:minutes:seconds - used by CWDurationValueTransformer 
+ * * * DEPRECATED * * * Check short time formatter
+*/
 "L300" = "%ud:%02u:%02u:%02u";
 "L301" = "%02u:%02u:%02u";
 
+/* short time formatter with days and without days - args come in order [days:]hours:minutes:seconds - used by CWDurationValueTransformer */
+"L302" = "%ud %02uh";
+"L303" = "%02uh %02um";
+"L304" = "%02um %02us";
