@@ -49,21 +49,23 @@
     // mode values taken from https://forge.betavine.net/pipermail/vodafonemobilec-devel/2007-November/000043.html
     switch (mode) {
         case 0:     // None
-            return NSLocalizedString(@"L240", @"");
+            return NSLocalizedString(@"L250", @"");
         case 1:     // GSM
-            return NSLocalizedString(@"L241", @"");
+            return NSLocalizedString(@"L251", @"");
         case 2:     // GPRS
-            return NSLocalizedString(@"L242", @"");
+            return NSLocalizedString(@"L252", @"");
         case 3:     // EDGE
-            return NSLocalizedString(@"L243", @"");
+            return NSLocalizedString(@"L253", @"");
         case 4:     // WCDMA/UMTS
-            return NSLocalizedString(@"L244", @"");
+            return NSLocalizedString(@"L254", @"");
         case 5:     // HSDPA
+            return NSLocalizedString(@"L255", @"");
         case 6:     // HSUPA
+            return NSLocalizedString(@"L256", @"");
         case 7:     // HSDPA + HSUPA
-            return NSLocalizedString(@"L245", @"");
+            return NSLocalizedString(@"L257", @"");
         default:    // Unknown
-            return NSLocalizedString(@"L249", @"");
+            return NSLocalizedString(@"L251", @"");
     }    
 }
 
@@ -80,7 +82,7 @@
         case 3:     // EDGE
             return @"edge";
         case 4:     // WCDMA/UMTS
-            return @"umts";
+            return @"edge";
         case 5:     // HSDPA
             return @"umts";
         case 6:     // HSUPA
@@ -100,61 +102,53 @@
 {
     // translate signal level and connection state into an icon
     CWModel *model = (CWModel *)value;
+
     if ([model modemAvailable]) {
-        NSUInteger signalStrength = [model signalStrength];
-        NSFont *menuFont = [NSFont fontWithName:@"Monaco" size:10.0];
-        NSImage *statusIcon;
-        BOOL connected = [model connected];
-        NSDictionary *stringAttributes;
-        NSAttributedString *modeString;
-        NSString *modeRawString;
-        NSString *iconName;
-        NSImage *rawIcon, *rawIcon2;
-        
-        // determine icon for given signal strength
-        if (signalStrength == 0) {
-            iconName = @"signal-0";
-        } else if (signalStrength < 10) {
-            iconName = @"signal-1";
-        } else if (signalStrength < 15) {
-            iconName = @"signal-2";
-        } else if (signalStrength < 20) {
-            iconName = @"signal-3";
-        } else {
-            iconName = @"signal-4";
-        }
-        // construct mode and duration string
-        stringAttributes = [NSDictionary dictionaryWithObjectsAndKeys:menuFont, NSFontAttributeName, [NSColor colorWithCalibratedRed:0.32 green:0.32 blue:0.32 alpha:1], NSForegroundColorAttributeName, nil];
-        // show mode and connection state or only mode, depending on connection state and preference setting & create status icon
-        if (connected && [[model preferences] showConnectionTime]) {
-            modeRawString = [NSString stringWithFormat:@"%@", CWPrettyTime([model duration])];
-            modeString = [[NSAttributedString alloc] initWithString:modeRawString attributes:stringAttributes];
-            statusIcon = [[[NSImage alloc] initWithSize:NSMakeSize(41 + [modeString size].width, 22)] autorelease]; 
-        } else {
-            statusIcon = [[[NSImage alloc] initWithSize:NSMakeSize(41, 22)] autorelease]; 
-        }
+
+		NSShadow *textShadow = [[NSShadow alloc] init];
+		[textShadow setShadowColor:[NSColor colorWithDeviceWhite:1 alpha:.8]];
+		[textShadow setShadowBlurRadius:0];
+		[textShadow setShadowOffset:NSMakeSize(0, -1)];
+		
+		NSAttributedString *modeString = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@", CWPrettyTimeShort([model duration])]
+																		 attributes: [NSDictionary dictionaryWithObjectsAndKeys:
+																					  [NSFont boldSystemFontOfSize:12.0], NSFontAttributeName,
+																					  textShadow, NSShadowAttributeName,
+																					  [NSColor blackColor], NSForegroundColorAttributeName,
+																					  nil]];
+				
+        // show mode and connection state or only mode, dependizg on connection state and preference setting & create status icon
+		NSImage *statusIcon =[[[NSImage alloc] initWithSize:NSMakeSize([model connected] && [[model preferences] showConnectionTime] ? ( 43 + modeString.size.width ) : 41, 22)] autorelease];
+		
+		[statusIcon setFlipped: YES];
+		
         // load raw icon with bars - append -off suffix if not connected
-        rawIcon = [NSImage imageNamed:[iconName stringByAppendingString:connected ? @"" : @"-off"]];
+        NSImage *rawIcon = [NSImage imageNamed:[@"signal-" stringByAppendingFormat:@"%d%@", [model signalLevel], [model connected] ? @"" : @"-off" ]];
+
+		[rawIcon setFlipped: NO];
         // draw raw icon into status icon
         [statusIcon lockFocus];
         [rawIcon drawAtPoint:NSZeroPoint fromRect:NSZeroRect operation:NSCompositeCopy fraction:1.0];
         // load second raw icon which shows connection state
-        if ( connected ) {
-            rawIcon2 = [NSImage imageNamed: [self modeIndicatorIconname:[model mode]]];
+        if ( [model connected] ) {
+			NSImage *rawIcon2 = [NSImage imageNamed: [self modeIndicatorIconname:[model mode]]];
             [rawIcon2 drawAtPoint:NSMakePoint(22, 0) fromRect:NSZeroRect operation:NSCompositeCopy fraction:1.0];                
             if ([[model preferences] showConnectionTime]) {
-                // show connection time
-                [modeString drawAtPoint:NSMakePoint(41, 3)];
-                [modeString release];
-            }                
-        } else {
-            if ([model carrier] == NULL) {
-                rawIcon2 = [NSImage imageNamed: @"lock-off"];            
+				// create raw icon with connection time
+				NSImage *rawIcon3 = [[[NSImage alloc] initWithSize:NSMakeSize([modeString size].width, 22)] autorelease];				
+				[rawIcon3 lockFocus];
+				[modeString drawAtPoint:NSZeroPoint];
+				[modeString release];
+				[rawIcon3 unlockFocus];
+				[rawIcon3 drawAtPoint:NSMakePoint(41,3) fromRect:NSZeroRect operation:NSCompositeCopy fraction:1.0];
+			}
+        } else if (![model serviceAvailable]) {
+                NSImage *rawIcon2 = [NSImage imageNamed: @"lock-off"];            
                 [rawIcon2 drawAtPoint:NSMakePoint(22, 0) fromRect:NSZeroRect operation:NSCompositeCopy fraction:1.0];                
-            }
         }
         // unlock drawing focus again
         [statusIcon unlockFocus];
+		[statusIcon setFlipped: NO];		
         return statusIcon;
     } else {
         // no modem available

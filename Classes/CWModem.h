@@ -51,6 +51,8 @@
 - (void)sendPuk:(NSString*)puk withNewPin:(NSString*)newPin;
 - (void)setModesPref: (CWModesPreference)newPref;
 - (void)setPinLock: (BOOL)enabled pin:(NSString*)pin;
+- (void)deviceSleep;
+- (void)deviceWakeUp;
 
 // accessors
 - (id)delegate;
@@ -61,5 +63,6 @@
 // delegate methods
 @interface NSObject (CWModemDelegateMethods)
 - (void)needsPin:(NSString*)pinDescription;
-- (void)needsPuk;
+- (void)needsPuk:(NSString*)pukDescription;
+- (void)needsAutoconnect;
 @end

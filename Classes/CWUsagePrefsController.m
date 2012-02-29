@@ -84,14 +84,14 @@
 	
 	CGFloat scaleFactor = [[NSScreen mainScreen] userSpaceScaleFactor];
 
-	CGFloat newViewHeight = (260 + viewHeight);		
+	CGFloat newViewHeight = (290 + viewHeight);		
 	windowFrame.origin.y += windowFrame.size.height - (newViewHeight * scaleFactor);
 	windowFrame.size.height = (newViewHeight * scaleFactor);		
 	[prefsWindow setFrame:windowFrame display:YES animate:YES];
 		
 	NSRect containerFrame = [autoResetFrequencyViewContainer frame];
 	containerFrame.size.height = viewHeight + 44;
-	containerFrame.origin.y = 22;
+	containerFrame.origin.y = 52;
 	[autoResetFrequencyViewContainer setFrame:containerFrame];
 	
 	[autoResetFrequencyViewContainer addSubview:view];

@@ -122,6 +122,16 @@
                 if (cmode == 2) {
                     // translate numeric MCC/MNC into operator name
                     NSString *carrier = [CWNetworks operatorForMCCMNC:mccmnc];
+					
+					if (
+						(![model carrierAvailable]) && 
+						([[model preferences] autoconnect]) && 
+						(delegate) && 
+						([delegate respondsToSelector:@selector(needsAutoconnect)])
+						 ) {
+							[delegate needsAutoconnect];
+						}
+					
                     [model setCarrier:carrier ? carrier : mccmnc];
                 } else {
                     [model setCarrier:mccmnc];
@@ -296,21 +306,22 @@
 		return;
 	
 	if ([pinState isEqual:@"READY"]) {
+		[model setOngoingPIN:NO];
 		return;
     } else if (([pinState isEqual:@"SIM PIN"]) && (![model ongoingPIN])) {
 		if (delegate && [delegate respondsToSelector:@selector(needsPin:)]) {
             [model setOngoingPIN:YES];
-			[delegate needsPin:pinState];
+			[delegate needsPin:NSLocalizedString(@"L133", @"")];
 		}
     } else if (([pinState isEqual:@"SIM PUK"]) && (![model ongoingPIN])) {
 		if (delegate && [delegate respondsToSelector:@selector(needsPuk)]) {
             [model setOngoingPIN:YES];
-            [delegate needsPuk];
+            [delegate needsPuk:NSLocalizedString(@"L135", @"")];
 		}
 	} else {
 		if ((delegate && [delegate respondsToSelector:@selector(needsPin:)]) && (![model ongoingPIN])) {
             [model setOngoingPIN:YES];
-			[delegate needsPin:pinState];
+			[delegate needsPin:NSLocalizedString(@"L133", @"")];
 		}
 	}
 }
@@ -411,9 +422,6 @@
         // start timout timer
         commandTimeoutTimer = [NSTimer scheduledTimerWithTimeInterval:CWCommandTimeout target:self selector:@selector(commandTimeout:)
                                        userInfo:nil repeats:NO];
-        if (([command isEqual:@"AT+CPIN?\r"]) && ([model ongoingPIN])) {
-            [model setOngoingPIN:NO]; // PIN status query is done after sending PIN/PUK
-        }
     }
 }
 
@@ -441,9 +449,9 @@
         } else if (([error isEqual:@"SIM PUK required"]) && (![model ongoingPIN])) {
             if (delegate && [delegate respondsToSelector:@selector(needsPuk)]) {
                 [model setOngoingPIN:YES];
-                [delegate needsPuk];
+                [delegate needsPuk:NSLocalizedString(@"L135", @"")];
             }
-        } else if (([error isEqual:@"incorrect password"]) && (![model ongoingPIN])) { // Incorrect PIN code
+        } else if ([error isEqual:@"incorrect password"]) { // Incorrect PIN code
             if (delegate && [delegate respondsToSelector:@selector(needsPin:)]) {
                 [model setOngoingPIN:YES];
                 [delegate needsPin:error];
@@ -643,23 +651,21 @@
 // open modem, allocata a file handle and send initial data
 - (void)openModem:(NSString *)devicePath
 {
-    NSInteger fd;
     // check if there is already a handle open, close it in this case
     if (modemHandle) {
         [self closeModem];
     }
-    // open modem device - need to use UNIX system call since NSFileHandle can't open a file for read and write
-    fd = open([devicePath cStringUsingEncoding:NSASCIIStringEncoding], O_RDWR | O_NOCTTY);
-#ifdef DEBUG
-    NSLog(@"CWModem: open returned %d", fd);
-#endif
-    if (fd != -1) {
         // create a new NSFileHandle for the modem port and start reading in the background
-        modemHandle = [[NSFileHandle alloc] initWithFileDescriptor:fd closeOnDealloc:YES];
+		modemHandle = [NSFileHandle fileHandleForUpdatingAtPath: devicePath];
+		if ( modemHandle == nil )
+			NSLog(@"CWModem: Failed to open device %@", devicePath);
+#ifdef DEBUG
+			NSLog(@"CWModem: Succesfully accessed device %@", devicePath);
+#endif
         [modemHandle waitForDataInBackgroundAndNotify];
 
-        // Initialization queries pin status which sets this to false
-        [model setOngoingPIN:YES];
+        // Initialization - no ongoing pin at the beginning..
+        [model setOngoingPIN:NO];
         
         // send commands to query some basic information
         [self sendModemCommand:@"AT+CGMI"];       // query manufacterer
@@ -667,6 +673,7 @@
         [self sendModemCommand:@"AT+CGSN"];       // query IMEI
 		if ([[model manufacturer] isEqual:@"Huawei"]) {
 			[self sendModemCommand:@"AT^HWVER"];  // query hardware version (Huawei)
+			[self sendModemCommand:@"AT+CFUN=1;+CFUN=5"];  // Enable device
 		} else {
 			[self sendModemCommand:@"AT+CGMR"];   // query hardware version (generic)
 		}
@@ -680,7 +687,6 @@
         [self periodicCommandTimer:periodicTimer];
         // modem is available now
         [model setModemAvailable:YES];
-    }
 }
 
 // close modem handle and remove any residue data
@@ -714,14 +720,34 @@
 
 - (void)sendPin: (NSString*) pin
 {
-    [self sendModemCommand:[NSString stringWithFormat:@"AT+CPIN=%@", pin]];
-    [self sendModemCommand:@"AT+CPIN?"];        
+    // invalidate periodic timer
+    [periodicTimer invalidate];
+    periodicTimer = nil;
+
+	[modemHandle writeData: [[NSString stringWithFormat:@"AT+CPIN=%@\r", pin] dataUsingEncoding:NSASCIIStringEncoding]];
+	[modemHandle writeData: [[NSString stringWithString:@"AT+CPIN?\r"] dataUsingEncoding:NSASCIIStringEncoding]];
+	
+	// setup a timer to periodically query some information
+	periodicTimer = [NSTimer scheduledTimerWithTimeInterval:CWPeriodicCommandInterval target:self selector:@selector(periodicCommandTimer:)
+												   userInfo:nil repeats:YES];
+	// call timer action immediately
+	[self periodicCommandTimer:periodicTimer];	 
 }
 
 - (void)sendPuk:(NSString*)puk withNewPin:(NSString*)newPin
 {
-    [self sendModemCommand:[NSString stringWithFormat:@"AT+CPIN=%@,%@", puk, newPin]];
-    [self sendModemCommand:@"AT+CPIN?"];        
+    // invalidate periodic timer
+    [periodicTimer invalidate];
+    periodicTimer = nil;
+	
+	[modemHandle writeData: [[NSString stringWithFormat:@"AT+CPIN=%@,%@\r", puk, newPin] dataUsingEncoding:NSASCIIStringEncoding]];
+	[modemHandle writeData: [[NSString stringWithString:@"AT+CPIN?\r"] dataUsingEncoding:NSASCIIStringEncoding]];
+	
+	// setup a timer to periodically query some information
+	periodicTimer = [NSTimer scheduledTimerWithTimeInterval:CWPeriodicCommandInterval target:self selector:@selector(periodicCommandTimer:)
+												   userInfo:nil repeats:YES];
+	// call timer action immediately
+	[self periodicCommandTimer:periodicTimer];	
 }
 
 - (void)setPinLock:(BOOL)enabled pin:(NSString*)pin
@@ -752,6 +778,21 @@
 #endif
     // not using devicePath yet
     [self closeModem];
+}
+
+- (void)deviceSleep
+{
+    if ([[model manufacturer] isEqualTo:@"Huawei"]) {
+		[self sendModemCommand:@"AT+CFUN=5"];
+	}
+}
+
+- (void)deviceWakeUp
+{
+    if ([[model manufacturer] isEqualTo:@"Huawei"]) {
+		[self sendModemCommand:@"AT+CFUN=1"];        
+
+	}
 }
 
 // accessors
