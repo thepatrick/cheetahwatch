@@ -67,5 +67,18 @@
 			<integer>4817</integer>
 		</dict>
 	</dict>
+	<dict>
+		<key>devicePath</key>
+		<string>/dev/cu.ZTEUSBATPort_</string>
+		<key>matchingDictionary</key>
+		<dict>
+			<key>IOProviderClass</key>
+			<string>IOUSBDevice</string>
+			<key>idProduct</key>
+			<integer>23</integer>
+			<key>idVendor</key>
+			<integer>6610</integer>
+		</dict>
+	</dict>
 </array>
 </plist>
