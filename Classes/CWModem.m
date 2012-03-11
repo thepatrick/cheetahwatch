@@ -190,6 +190,17 @@
     }
 }
 
+// parse a ^ZRSSI reply
+- (void)processZRSSI:(NSScanner *)scanner
+{
+    // example: ^ZRSSI: 92,1000,1000
+    NSInteger signalStrength;
+    if ([scanner scanInteger:&signalStrength]) {
+        // have a valid signal strength
+        [model setSignalStrength:signalStrength / 4.85];
+    }
+}
+
 // parse a ^MODE reply
 - (void)processMODE:(NSScanner *)scanner
 {
@@ -223,11 +234,11 @@
         [model setMode:-1];
         return;
     }
-    
+
     if ([mode_str isEqual:@"No Service"]) {
         [model setMode:0];
     } else if ([mode_str isEqual:@"Limited Service"]) {
-        [model setMode:-1];
+        [model setMode:1];
     } else if ([mode_str isEqual:@"GSM"]) {
         [model setMode:1];
     } else if ([mode_str isEqual:@"GPRS"]) {
@@ -240,7 +251,10 @@
         [model setMode:5];
     } else if ([mode_str isEqual:@"HSUPA"]) {
         [model setMode:6];
+    } else if ([mode_str isEqual:@"HSPA+"]) {
+        [model setMode:7];
     } else {
+		NSLog(@"Unknown network mode %@", mode_str);
         [model setMode:-1];
     }
     
@@ -488,6 +502,8 @@
         [self processDSFLOWRPT:scanner];
     } else if ([command isEqual:@"^RSSI"]) {
         [self processRSSI:scanner];
+    } else if ([command isEqual:@"+ZRSSI"]) {
+        [self processZRSSI:scanner];
     } else if ([command isEqual:@"^MODE"]) {
         [self processMODE:scanner];
     } else if ([command isEqual:@"+ZPAS"]) {
@@ -618,7 +634,7 @@
         } else if (newPref==CWMode3GPreferred) {
             [self sendModemCommand:@"AT^SYSCFG=2,2,3FFFFFFF,2,4"];
         }
-    } else if ([[model manufacturer] isEqualTo:@"Zte Incorporated"]) {
+    } else if (([[model manufacturer] isEqualTo:@"Zte Incorporated"]) || ([[model manufacturer] isEqualTo:@"Zte Corporation"])) {
         if (newPref==CWModeGPRSOnly) {
             [self sendModemCommand:@"AT+ZSNT=1,0,0"];
         } else if (newPref==CWMode3GOnly) {
@@ -639,9 +655,10 @@
     [self sendModemCommand:@"AT+COPS?"];           // query carrier
     [self sendModemCommand:@"AT+CPAS"];            // query module status
 	[self sendModemCommand:@"AT+CIMI"];            // query IMSI
-	if ([[model manufacturer] isEqual:@"Zte Incorporated"]) {
+	if (([[model manufacturer] isEqual:@"Zte Incorporated"]) || ([[model manufacturer] isEqualTo:@"Zte Corporation"])) {
 		[self sendModemCommand:@"AT+ZPAS?"];       // query mode (ZTE)
         [self sendModemCommand:@"AT+ZSNT?"];       // query mode preferences (ZTE)
+        [self sendModemCommand:@"AT+ZRSSI"];       // query mode preferences (ZTE)		
 	} else if ([[model manufacturer] isEqual:@"Huawei"]) {
         [self sendModemCommand:@"AT^SYSCFG?"];  // query mode preferences (Huawei)
     }
