@@ -76,8 +76,8 @@
     // example: +CSQ: 11,99
     NSInteger signalStrength;
     if ([scanner scanInteger:&signalStrength]) {
-        // have a valid signal strength
-        [model setSignalStrength:signalStrength];
+        // have a valid signal strength	
+		[model setSignalStrength: signalStrength ];
     }
 }
 
@@ -186,7 +186,7 @@
     NSInteger signalStrength;
     if ([scanner scanInteger:&signalStrength]) {
         // have a valid signal strength
-        [model setSignalStrength:signalStrength];
+		[model setSignalStrength: signalStrength ];
     }
 }
 
@@ -197,7 +197,8 @@
     NSInteger signalStrength;
     if ([scanner scanInteger:&signalStrength]) {
         // have a valid signal strength
-        [model setSignalStrength:signalStrength / 4.85];
+        //[model setSignalStrength: signalStrength];
+		// Don't do it - ZRSSI rssi conversion to CSQ rssi calculation not done..
     }
 }
 
@@ -318,8 +319,7 @@
     NSString *pinState;
     if (![scanner scanUpToString:@"\n" intoString:&pinState])
 		return;
-	
-	if ([pinState isEqual:@"READY"]) {
+	if (([pinState isEqual:@"READY"]) || ([pinState isEqual:@"OK"])) {
 		[model setOngoingPIN:NO];
 		return;
     } else if (([pinState isEqual:@"SIM PIN"]) && (![model ongoingPIN])) {
@@ -346,6 +346,7 @@
 {
     /*
      ZTE:
+	 'AUTOMATIC': 'AT+ZSNT=0,0,0';
      'GPRSONLY' : 'AT+ZSNT=1,0,0',
      '3GONLY'   : 'AT+ZSNT=2,0,0',
      'GPRSPREF' : 'AT+ZSNT=0,0,1',
@@ -356,7 +357,9 @@
     if (![scanner scanUpToString:@"\n" intoString:&order])
         return;
     
-    if ([order isEqualTo:@"1,0,0"]) {
+    if ([order isEqualTo:@"0,0,0"]) {
+        [model setModesPreference:CWModeAuto];
+    } else if ([order isEqualTo:@"1,0,0"]) {
         [model setModesPreference:CWModeGPRSOnly];
     } else if ([order isEqualTo:@"2,0,0"]) {
         [model setModesPreference:CWMode3GOnly];
@@ -634,8 +637,10 @@
         } else if (newPref==CWMode3GPreferred) {
             [self sendModemCommand:@"AT^SYSCFG=2,2,3FFFFFFF,2,4"];
         }
-    } else if (([[model manufacturer] isEqualTo:@"Zte Incorporated"]) || ([[model manufacturer] isEqualTo:@"Zte Corporation"])) {
-        if (newPref==CWModeGPRSOnly) {
+    } else if ( [model isZTE] ) {
+        if (newPref==CWModeAuto) {
+            [self sendModemCommand:@"AT+ZSNT=0,0,0"];
+        } else if (newPref==CWModeGPRSOnly) {
             [self sendModemCommand:@"AT+ZSNT=1,0,0"];
         } else if (newPref==CWMode3GOnly) {
             [self sendModemCommand:@"AT+ZSNT=2,0,0"];
@@ -655,10 +660,10 @@
     [self sendModemCommand:@"AT+COPS?"];           // query carrier
     [self sendModemCommand:@"AT+CPAS"];            // query module status
 	[self sendModemCommand:@"AT+CIMI"];            // query IMSI
-	if (([[model manufacturer] isEqual:@"Zte Incorporated"]) || ([[model manufacturer] isEqualTo:@"Zte Corporation"])) {
+	if ( [model isZTE] ) {
 		[self sendModemCommand:@"AT+ZPAS?"];       // query mode (ZTE)
         [self sendModemCommand:@"AT+ZSNT?"];       // query mode preferences (ZTE)
-        [self sendModemCommand:@"AT+ZRSSI"];       // query mode preferences (ZTE)		
+        //[self sendModemCommand:@"AT+ZRSSI"];       // query mode preferences (ZTE)		
 	} else if ([[model manufacturer] isEqual:@"Huawei"]) {
         [self sendModemCommand:@"AT^SYSCFG?"];  // query mode preferences (Huawei)
     }
@@ -691,7 +696,12 @@
 		if ([[model manufacturer] isEqual:@"Huawei"]) {
 			[self sendModemCommand:@"AT^HWVER"];  // query hardware version (Huawei)
 			[self sendModemCommand:@"AT+CFUN=1;+CFUN=5"];  // Enable device
-		} else {
+		} if ( [model isZTE] ) {
+			[self sendModemCommand:@"AT+CGMR"];   // query hardware version (generic)
+			[self sendModemCommand:@"AT+ZOPRT=5"];   // Keep modem on-line/powered on (ZTE)
+			[self sendModemCommand:@"AT+CPMS?"]; // Stop repeating ZUSIMR:2 message between every 2 seconds..
+		}
+		else {
 			[self sendModemCommand:@"AT+CGMR"];   // query hardware version (generic)
 		}
 		[self sendModemCommand:@"AT+CPIN?"];      // query pin status
@@ -728,8 +738,12 @@
     NSString *presetApn = [[model preferences] presetApn];
     // don't do anything if no APN is defined in preferences and don't send anything if no modem is present
     if ([presetApn length] && [model modemAvailable]) {
-        // example command: AT+CGDCONT=1,"IP","gprs.swisscom.ch","",0,0
-        [self sendModemCommand:[NSString stringWithFormat:@"AT+CGDCONT=1,\"IP\",\"%@\",\"\",0,0", presetApn]];
+		// ZTE documentation says that you should use cid 4
+		if ( [model isZTE] ) {
+			[self sendModemCommand:[NSString stringWithFormat:@"AT+CGDCONT=4,\"IP\",\"%@\",\"\",0,0", presetApn]];
+		} else { // example command: AT+CGDCONT=1,"IP","gprs.swisscom.ch","",0,0
+			[self sendModemCommand:[NSString stringWithFormat:@"AT+CGDCONT=1,\"IP\",\"%@\",\"\",0,0", presetApn]];			
+		}
         // query new APN
         [self sendModemCommand:@"AT+CGDCONT?"];
     }
@@ -800,16 +814,24 @@
 - (void)deviceSleep
 {
     if ([[model manufacturer] isEqualTo:@"Huawei"]) {
-		[self sendModemCommand:@"AT+CFUN=5"];
+		[self sendModemCommand:@"AT+CFUN=4"];
 	}
+/*	else if ( [model isZTE] ) { // Wake up is broken :(
+		[self sendModemCommand:@"AT+ZOPRT=6"];   // Set modem standby (ZTE)
+	}*/
 }
 
 - (void)deviceWakeUp
 {
     if ([[model manufacturer] isEqualTo:@"Huawei"]) {
 		[self sendModemCommand:@"AT+CFUN=1"];        
-
 	}
+/*	else if ( [model isZTE] ) { // Wake up does not work :/
+		[self sendModemCommand:@"AT+ZOPRT=5"];   // Keep modem on-line/powered on (ZTE)
+		[self sendModemCommand:@"AT+ZOPRT=5"];
+		[self sendModemCommand:@"AT+ZOPRT=5"];
+		[self sendModemCommand:@"AT+ZOPRT=5"];
+	}*/
 }
 
 // accessors
