@@ -44,7 +44,7 @@
         [self setKeys:[NSArray arrayWithObjects:@"connectionState", @"duration", nil] triggerChangeNotificationsForDependentKey:@"modelForConnectionState"];
         [self setKeys:[NSArray arrayWithObject:@"connectionState"] triggerChangeNotificationsForDependentKey:@"connected"];
         [self setKeys:[NSArray arrayWithObject:@"connectionState"] triggerChangeNotificationsForDependentKey:@"disconnected"];
-        
+		
         beenHere = YES;
     }
 }
@@ -299,6 +299,13 @@
 	return connectionState == kSCNetworkConnectionPPPDisconnected;
 }
 
+- (BOOL)isZTE
+{
+	if (([[self manufacturer] isEqual:@"Zte Incorporated"]) || ([[self manufacturer] isEqualTo:@"Zte Corporation"]))
+		return YES;
+	return NO;
+}
+
 // accessors
 - (BOOL)modemAvailable
 {
@@ -439,14 +446,14 @@
 }
 
 - (void)setSignalStrength:(NSUInteger)newSignalStrength
-{
-	signalStrength = newSignalStrength;
-	signalLevel = ( newSignalStrength == 99 ) ? signalLevel : 
-	( newSignalStrength < 3 ) ? 0 :
-	( newSignalStrength < 6 ) ? 1 :
-	( newSignalStrength < 10 ) ? 2 :
-	( newSignalStrength < 15 ) ? 3 :
-	( newSignalStrength < 20 ) ? 4 : 5;
+{	// Signal level according to this: http://www.siptune.net/tiki-index.php?page=Signaalinaytot
+	signalStrength = ( newSignalStrength == 99 ) ? signalStrength : newSignalStrength;
+	signalLevel =
+	( signalStrength < 3 ) ? 0 :
+	( signalStrength < 8 ) ? 1 :
+	( signalStrength < 14 ) ? 2 :
+	( signalStrength < 20 ) ? 3 :
+	( signalStrength < 26 ) ? 4 : 5;
 }
 
 - (NSUInteger)mode

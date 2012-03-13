@@ -319,6 +319,14 @@
 							<string key="NSTitle">Network mode</string>
 							<object class="NSMutableArray" key="NSMenuItems">
 								<bool key="EncodedWithXMLCoder">YES</bool>
+								<object class="NSMenuItem" id="1033456993">
+									<reference key="NSMenu" ref="840130422"/>
+									<string key="NSTitle">Automatic</string>
+									<string key="NSKeyEquiv"/>
+									<int key="NSMnemonicLoc">2147483647</int>
+									<reference key="NSOnImage" ref="88867518"/>
+									<reference key="NSMixedImage" ref="11226334"/>
+								</object>
 								<object class="NSMenuItem" id="703315586">
 									<reference key="NSMenu" ref="840130422"/>
 									<string key="NSTitle">3G Preferred</string>
@@ -435,7 +443,7 @@
 				</object>
 				<nil key="NSUserInterfaceItemIdentifier"/>
 				<object class="NSView" key="NSWindowView" id="906998178">
-					<nil key="NSNextResponder"/>
+					<reference key="NSNextResponder"/>
 					<int key="NSvFlags">288</int>
 					<object class="NSMutableArray" key="NSSubviews">
 						<bool key="EncodedWithXMLCoder">YES</bool>
@@ -841,6 +849,7 @@
 							<int key="NSvFlags">-2147483380</int>
 							<string key="NSFrame">{{27, 120}, {159, 17}}</string>
 							<reference key="NSSuperview" ref="906998178"/>
+							<reference key="NSNextKeyView"/>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSTextFieldCell" key="NSCell" id="774111479">
 								<int key="NSCellFlags">67239424</int>
@@ -899,6 +908,7 @@
 						</object>
 					</object>
 					<string key="NSFrameSize">{345, 232}</string>
+					<reference key="NSSuperview"/>
 					<reference key="NSNextKeyView" ref="898917601"/>
 				</object>
 				<string key="NSScreenRect">{{0, 0}, {1920, 1058}}</string>
@@ -1448,7 +1458,7 @@
 				<nil key="NSViewClass"/>
 				<nil key="NSUserInterfaceItemIdentifier"/>
 				<object class="NSView" key="NSWindowView" id="473863774">
-					<reference key="NSNextResponder"/>
+					<nil key="NSNextResponder"/>
 					<int key="NSvFlags">256</int>
 					<object class="NSMutableArray" key="NSSubviews">
 						<bool key="EncodedWithXMLCoder">YES</bool>
@@ -1894,7 +1904,6 @@
 							<int key="NSvFlags">268</int>
 							<string key="NSFrame">{{18, 30}, {152, 18}}</string>
 							<reference key="NSSuperview" ref="473863774"/>
-							<reference key="NSNextKeyView"/>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSButtonCell" key="NSCell" id="557132067">
 								<int key="NSCellFlags">-2080244224</int>
@@ -1914,7 +1923,6 @@
 						</object>
 					</object>
 					<string key="NSFrameSize">{380, 421}</string>
-					<reference key="NSSuperview"/>
 					<reference key="NSNextKeyView" ref="349813978"/>
 				</object>
 				<string key="NSScreenRect">{{0, 0}, {1920, 1058}}</string>
@@ -3639,22 +3647,6 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
-						<string key="label">value: selection.signalStrength</string>
-						<reference key="source" ref="973712755"/>
-						<reference key="destination" ref="687365369"/>
-						<object class="NSNibBindingConnector" key="connector">
-							<reference key="NSSource" ref="973712755"/>
-							<reference key="NSDestination" ref="687365369"/>
-							<string key="NSLabel">value: selection.signalStrength</string>
-							<string key="NSBinding">value</string>
-							<string key="NSKeyPath">selection.signalStrength</string>
-							<int key="NSNibBindingConnectorVersion">2</int>
-						</object>
-					</object>
-					<int key="connectionID">1825</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBBindingConnection" key="connection">
 						<string key="label">enabled: selection.modemAvailable</string>
 						<reference key="source" ref="973712755"/>
 						<reference key="destination" ref="687365369"/>
@@ -3668,6 +3660,22 @@
 						</object>
 					</object>
 					<int key="connectionID">1892</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">value: selection.signalStrength</string>
+						<reference key="source" ref="973712755"/>
+						<reference key="destination" ref="687365369"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="973712755"/>
+							<reference key="NSDestination" ref="687365369"/>
+							<string key="NSLabel">value: selection.signalStrength</string>
+							<string key="NSBinding">value</string>
+							<string key="NSKeyPath">selection.signalStrength</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">2647</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
@@ -5365,6 +5373,39 @@
 					</object>
 					<int key="connectionID">2606</int>
 				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">enabled: selection.modemAvailable</string>
+						<reference key="source" ref="1033456993"/>
+						<reference key="destination" ref="687365369"/>
+						<object class="NSNibBindingConnector" key="connector" id="127525058">
+							<reference key="NSSource" ref="1033456993"/>
+							<reference key="NSDestination" ref="687365369"/>
+							<string key="NSLabel">enabled: selection.modemAvailable</string>
+							<string key="NSBinding">enabled</string>
+							<string key="NSKeyPath">selection.modemAvailable</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">2653</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">hidden: selection.isZTE</string>
+						<reference key="source" ref="1033456993"/>
+						<reference key="destination" ref="687365369"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="1033456993"/>
+							<reference key="NSDestination" ref="687365369"/>
+							<string key="NSLabel">hidden: selection.isZTE</string>
+							<string key="NSBinding">hidden</string>
+							<string key="NSKeyPath">selection.isZTE</string>
+							<reference key="NSPreviousConnector" ref="127525058"/>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">2654</int>
+				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
 				<object class="NSArray" key="orderedObjects">
@@ -5413,12 +5454,12 @@
 							<reference ref="188549539"/>
 							<reference ref="285959542"/>
 							<reference ref="758027280"/>
-							<reference ref="211015125"/>
 							<reference ref="725124444"/>
 							<reference ref="332552706"/>
 							<reference ref="218949241"/>
 							<reference ref="399182625"/>
 							<reference ref="63270334"/>
+							<reference ref="211015125"/>
 						</object>
 						<reference key="parent" ref="346414874"/>
 					</object>
@@ -7244,6 +7285,7 @@
 							<reference ref="1058611317"/>
 							<reference ref="671311854"/>
 							<reference ref="514936866"/>
+							<reference ref="1033456993"/>
 						</object>
 						<reference key="parent" ref="279642115"/>
 					</object>
@@ -7422,6 +7464,11 @@
 						<int key="objectID">612</int>
 						<reference key="object" ref="235091593"/>
 						<reference key="parent" ref="61194992"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">2648</int>
+						<reference key="object" ref="1033456993"/>
+						<reference key="parent" ref="840130422"/>
 					</object>
 				</object>
 			</object>
@@ -7682,6 +7729,7 @@
 					<string>2577.IBPluginDependency</string>
 					<string>2590.IBPluginDependency</string>
 					<string>2591.IBPluginDependency</string>
+					<string>2648.IBPluginDependency</string>
 					<string>277.IBPluginDependency</string>
 					<string>326.IBPluginDependency</string>
 					<string>327.IBPluginDependency</string>
@@ -7998,6 +8046,7 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>{{175, 184}, {480, 515}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.WebKitIBPlugin</string>
@@ -8062,7 +8111,7 @@
 				<reference key="dict.values" ref="0"/>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">2606</int>
+			<int key="maxID">2654</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes"/>
 		<int key="IBDocument.localizationMode">0</int>
