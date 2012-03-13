@@ -31,6 +31,7 @@ typedef enum {
     CWModeGPRSPreferred  = 2,
     CWMode3GOnly         = 3,
     CWModeGPRSOnly       = 4,
+	CWModeAuto			 = 5,
 } CWModesPreference;
 
 @interface CWModel : NSObject {
@@ -107,6 +108,7 @@ typedef enum {
 - (CWModel *)modelForConnectionState;
 - (BOOL)connected;
 - (BOOL)disconnected;
+- (BOOL)isZTE;
 
 // accessors
 - (BOOL)modemAvailable;

@@ -142,7 +142,7 @@
 				[rawIcon3 unlockFocus];
 				[rawIcon3 drawAtPoint:NSMakePoint(41,3) fromRect:NSZeroRect operation:NSCompositeCopy fraction:1.0];
 			}
-        } else if (![model serviceAvailable]) {
+        } else if ((![model serviceAvailable]) || ([model ongoingPIN])) {
                 NSImage *rawIcon2 = [NSImage imageNamed: @"lock-off"];            
                 [rawIcon2 drawAtPoint:NSMakePoint(22, 0) fromRect:NSZeroRect operation:NSCompositeCopy fraction:1.0];                
         }
