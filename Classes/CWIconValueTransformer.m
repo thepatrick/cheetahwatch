@@ -123,7 +123,7 @@
 		[statusIcon setFlipped: YES];
 		
         // load raw icon with bars - append -off suffix if not connected
-        NSImage *rawIcon = [NSImage imageNamed:[@"signal-" stringByAppendingFormat:@"%d%@", [model signalLevel], [model connected] ? @"" : @"-off" ]];
+        NSImage *rawIcon = [NSImage imageNamed:[@"signal-" stringByAppendingFormat:@"%lu%@", (unsigned long)[model signalLevel], [model connected] ? @"" : @"-off" ]];
 
 		[rawIcon setFlipped: NO];
         // draw raw icon into status icon

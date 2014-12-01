@@ -260,7 +260,7 @@
     }
     
 #ifdef DEBUG
-    NSLog(@"CWModem: ZPAS str: %@ ZPAS int: %d", mode_str, [model mode]);
+    NSLog(@"CWModem: ZPAS str: %@ ZPAS int: %lu", mode_str, (unsigned long)[model mode]);
 #endif
 }
 
@@ -756,7 +756,7 @@
     periodicTimer = nil;
 
 	[modemHandle writeData: [[NSString stringWithFormat:@"AT+CPIN=%@\r", pin] dataUsingEncoding:NSASCIIStringEncoding]];
-	[modemHandle writeData: [[NSString stringWithString:@"AT+CPIN?\r"] dataUsingEncoding:NSASCIIStringEncoding]];
+	[modemHandle writeData: [@"AT+CPIN?\r" dataUsingEncoding:NSASCIIStringEncoding]];
 	
 	// setup a timer to periodically query some information
 	periodicTimer = [NSTimer scheduledTimerWithTimeInterval:CWPeriodicCommandInterval target:self selector:@selector(periodicCommandTimer:)
@@ -772,7 +772,7 @@
     periodicTimer = nil;
 	
 	[modemHandle writeData: [[NSString stringWithFormat:@"AT+CPIN=%@,%@\r", puk, newPin] dataUsingEncoding:NSASCIIStringEncoding]];
-	[modemHandle writeData: [[NSString stringWithString:@"AT+CPIN?\r"] dataUsingEncoding:NSASCIIStringEncoding]];
+	[modemHandle writeData: [@"AT+CPIN?\r" dataUsingEncoding:NSASCIIStringEncoding]];
 	
 	// setup a timer to periodically query some information
 	periodicTimer = [NSTimer scheduledTimerWithTimeInterval:CWPeriodicCommandInterval target:self selector:@selector(periodicCommandTimer:)

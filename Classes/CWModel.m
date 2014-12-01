@@ -200,7 +200,7 @@
         [lastPurgeDate autorelease];
         // look at reset mode
 #ifdef DEBUG
-        NSLog(@"CWModel: cleanup mode = %d", [preferences resetMode]);
+        NSLog(@"CWModel: cleanup mode = %ld", (long)[preferences resetMode]);
 #endif
         if ([preferences resetMode] == CWResetStatisticsModeDay) {
             // clean up after x days
