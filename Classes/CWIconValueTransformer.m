@@ -82,7 +82,7 @@
         case 3:     // EDGE
             return @"edge";
         case 4:     // WCDMA/UMTS
-            return @"edge";
+            return @"umts";
         case 5:     // HSDPA
             return @"umts";
         case 6:     // HSUPA
