@@ -62,8 +62,8 @@
     // show connection time in status bar if true
     BOOL showConnectionTime;
 	
-	// Connect automaticly
-	BOOL autoconnect;
+    // Connect automatically
+    BOOL autoconnect;
 
     // APN settings
     NSString *presetApn;

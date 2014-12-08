@@ -29,26 +29,26 @@
 
 @implementation CWModel
 
-/*+ (NSSet *)keyPathsForValuesAffectingValueForKey:(NSString *)key
-{
-    
-}*/
 
-+ (void)initialize
-{
-    static BOOL beenHere;
-    if (!beenHere) {
-        // make derived attributes binding capable
-        [self setKeys:[NSArray arrayWithObjects:@"mode", @"signalStrength", @"connected", @"modemAvailable", @"serviceAvailable", @"carrierAvailable", @"duration", nil] triggerChangeNotificationsForDependentKey:@"modelForIcon"];
-		
-        [self setKeys:[NSArray arrayWithObjects:@"connectionState", @"duration", nil] triggerChangeNotificationsForDependentKey:@"modelForConnectionState"];
-        [self setKeys:[NSArray arrayWithObject:@"connectionState"] triggerChangeNotificationsForDependentKey:@"connected"];
-        [self setKeys:[NSArray arrayWithObject:@"connectionState"] triggerChangeNotificationsForDependentKey:@"disconnected"];
-		
-        beenHere = YES;
-    }
++ (NSSet *)keyPathsForValuesAffectingValueForKey:(NSString *)key {
+  NSSet *keyPaths = [super keyPathsForValuesAffectingValueForKey:key];
+
+  if ([key isEqualToString:@"modelForIcon"]) {
+    NSArray *affectingKeys = @[@"mode", @"signalStrength", @"connected", @"modemAvailable", @"serviceAvailable", @"carrierAvailable", @"duration"];
+    keyPaths = [keyPaths setByAddingObjectsFromArray:affectingKeys];
+  } else if ([key isEqualToString:@"modelForConnectionState"]) {
+    NSArray *affectingKeys = @[@"mode", @"signalStrength", @"connected", @"modemAvailable", @"serviceAvailable", @"carrierAvailable", @"duration"];
+    keyPaths = [keyPaths setByAddingObjectsFromArray:affectingKeys];
+  } else if ([key isEqualToString:@"modelForConnectionState"]) {
+    NSArray *affectingKeys = @[@"connectionState"];
+    keyPaths = [keyPaths setByAddingObjectsFromArray:affectingKeys];
+  } else if ([key isEqualToString:@"disconnected"]) {
+    NSArray *affectingKeys = @[@"connectionState"];
+    keyPaths = [keyPaths setByAddingObjectsFromArray:affectingKeys];
+  }
+
+  return keyPaths;
 }
-
 // return a model initialized from disk data
 + (id)persistentModel
 {
