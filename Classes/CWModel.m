@@ -620,8 +620,8 @@
 #ifdef DEBUG
         NSLog(@"CWModel: checking traffic limit");
 #endif
-        unsigned long long traffic;
-        unsigned long long limit;
+        unsigned long long traffic = 0;
+        unsigned long long limit = 0;
         switch ([preferences trafficWarningMode]) {
             case CWTrafficWarningModeReceived:
                 traffic = [self rxTotalBytes];
