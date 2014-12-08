@@ -285,11 +285,13 @@
 {
     // only display a dialog unless another one is still open
     if (!trafficWarningDialogOpen) {
-        NSString *msg = [NSString stringWithFormat:NSLocalizedString(@"L111", @""), CWPrettyBytes(limit), CWPrettyBytes(traffic)];
-        NSAlert *alert = [NSAlert alertWithMessageText:NSLocalizedString(@"L110", @"") defaultButton:NSLocalizedString(@"L112", @"")
-                                  alternateButton:nil otherButton:nil informativeTextWithFormat:msg];
-        [alert beginSheetModalForWindow:nil modalDelegate:self didEndSelector: @selector(trafficWarningSheetDidEnd:returnCode:context:) contextInfo:nil];
-        trafficWarningDialogOpen = YES;
+      NSString *msg = [NSString stringWithFormat:NSLocalizedString(@"L111", @""), CWPrettyBytes(limit), CWPrettyBytes(traffic)];
+      NSAlert *alert = [[NSAlert alloc] init];
+      [alert addButtonWithTitle:NSLocalizedString(@"L112", @"")];
+      [alert setMessageText:NSLocalizedString(@"L110", @"")];
+      [alert setInformativeText:msg];
+      [alert beginSheetModalForWindow:nil modalDelegate:self didEndSelector: @selector(trafficWarningSheetDidEnd:returnCode:context:) contextInfo:nil];
+      trafficWarningDialogOpen = YES;
     }
 }
 
