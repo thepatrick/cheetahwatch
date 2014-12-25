@@ -11,48 +11,36 @@
 
 @implementation CWCustomView
 
+const static size_t defaultWidth = 22;
+
 - (void)setImage:(NSImage *)newImage
 {
-	[newImage retain];
-    [customImage release];
-    customImage = newImage;	
-    [self setNeedsDisplay:YES];
+  [newImage retain];
+  [customImage release];
+  customImage = newImage;
+  [self setNeedsDisplay:YES];
 }
 
-- (void)setToolTip:(NSString *)string
+- (void)drawRect:(NSRect)rect
 {
-	
-}
-/*
-- (void)mouseDown:(NSEvent *)event
-{
-    [controller toggleAttachedWindowAtPoint];
-//    clicked = !clicked;
-    [self setNeedsDisplay:YES];
-}
-*/
+  CGFloat scale = [[NSScreen mainScreen] backingScaleFactor];
+  NSRect newRect = NSMakeRect(0,0, customImage.size.width < defaultWidth ? defaultWidth : customImage.size.width, defaultWidth);
+  [self setFrame:newRect];
 
-- (void)drawRect:(NSRect)rect 
-{
+  newRect.origin.x = ([self frame].size.width - customImage.size.width) / (2.0 * scale);
+  newRect.origin.y = ([self frame].size.height - customImage.size.height) / (2.0 * scale);
 
-	NSRect newRect = NSMakeRect(0,0, customImage.size.width < 22 ? 22 : customImage.size.width, 22);
-	[self setFrame:newRect];
-	
-	newRect.origin.x = ([self frame].size.width - customImage.size.width) / 2.0;
-	newRect.origin.y = ([self frame].size.height - customImage.size.height) / 2.0;
-	
-	[customImage setScalesWhenResized: YES];
-
-	[customImage drawInRect: newRect fromRect: NSZeroRect operation: NSCompositeCopy fraction: 1.0f];
+  [customImage setScalesWhenResized: YES];
+  [customImage drawInRect: newRect fromRect: NSZeroRect operation: NSCompositeCopy fraction: 1.0f];
 }
 
 - (id)initWithFrame:(NSRect)frame controller:(CWApplication *)ctrlr
 {
-    self = [super initWithFrame:frame pullsDown:YES];
-    if (self) {
-        controller = ctrlr; // deliberately weak reference.
-    }
-    return self;
+  self = [super initWithFrame:frame pullsDown:YES];
+  if (self) {
+    controller = ctrlr; // deliberately weak reference.
+  }
+  return self;
 }
 
 - (void)dealloc

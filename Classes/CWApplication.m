@@ -140,46 +140,46 @@
 - (void)awakeFromNib
 {
 #ifdef DEBUG
-    NSLog(@"CWApplication: awakeFromNib called");
+  NSLog(@"CWApplication: awakeFromNib called");
 #endif
-	
-    // load model
-    [self setModel:[CWModel persistentModel]];
-    [model setDelegate:self];
 
-    // allocate a modem object handling all input/output - use setter to notify bindings
-    [self setModem:[[[CWModem alloc] initWithModel:model] autorelease]];
-    [modem setDelegate:self];
-    
-    // allocate a dialer
-    [self setDialer:[[[CWDialer alloc] initWithModel:model] autorelease]];
+  // load model
+  [self setModel:[CWModel persistentModel]];
+  [model setDelegate:self];
 
-    // setup menu item
-	statusItem = [[[NSStatusBar systemStatusBar] statusItemWithLength:NSVariableStatusItemLength] retain];
-	statusItemView = [[[CWCustomView alloc] initWithFrame:NSMakeRect(0, 0, 41, 22) controller:self] autorelease];
-	[statusItem setView: statusItemView];
-	[statusItem setHighlightMode:YES];
-	[statusItem setEnabled:YES];
-	[statusItem setToolTip:NSLocalizedString(@"L120", @"")];
-	[statusItemView setMenu:statusItemMenu];
-	[statusItemView setPreferredEdge:NSMaxYEdge];
-    [statusItemView setImage:[NSImage imageNamed:@"airplane"]];
+  // allocate a modem object handling all input/output - use setter to notify bindings
+  [self setModem:[[[CWModem alloc] initWithModel:model] autorelease]];
+  [modem setDelegate:self];
 
-    // manually set up a KVO since the status item does not know anything about bindings (yet)
-    [self addObserver:self forKeyPath:@"model.modelForIcon" options:NSKeyValueObservingOptionNew context:NULL];
+  // allocate a dialer
+  [self setDialer:[[[CWDialer alloc] initWithModel:model] autorelease]];
 
-    // KVO for mode preference menu items
-    [self addObserver:self forKeyPath:@"model.modesPreference" options:NSKeyValueObservingOptionNew context:NULL];
+  // setup menu item
+  statusItem = [[[NSStatusBar systemStatusBar] statusItemWithLength:NSVariableStatusItemLength] retain];
+  CGFloat itemHeight = [[NSStatusBar systemStatusBar] thickness];
+  statusItemView = [[[CWCustomView alloc] initWithFrame:NSMakeRect(0, 0, 41, itemHeight) controller:self] autorelease]; //x,y,w,h
+  [statusItem setView: statusItemView];
+  [statusItem setHighlightMode:YES];
+  [statusItem setEnabled:YES];
+  [statusItem setToolTip:NSLocalizedString(@"L120", @"")];
+  [statusItemView setMenu:statusItemMenu];
+  [statusItemView setPreferredEdge:NSMaxYEdge];
+  [statusItemView setImage:[NSImage imageNamed:@"airplane"]];
 
-    // show welcome window on first run
-    [self showFirstRun];
+  // manually set up a KVO since the status item does not know anything about bindings (yet)
+  [self addObserver:self forKeyPath:@"model.modelForIcon" options:NSKeyValueObservingOptionNew context:NULL];
 
-    // run cleanup once, then let the timer run it once an hour
-    [self cleanupTimer:nil];
+  // KVO for mode preference menu items
+  [self addObserver:self forKeyPath:@"model.modesPreference" options:NSKeyValueObservingOptionNew context:NULL];
 
-	[self fileNotifications];
+  // show welcome window on first run
+  [self showFirstRun];
 
-	wasConnected = NO;
+  // run cleanup once, then let the timer run it once an hour
+  [self cleanupTimer:nil];
+  [self fileNotifications];
+
+  wasConnected = NO;
 }
 
 // update status icon and connect automaticly - called by binding observer

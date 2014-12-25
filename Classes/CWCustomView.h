@@ -17,6 +17,5 @@
 
 - (id)initWithFrame:(NSRect)frame controller:(CWApplication *)ctrlr;
 - (void)setImage:(NSImage *)newImage;
-- (void)setToolTip:(NSString *)string;
 
 @end
