@@ -1,0 +1,3 @@
+language: objective-c
+xcode_project: CheetahWatch.xcodeproj
+xcode_scheme: CheetahWatch
