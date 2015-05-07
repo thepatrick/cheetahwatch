@@ -282,8 +282,8 @@ static void CWConnectionStatusChangeCallback(SCNetworkConnectionRef connection, 
                                 // no need to search any further
                                 CFRelease(serviceProperties);
                                 CFRelease(serviceKey);
-                                CFRelease(services);
                                 CFRelease(serviceDictKey);
+                                CFRelease(serviceDict);
                                 return;
                             }
                             CFRelease(serviceProperties);
@@ -292,7 +292,7 @@ static void CWConnectionStatusChangeCallback(SCNetworkConnectionRef connection, 
                     }
                 }
             }
-            CFRelease(services);
+          CFRelease(serviceDict);
         }
         CFRelease(serviceDictKey);
     }

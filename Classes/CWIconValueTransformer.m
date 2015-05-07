@@ -82,7 +82,7 @@
         case 3:     // EDGE
             return @"edge";
         case 4:     // WCDMA/UMTS
-            return @"edge";
+            return @"umts";
         case 5:     // HSDPA
             return @"umts";
         case 6:     // HSUPA
@@ -116,14 +116,14 @@
 																					  textShadow, NSShadowAttributeName,
 																					  [NSColor blackColor], NSForegroundColorAttributeName,
 																					  nil]];
-				
+    [textShadow release];
         // show mode and connection state or only mode, dependizg on connection state and preference setting & create status icon
 		NSImage *statusIcon =[[[NSImage alloc] initWithSize:NSMakeSize([model connected] && [[model preferences] showConnectionTime] ? ( 43 + modeString.size.width ) : 41, 22)] autorelease];
 		
 		[statusIcon setFlipped: YES];
 		
         // load raw icon with bars - append -off suffix if not connected
-        NSImage *rawIcon = [NSImage imageNamed:[@"signal-" stringByAppendingFormat:@"%d%@", [model signalLevel], [model connected] ? @"" : @"-off" ]];
+        NSImage *rawIcon = [NSImage imageNamed:[@"signal-" stringByAppendingFormat:@"%lu%@", (unsigned long)[model signalLevel], [model connected] ? @"" : @"-off" ]];
 
 		[rawIcon setFlipped: NO];
         // draw raw icon into status icon
@@ -138,7 +138,6 @@
 				NSImage *rawIcon3 = [[[NSImage alloc] initWithSize:NSMakeSize([modeString size].width, 22)] autorelease];				
 				[rawIcon3 lockFocus];
 				[modeString drawAtPoint:NSZeroPoint];
-				[modeString release];
 				[rawIcon3 unlockFocus];
 				[rawIcon3 drawAtPoint:NSMakePoint(41,3) fromRect:NSZeroRect operation:NSCompositeCopy fraction:1.0];
 			}
@@ -148,7 +147,8 @@
         }
         // unlock drawing focus again
         [statusIcon unlockFocus];
-		[statusIcon setFlipped: NO];		
+        [statusIcon setFlipped: NO];
+        [modeString release];
         return statusIcon;
     } else {
         // no modem available
